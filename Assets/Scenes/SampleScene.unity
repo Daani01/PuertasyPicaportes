@@ -485,6 +485,7 @@ GameObject:
   m_Component:
   - component: {fileID: 323469795}
   - component: {fileID: 323469796}
+  - component: {fileID: 323469797}
   m_Layer: 0
   m_Name: Rooms
   m_TagString: Untagged
@@ -501,7 +502,7 @@ Transform:
   m_GameObject: {fileID: 323469794}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.7153423, y: 32, z: -63.4}
+  m_LocalPosition: {x: -2.7153423, y: 55.21, z: -63.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -526,6 +527,18 @@ MonoBehaviour:
   - {fileID: 6456942226906086792, guid: a7309d6728721554993065aecbdd2c8a, type: 3}
   - {fileID: 845942848725216831, guid: ed77fb14bc8c70a419d8dda98118048d, type: 3}
   numberOfRooms: 10
+--- !u!114 &323469797
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 323469794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da106be504afeb54686d3e6c63a9aae9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &347567770
 GameObject:
   m_ObjectHideFlags: 0
@@ -1941,7 +1954,7 @@ GameObject:
   - component: {fileID: 993320422}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2045,14 +2058,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 993320415}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7361fa3006caa35408bce6d8ec36b04c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 10
+  walkSpeed: 5
   runSpeed: 15
-  crouchSpeed: 5
+  crouchSpeed: 2.5
   crouchHeight: 0.5
   normalHeight: 2
   gravity: -9.81

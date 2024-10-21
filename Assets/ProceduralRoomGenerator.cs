@@ -19,6 +19,8 @@ public class ProceduralRoomGenerator : MonoBehaviour
 
     void GenerateRooms()
     {
+        RoomEventManager roomEventManager = GetComponent<RoomEventManager>();
+
         // 1. Generar la primera habitación (Start) que solo tiene EndDoorSpawnPoint
         GameObject startRoom = Instantiate(startRoomPrefab);
         rooms.Add(startRoom);
@@ -32,6 +34,7 @@ public class ProceduralRoomGenerator : MonoBehaviour
             // Seleccionar un prefab de habitación intermedia al azar
             GameObject newRoomPrefab = basicRoomPrefabs[Random.Range(0, basicRoomPrefabs.Length)];
             GameObject newRoom = Instantiate(newRoomPrefab);
+            roomEventManager.AssignRoomEvent(newRoom);
 
             // Obtener el StartDoorSpawnPoint de la nueva habitación
             Transform newStartDoor = newRoom.transform.Find("StartDoorSpawnPoint");
