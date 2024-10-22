@@ -16,23 +16,25 @@ public class FirstPersonController : MonoBehaviour
 
     [Header("Look Settings")]
     public Camera playerCamera;
+    public float interactRange = 3f; // Distancia máxima de interacción
+    public LayerMask interactableLayer; // Opcional: filtrar solo objetos interactuables
 
     private CharacterController controller;
     private Vector2 moveInput;
-
     private float currentSpeed;
     private Vector3 velocity;
 
-    private enum PlayerState
+    public enum PlayerState
     {
         Walking,
         Running,
         Crouching,
-        Block, // Estado que impide movimiento
-        Wait // Estado cuando no se está moviendo
+        Hiding, //falta por añadir
+        Block,
+        Wait
     }
 
-    private PlayerState currentState;
+    public PlayerState currentState;
 
     // Bool para activar/desactivar cada estado
     [Header("State Control")]
@@ -58,6 +60,9 @@ public class FirstPersonController : MonoBehaviour
 
         playerInput.actions["Crouch"].started += ctx => ToggleCrouch();
         playerInput.actions["Jump"].started += ctx => Jump();
+
+        // Añadimos la acción de interacción
+        playerInput.actions["Interact"].started += ctx => Interact();
     }
 
     private void Update()
@@ -72,6 +77,13 @@ public class FirstPersonController : MonoBehaviour
 
     private void Move()
     {
+        // Si el estado actual es Hiding, no se mueve
+        if (currentState == PlayerState.Hiding)
+        {
+            currentSpeed = 0f;
+            return;
+        }
+
         // Si el estado actual es Block, no se mueve
         if (currentState == PlayerState.Block)
         {
@@ -114,6 +126,18 @@ public class FirstPersonController : MonoBehaviour
 
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
+    }
+
+    public void EnterHiding()
+    {
+        currentState = PlayerState.Hiding;
+        //AÑADIR POSICION DE IDA
+    }
+
+    public void ExitHiding()
+    {
+        currentState = PlayerState.Walking;
+        //AÑADIR POSICION DE VUELTA
     }
 
     private void Jump()
@@ -173,4 +197,23 @@ public class FirstPersonController : MonoBehaviour
             currentState = PlayerState.Walking; // Cambiar a Walking si se desactiva el bloqueo
         }
     }
+
+    // Método para interactuar con objetos
+    private void Interact()
+    {
+        // Lanza un rayo desde la posición de la cámara hacia adelante
+        Ray ray = new Ray(playerCamera.transform.position, playerCamera.transform.forward);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, interactRange, interactableLayer))
+        {
+            Interactable interactable = hit.collider.GetComponent<Interactable>();
+
+            if (interactable != null)
+            {
+                interactable.Interact(); // Llama al método Interact si el objeto tiene IInteractable
+            }
+        }
+    }
+
 }
