@@ -60,7 +60,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Test1",
+                    "name": "SelectObj1",
                     "type": "Button",
                     "id": "0c853dfb-442f-4681-a777-6d74f8fa97bb",
                     "expectedControlType": "",
@@ -69,9 +69,18 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Test2",
+                    "name": "SelectObj2",
                     "type": "Button",
                     "id": "b95775b1-e22a-4785-9987-06cfbb203dc0",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ActivateObj",
+                    "type": "Button",
+                    "id": "dd852ef5-8f05-4490-81a2-dfd844476889",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -240,7 +249,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Test1",
+                    "action": "SelectObj1",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -251,7 +260,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Test2",
+                    "action": "SelectObj2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1807a968-96d1-4bfb-b702-64f12e81872f",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ActivateObj",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -1,5 +1,6 @@
 using Cinemachine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -13,16 +14,30 @@ public class FirstPersonController : MonoBehaviour
     public float crouchHeight = 0.5f;
     public float normalHeight = 2f;
     public float gravity = -9.81f;
-    public float jumpHeight = 1.5f;
+    public float jumpHeight = 1.5f;    
 
     [Header("Look Settings")]
-    public CinemachineVirtualCamera virtualCamera; // Referencia a la Cinemachine Virtual Camera
+    public float mouseSensitivity = 100f; // Sensibilidad de la rotación
+    public float maxVerticalAngle = 80f; // Máximo ángulo vertical
+    public float minVerticalAngle = -80f; // Mínimo ángulo vertical
+    public float rotationSmoothness = 0.1f; // Suavidad de la rotación
     public Camera playerCamera;
     public float interactRange = 3f; // Distancia máxima de interacción
     public LayerMask interactableLayer; // Opcional: filtrar solo objetos interactuables
 
+    [Header("Inventory")]
+    public List<IUsable> inventory = new List<IUsable>(); // Lista para almacenar objetos recogidos
+    public IUsable selectedObject;
+
+
     private CharacterController controller;
     private Vector2 moveInput;
+
+    private Vector2 lookInput; // Input del ratón
+    private Vector2 currentRotation; // Rotación actual
+    private Vector2 targetRotation; // Rotación objetivo
+    private Vector2 rotationVelocity; // Velocidad de la rotación (para suavizado)
+
     private float currentSpeed;
     private Vector3 velocity;
 
@@ -54,10 +69,15 @@ public class FirstPersonController : MonoBehaviour
 
     private void OnEnable()
     {
-        virtualCamera.GetCinemachineComponent<CinemachinePOV>();
+        Cursor.lockState = CursorLockMode.Locked; // Bloquea el cursor al centro de la pantalla
+        Cursor.visible = false; // Esconde el cursor
+
         var playerInput = GetComponent<PlayerInput>();
         playerInput.actions["Move"].performed += ctx => moveInput = ctx.ReadValue<Vector2>();
         playerInput.actions["Move"].canceled += ctx => moveInput = Vector2.zero;
+
+        playerInput.actions["Look"].performed += ctx => lookInput = ctx.ReadValue<Vector2>();
+        playerInput.actions["Look"].canceled += ctx => lookInput = Vector2.zero;
 
         playerInput.actions["Run"].started += ctx => StartRunning();
         playerInput.actions["Run"].canceled += ctx => StopRunning();
@@ -67,8 +87,10 @@ public class FirstPersonController : MonoBehaviour
 
         playerInput.actions["Interact"].started += ctx => Interact();
 
-        playerInput.actions["Test1"].started += ctx => EnterDeadState();
-        playerInput.actions["Test2"].started += ctx => ExitDeadState();
+        playerInput.actions["SelectObj1"].started += ctx => SelectObj(1);
+        playerInput.actions["SelectObj2"].started += ctx => SelectObj(2);
+
+        playerInput.actions["ActivateObj"].started += ctx => ActivateObj();
 
     }
 
@@ -76,11 +98,31 @@ public class FirstPersonController : MonoBehaviour
     {
         BlockPlayer();
         Move();
+        Look();
         RotatePlayer();
         ApplyGravity();
-        HandleCamera();
+        //HandleCamera();
 
-        Debug.Log(currentState.ToString());
+        //Debug.Log(currentState.ToString());
+    }
+
+    private void Look()
+    {
+        // Calcula la rotación objetivo en función del input del ratón
+        targetRotation.x += lookInput.x * mouseSensitivity; // Rotación en el eje Y (horizontal)
+        targetRotation.y -= lookInput.y * mouseSensitivity; // Rotación en el eje X (vertical)
+
+        // Limita la rotación vertical
+        targetRotation.y = Mathf.Clamp(targetRotation.y, minVerticalAngle, maxVerticalAngle);
+
+        // Interpola suavemente entre la rotación actual y la rotación objetivo
+        currentRotation = Vector2.SmoothDamp(currentRotation, targetRotation, ref rotationVelocity, rotationSmoothness);
+
+        // Aplica la rotación en el jugador (rotación en el eje Y)
+        transform.rotation = Quaternion.Euler(0f, currentRotation.x, 0f);
+
+        // Aplica la rotación en la cámara (rotación en el eje X)
+        playerCamera.transform.localRotation = Quaternion.Euler(currentRotation.y, 0f, 0f);
     }
 
     private void HandleCamera()
@@ -95,12 +137,7 @@ public class FirstPersonController : MonoBehaviour
         }
         else
         {
-            // Restaurar la cámara si no está en estado Dead
-            if (virtualCamera != null)
-            {
-                //virtualCamera.m_HorizontalAxis.m_MaxSpeed = 300f;
-                //virtualCamera.m_VerticalAxis.m_MaxSpeed = 300f;
-            }
+            
         }
     }
 
@@ -275,12 +312,69 @@ public class FirstPersonController : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, interactRange, interactableLayer))
         {
+            // Primero interactúa con el objeto
             Interactable interactable = hit.collider.GetComponent<Interactable>();
-
             if (interactable != null)
             {
-                interactable.Interact(); // Llama al método Interact si el objeto tiene IInteractable
+                interactable.Interact(); // Llama al método Interact si el objeto tiene Interactable
             }
+
+            // Luego verifica si también es usable
+            IUsable usable = hit.collider.GetComponent<IUsable>();
+            if (usable != null)
+            {
+                PickUpItem(usable); // Recoger el objeto si es usable
+            }
+        }
+    }
+
+
+    public void PickUpItem(IUsable usableItem)
+    {
+        // Verifica si ya tienes un objeto del mismo tipo
+        foreach (var item in inventory)
+        {
+            if (item.GetType() == usableItem.GetType())
+            {
+                Debug.Log("Ya tienes un objeto de este tipo en el inventario.");
+                return;
+            }
+        }
+
+        if (inventory.Count < 6) // Máximo de 6 objetos
+        {
+            inventory.Add(usableItem);
+            Debug.Log("Objeto añadido al inventario.");
+        }
+        else
+        {
+            Debug.Log("Inventario lleno.");
+        }
+    }
+
+
+    public void SelectObj(int index)
+    {
+        if (index > 0 && index <= inventory.Count)
+        {
+            selectedObject = inventory[index - 1];
+            Debug.Log($"Object {index} selected.");
+        }
+        else
+        {
+            Debug.Log("Invalid selection.");
+        }
+    }
+
+    public void ActivateObj()
+    {
+        if (selectedObject != null)
+        {
+            selectedObject.Use(); // Activa el objeto seleccionado
+        }
+        else
+        {
+            Debug.Log("No object selected.");
         }
     }
 
