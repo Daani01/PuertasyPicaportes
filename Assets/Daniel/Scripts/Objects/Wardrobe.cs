@@ -1,7 +1,7 @@
 using UnityEngine;
 using static FirstPersonController;
 
-public class Wardrobe : MonoBehaviour, Interactable
+public class Wardrobe : MonoBehaviour, IInteractable
 {
     Transform insideWardrobe;
     Transform outsideWardrobe;
@@ -10,10 +10,9 @@ public class Wardrobe : MonoBehaviour, Interactable
     {
         insideWardrobe = transform.Find("INSIDE_WARDROBE");
         outsideWardrobe = transform.Find("OUTSIDE_WARDROBE");
-
     }
 
-    public void Interact()
+    public void InteractObj()
     {
 
         FirstPersonController player = FindObjectOfType<FirstPersonController>();
@@ -22,11 +21,11 @@ public class Wardrobe : MonoBehaviour, Interactable
         {
             if (player.currentState == PlayerState.Hiding)
             {
-                player.ExitHiding(outsideWardrobe.position); // Mover a la posición de vuelta
+                player.ExitHiding(outsideWardrobe.position);
             }
             else
             {
-                player.EnterHiding(insideWardrobe.position); // Mover a la posición dentro del armario
+                player.EnterHiding(insideWardrobe.position);
             }
         }
     }

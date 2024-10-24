@@ -313,10 +313,10 @@ public class FirstPersonController : MonoBehaviour
         if (Physics.Raycast(ray, out hit, interactRange, interactableLayer))
         {
             // Primero interactúa con el objeto
-            Interactable interactable = hit.collider.GetComponent<Interactable>();
+            IInteractable interactable = hit.collider.GetComponent<IInteractable>();
             if (interactable != null)
             {
-                interactable.Interact(); // Llama al método Interact si el objeto tiene Interactable
+                interactable.InteractObj(); // Llama al método Interact si el objeto tiene Interactable
             }
 
             // Luego verifica si también es usable
