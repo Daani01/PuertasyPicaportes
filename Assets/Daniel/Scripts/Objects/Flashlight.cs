@@ -1,28 +1,42 @@
 using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
 using static IUsable;
 
 public class Flashlight : MonoBehaviour, IInteractable, IUsable
 {
     public ActivationType activationType;
-
+    bool activatedFlashlight;
+    public GameObject FlashlightLight;
+        
     public void InteractObj()
+    {        
+
+    }
+
+    public void DesActivateObj(Transform position)
     {
-        Debug.Log("Interacted with: " + gameObject.name);
+        gameObject.transform.position = position.position;
+        gameObject.transform.SetParent(position.transform, true);
         gameObject.SetActive(false);
     }
 
     public void Use()
     {
+        gameObject.SetActive(true);
+
         switch (activationType)
         {
             case ActivationType.OneTime:
-                Debug.Log(" used once.");
+
                 break;
             case ActivationType.MultipleTimes:
-                Debug.Log(" can be used multiple times.");
+
+                activatedFlashlight = !activatedFlashlight;
+                FlashlightLight.SetActive(activatedFlashlight);
+
                 break;
             case ActivationType.Charge:
-                Debug.Log(" is charging.");
+
                 break;
         }
     }

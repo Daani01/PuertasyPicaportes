@@ -1,42 +1,42 @@
 using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(PlayerInput), typeof(CharacterController))]
 public class FirstPersonController : MonoBehaviour
 {
+    [Header("HUD")]
+    public TMP_Text Text_State;
+    public TMP_Text Text_Objets;
+
     [Header("Movement Settings")]
-    public float walkSpeed = 2f;
-    public float runSpeed = 5f;
-    public float crouchSpeed = 1f;
-    public float crouchHeight = 0.5f;
-    public float normalHeight = 2f;
-    public float gravity = -9.81f;
-    public float jumpHeight = 1.5f;    
+    public float walkSpeed;
+    public float runSpeed;
+    public float crouchSpeed;
+    public float crouchHeight;
+    public float normalHeight;
+    public float gravity;
+    public float jumpHeight;    
 
     [Header("Look Settings")]
-    public float mouseSensitivity = 100f; // Sensibilidad de la rotación
-    public float maxVerticalAngle = 80f; // Máximo ángulo vertical
-    public float minVerticalAngle = -80f; // Mínimo ángulo vertical
-    public float rotationSmoothness = 0.1f; // Suavidad de la rotación
+    public float mouseSensitivity;
+    public float maxVerticalAngle;
+    public float minVerticalAngle;
+    public float rotationSmoothness;
     public Camera playerCamera;
-    public float interactRange = 3f; // Distancia máxima de interacción
-    public LayerMask interactableLayer; // Opcional: filtrar solo objetos interactuables
-
-    [Header("Inventory")]
-    public List<IUsable> inventory = new List<IUsable>(); // Lista para almacenar objetos recogidos
-    public IUsable selectedObject;
-
+    public float interactRange;
+    public LayerMask interactableLayer;
 
     private CharacterController controller;
     private Vector2 moveInput;
 
-    private Vector2 lookInput; // Input del ratón
-    private Vector2 currentRotation; // Rotación actual
-    private Vector2 targetRotation; // Rotación objetivo
-    private Vector2 rotationVelocity; // Velocidad de la rotación (para suavizado)
+    private Vector2 lookInput;
+    private Vector2 currentRotation;
+    private Vector2 targetRotation;
+    private Vector2 rotationVelocity;
 
     private float currentSpeed;
     private Vector3 velocity;
@@ -52,14 +52,16 @@ public class FirstPersonController : MonoBehaviour
         Dead
     }
 
-    public PlayerState currentState;
+    public PlayerState currentState;    
 
-    // Bool para activar/desactivar cada estado
     [Header("State Control")]
-    public bool canWalk = true;
-    public bool canRun = true;
-    public bool canCrouch = true;
-    public bool blockPlayer = false;
+    public bool canWalk;
+    public bool canRun;
+    public bool canCrouch;
+    public bool blockPlayer;
+    public List<IUsable> inventory = new List<IUsable>();
+    public IUsable selectedObject;
+    public Transform ObjectsTransform;
 
     private void Awake()
     {
@@ -69,8 +71,8 @@ public class FirstPersonController : MonoBehaviour
 
     private void OnEnable()
     {
-        Cursor.lockState = CursorLockMode.Locked; // Bloquea el cursor al centro de la pantalla
-        Cursor.visible = false; // Esconde el cursor
+        //Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.visible = false;
 
         var playerInput = GetComponent<PlayerInput>();
         playerInput.actions["Move"].performed += ctx => moveInput = ctx.ReadValue<Vector2>();
@@ -102,26 +104,19 @@ public class FirstPersonController : MonoBehaviour
         RotatePlayer();
         ApplyGravity();
         //HandleCamera();
-
-        //Debug.Log(currentState.ToString());
     }
 
     private void Look()
     {
-        // Calcula la rotación objetivo en función del input del ratón
-        targetRotation.x += lookInput.x * mouseSensitivity; // Rotación en el eje Y (horizontal)
-        targetRotation.y -= lookInput.y * mouseSensitivity; // Rotación en el eje X (vertical)
+        targetRotation.x += lookInput.x * mouseSensitivity;
+        targetRotation.y -= lookInput.y * mouseSensitivity;
 
-        // Limita la rotación vertical
         targetRotation.y = Mathf.Clamp(targetRotation.y, minVerticalAngle, maxVerticalAngle);
 
-        // Interpola suavemente entre la rotación actual y la rotación objetivo
         currentRotation = Vector2.SmoothDamp(currentRotation, targetRotation, ref rotationVelocity, rotationSmoothness);
 
-        // Aplica la rotación en el jugador (rotación en el eje Y)
         transform.rotation = Quaternion.Euler(0f, currentRotation.x, 0f);
 
-        // Aplica la rotación en la cámara (rotación en el eje X)
         playerCamera.transform.localRotation = Quaternion.Euler(currentRotation.y, 0f, 0f);
     }
 
@@ -144,15 +139,15 @@ public class FirstPersonController : MonoBehaviour
     public void EnterDeadState()
     {
         currentState = PlayerState.Dead;
-        //blockPlayer = true; // Bloquea al jugador
-        HandleCamera();     // Desactiva el movimiento de la cámara
+        //blockPlayer = true;
+        HandleCamera();
     }
 
     public void ExitDeadState()
     {
-        currentState = PlayerState.Walking; // O el estado deseado
-        //blockPlayer = false; // Vuelve a activar al jugador
-        HandleCamera();      // Reactiva el movimiento de la cámara
+        currentState = PlayerState.Walking;
+        //blockPlayer = false;
+        HandleCamera();
     }
 
 
@@ -164,30 +159,27 @@ public class FirstPersonController : MonoBehaviour
             return;
         }
 
-        // Si el estado actual es Block, no se mueve
         if (currentState == PlayerState.Block)
         {
             currentSpeed = 0f;
             return;
         }
 
-        // Si el estado actual es Hiding, no se mueve
         if (currentState == PlayerState.Hiding)
         {
             currentSpeed = 0f;
             return;
         }
 
-        // Cambiar a Wait si no se está moviendo
         if (moveInput == Vector2.zero && currentState != PlayerState.Crouching)
         {
-            currentState = PlayerState.Wait;
+            ChangePlayerState(PlayerState.Wait);
             currentSpeed = 0f;
             return;
         }
         else if (currentState == PlayerState.Wait)
         {
-            currentState = PlayerState.Walking; // Cambia a Walking si empieza a moverse
+            ChangePlayerState(PlayerState.Walking);
         }
 
         float targetSpeed = currentState == PlayerState.Running ? runSpeed : (currentState == PlayerState.Crouching ? crouchSpeed : walkSpeed);
@@ -217,20 +209,20 @@ public class FirstPersonController : MonoBehaviour
 
     public void EnterHiding(Vector3 insidePosition)
     {
-        currentState = PlayerState.Hiding;
+        ChangePlayerState(PlayerState.Hiding);
         controller.height = normalHeight;
-        StartCoroutine(MoveToPosition(insidePosition)); // Iniciar la interpolación hacia el interior del armario
+        StartCoroutine(MoveToPosition(insidePosition));
     }
 
     public void ExitHiding(Vector3 outsidePosition)
     {
-        currentState = PlayerState.Walking;
-        StartCoroutine(MoveToPosition(outsidePosition)); // Iniciar la interpolación hacia el exterior del armario
+        ChangePlayerState(PlayerState.Walking);
+        StartCoroutine(MoveToPosition(outsidePosition));
     }
 
     private IEnumerator MoveToPosition(Vector3 targetPosition)
     {
-        float timeToMove = 1.0f; // Duración del movimiento
+        float timeToMove = 1.0f;
         Vector3 startPosition = transform.position;
         float elapsedTime = 0f;
 
@@ -241,13 +233,12 @@ public class FirstPersonController : MonoBehaviour
             yield return null;
         }
 
-        transform.position = targetPosition; // Asegurar que la posición final sea exacta
+        transform.position = targetPosition;
     }
 
 
     private void Jump()
     {
-        // No puede saltar si está agachado o en estado Block
         if (controller.isGrounded && currentState != PlayerState.Crouching && currentState != PlayerState.Block)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
@@ -256,84 +247,92 @@ public class FirstPersonController : MonoBehaviour
 
     private void ToggleCrouch()
     {
-        // Solo puede agacharse si está habilitado y no está en estado Block
         if (canCrouch && currentState != PlayerState.Block && currentState != PlayerState.Hiding)
         {
             if (currentState == PlayerState.Crouching)
             {
                 controller.height = normalHeight;
-                currentState = PlayerState.Walking; // Cambiar a estado de andar
+                ChangePlayerState(PlayerState.Walking);
             }
             else
             {
                 controller.height = crouchHeight;
-                currentState = PlayerState.Crouching; // Cambiar a estado agachado
+                currentState = PlayerState.Crouching;
             }
         }
     }
 
     private void StartRunning()
     {
-        // Solo puede correr si está habilitado y no está en estado Block
         if (canRun && currentState != PlayerState.Crouching && currentState != PlayerState.Block)
         {
-            currentState = PlayerState.Running;
+            ChangePlayerState(PlayerState.Running);
         }
     }
 
     private void StopRunning()
     {
-        // Solo puede detenerse de correr si está habilitado y no está en estado Block
         if (canRun && currentState != PlayerState.Crouching && currentState != PlayerState.Block)
         {
-            currentState = PlayerState.Walking;
+            ChangePlayerState(PlayerState.Walking);
         }
     }
 
     private void BlockPlayer()
     {
-        // Cambiar a estado Block si el booleano está activado
         if (blockPlayer)
         {
-            currentState = PlayerState.Block;
+            ChangePlayerState(PlayerState.Block);
         }
         else if (currentState == PlayerState.Block)
         {
-            currentState = PlayerState.Walking; // Cambiar a Walking si se desactiva el bloqueo
+            ChangePlayerState(PlayerState.Walking);
         }
     }
 
-    // Método para interactuar con objetos
     private void Interact()
     {
-        // Lanza un rayo desde la posición de la cámara hacia adelante
         Ray ray = new Ray(playerCamera.transform.position, playerCamera.transform.forward);
         RaycastHit hit;
 
         if (Physics.Raycast(ray, out hit, interactRange, interactableLayer))
         {
-            // Primero interactúa con el objeto
+            IUsable usable = hit.collider.GetComponent<IUsable>();
             IInteractable interactable = hit.collider.GetComponent<IInteractable>();
+
+            // Primero interactuar si el objeto es interactuable.
             if (interactable != null)
             {
-                interactable.InteractObj(); // Llama al método Interact si el objeto tiene Interactable
+                interactable.InteractObj();
             }
 
-            // Luego verifica si también es usable
-            IUsable usable = hit.collider.GetComponent<IUsable>();
-            if (usable != null)
+            // Luego, si es usable y se puede recoger, lo recogemos.
+            if (usable != null && CheckPickUpItem(usable))
             {
-                PickUpItem(usable); // Recoger el objeto si es usable
+                PickUpItem(usable);
+                usable.DesActivateObj(ObjectsTransform);
             }
         }
     }
 
 
-    public void PickUpItem(IUsable usableItem)
+    bool CheckPickUpItem(IUsable usableItem)
     {
-        // Verifica si ya tienes un objeto del mismo tipo
         foreach (var item in inventory)
         {
+            if (item.GetType() == usableItem.GetType())
+            {
+                Debug.Log("Ya tienes un objeto de este tipo en el inventario.");
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void PickUpItem(IUsable usableItem)
+    {
+        foreach (var item in inventory)
+        {           
             if (item.GetType() == usableItem.GetType())
             {
                 Debug.Log("Ya tienes un objeto de este tipo en el inventario.");
@@ -341,14 +340,16 @@ public class FirstPersonController : MonoBehaviour
             }
         }
 
-        if (inventory.Count < 6) // Máximo de 6 objetos
+        if (inventory.Count < 6)
         {
             inventory.Add(usableItem);
-            Debug.Log("Objeto añadido al inventario.");
+            Text_Objets.text += $"\n\n {usableItem.GetType().ToString()}\n\n";
+
+            //Debug.Log("Objeto añadido al inventario.");
         }
         else
         {
-            Debug.Log("Inventario lleno.");
+            //Debug.Log("Inventario lleno.");
         }
     }
 
@@ -357,8 +358,17 @@ public class FirstPersonController : MonoBehaviour
     {
         if (index > 0 && index <= inventory.Count)
         {
-            selectedObject = inventory[index - 1];
-            Debug.Log($"Object {index} selected.");
+            // Comprobar si el objeto seleccionado ya está activo.
+            if (selectedObject == inventory[index - 1])
+            {
+                selectedObject = null;
+                Debug.Log($"Object {index} is already selected.");
+            }
+            else
+            {
+                selectedObject = inventory[index - 1];
+                Debug.Log($"Object {index} selected.");
+            }
         }
         else
         {
@@ -366,16 +376,35 @@ public class FirstPersonController : MonoBehaviour
         }
     }
 
+
     public void ActivateObj()
     {
         if (selectedObject != null)
         {
-            selectedObject.Use(); // Activa el objeto seleccionado
+            selectedObject.Use();
         }
         else
         {
             Debug.Log("No object selected.");
         }
+    }
+
+
+
+
+
+    private void ChangePlayerState(PlayerState newState)
+    {
+        if (currentState != newState)
+        {
+            currentState = newState;
+            OnPlayerStateChanged(currentState.ToString());
+        }
+    }
+
+    private void OnPlayerStateChanged(string stateName)
+    {
+        Text_State.text = stateName;
     }
 
 }
