@@ -20,13 +20,13 @@ RenderSettings:
   m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0, g: 0, b: 0, a: 1}
+  m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
-  m_AmbientMode: 3
+  m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 0}
+  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -717,13 +717,14 @@ GameObject:
   - component: {fileID: 323469795}
   - component: {fileID: 323469796}
   - component: {fileID: 323469797}
+  - component: {fileID: 323469798}
   m_Layer: 0
   m_Name: Rooms
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &323469795
 Transform:
   m_ObjectHideFlags: 0
@@ -733,7 +734,7 @@ Transform:
   m_GameObject: {fileID: 323469794}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.7153423, y: 55.21, z: -63.4}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -758,6 +759,8 @@ MonoBehaviour:
   - {fileID: 6456942226906086792, guid: a7309d6728721554993065aecbdd2c8a, type: 3}
   - {fileID: 845942848725216831, guid: ed77fb14bc8c70a419d8dda98118048d, type: 3}
   numberOfRooms: 10
+  roomCount: 0
+  rooms: []
 --- !u!114 &323469797
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -770,6 +773,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da106be504afeb54686d3e6c63a9aae9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &323469798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 323469794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5098aa41d2e04cf4b8a375398359867d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pf_Rush: {fileID: 6526289013619476488, guid: 9f05cb6b37dc54f4f81c0b896973ec9d, type: 3}
+  roomGenerator: {fileID: 323469796}
 --- !u!1 &345817096
 GameObject:
   m_ObjectHideFlags: 0
@@ -2376,7 +2393,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!64 &590715964
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -6714,7 +6731,7 @@ Transform:
   m_GameObject: {fileID: 993320415}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.58, y: 0.35, z: 1.6}
+  m_LocalPosition: {x: -0.46, y: 1.89, z: 1.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -10236,7 +10253,6 @@ SceneRoots:
   - {fileID: 816183159}
   - {fileID: 294531444}
   - {fileID: 675048457}
-  - {fileID: 323469795}
   - {fileID: 1472946848}
   - {fileID: 1598846415}
   - {fileID: 1385194771}
@@ -10245,3 +10261,4 @@ SceneRoots:
   - {fileID: 1717821974}
   - {fileID: 590715969}
   - {fileID: 1393436337}
+  - {fileID: 323469795}

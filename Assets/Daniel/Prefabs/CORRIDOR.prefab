@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 3829083685614509662}
   - component: {fileID: 5017300168989262710}
   - component: {fileID: 7533916470611952508}
+  - component: {fileID: -3691175645368612077}
   m_Layer: 0
   m_Name: CORRIDOR
   m_TagString: Untagged
@@ -139,6 +140,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &-3691175645368612077
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 845942848725216831}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da106be504afeb54686d3e6c63a9aae9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1168010826490351498
 GameObject:
   m_ObjectHideFlags: 0
@@ -149,6 +162,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3317797500630247955}
   - component: {fileID: 2984351458812557743}
+  - component: {fileID: 1162260029189355603}
   m_Layer: 0
   m_Name: TriggerEvent
   m_TagString: Untagged
@@ -192,6 +206,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1162260029189355603
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1168010826490351498}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fc1667db8ccd46479e55fcaa0df553a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6564418677900898151
 GameObject:
   m_ObjectHideFlags: 0

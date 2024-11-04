@@ -2,33 +2,48 @@ using UnityEngine;
 
 public class RoomEventManager : MonoBehaviour
 {
-    // Función principal que se llamará al crear la habitación y asignar el evento
-    public void AssignRoomEvent(GameObject room)
+    public enum RoomEventType
     {
-        // Buscar el objeto TriggerEvent dentro de la habitación
-        Transform triggerEvent = room.transform.Find("TriggerEvent");
-        if (triggerEvent != null)
+        None,
+        Rush,
+        Ambush,
+        Halt,
+        Eyes,
+        Screech,
+        Dupe,
+        A_60,
+        A_90,
+        A_120
+    }
+
+    private RoomEventType _eventType;
+    
+    public void AssignRoomEvent(GameObject room, int numberRoom, int maxNumberRoom)
+    {
+        int random = Random.Range(0, maxNumberRoom);
+
+        if (numberRoom > random)
         {
-            Debug.Log("Asignando evento al TriggerEvent en " + room.name);
-            DetermineRoomEvent(triggerEvent.gameObject);
+            Transform triggerEvent = room.transform.Find("TriggerEvent");
+            if (triggerEvent != null)
+            {
+                _eventType = RoomEventType.Rush;
+                room.GetComponent<RoomEventManager>()._eventType = _eventType;
+                Debug.Log($"Asignando evento {_eventType} en la habitación {numberRoom}");
+            }
         }
         else
         {
-            Debug.LogError("No se encontró TriggerEvent en " + room.name);
+
+            //Transform triggerEvent = room.transform.Find("TriggerEvent");
+            //triggerEvent.gameObject.SetActive(false);
+            //Debug.Log($"No se generó evento para la habitación {numberRoom}");
+
         }
     }
 
-    // Esta función determinará el tipo de evento que ocurrirá cuando el jugador entre en el TriggerEvent
-    private void DetermineRoomEvent(GameObject triggerEvent)
+    public void OnPlayerEnterRoom()
     {
-        Debug.Log("Evento determinado para TriggerEvent: " + triggerEvent.name);
-        // Aquí decides el evento que ocurrirá (enemigos, trampas, etc.)
-    }
-
-    // Función que se llama cuando el jugador entra en la habitación
-    public void OnPlayerEnterRoom(GameObject triggerEvent)
-    {
-        Debug.Log("Jugador entró en la habitación con TriggerEvent: " + triggerEvent.name);
-        // Aquí puedes ejecutar el evento determinado para la habitación
+        EnemyManager.Instance?.HandlePlayerEnter(_eventType);
     }
 }
