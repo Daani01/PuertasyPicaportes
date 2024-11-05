@@ -785,7 +785,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5098aa41d2e04cf4b8a375398359867d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pf_Rush: {fileID: 6526289013619476488, guid: 9f05cb6b37dc54f4f81c0b896973ec9d, type: 3}
+  pf_Rush: {fileID: 2519625118080284939, guid: 9f05cb6b37dc54f4f81c0b896973ec9d, type: 3}
   roomGenerator: {fileID: 323469796}
 --- !u!1 &345817096
 GameObject:
@@ -6785,21 +6785,23 @@ MonoBehaviour:
   normalHeight: 2
   gravity: -9.81
   jumpHeight: 1
-  mouseSensitivity: 1.5
-  maxVerticalAngle: 80
-  minVerticalAngle: -80
+  maxHealth: 100
+  currentHealth: 0
+  mouseSensitivity: 0.1
+  maxVerticalAngle: 90
+  minVerticalAngle: -90
   rotationSmoothness: 0.15
   playerCamera: {fileID: 963194227}
   interactRange: 3
   interactableLayer:
     serializedVersion: 2
     m_Bits: 8
-  currentState: 0
   canWalk: 1
   canRun: 1
   canCrouch: 1
   blockPlayer: 0
   ObjectsTransform: {fileID: 95246094}
+  currentState: 0
 --- !u!114 &993320423
 MonoBehaviour:
   m_ObjectHideFlags: 0

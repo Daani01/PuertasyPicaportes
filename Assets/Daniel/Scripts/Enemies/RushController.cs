@@ -6,6 +6,7 @@ public class RushController : MonoBehaviour
     private List<Transform> waypoints;
     private int currentWaypointIndex = 0;
     public float speed = 5f;
+    public float damageAmount = 20f;
 
     public void SetWaypoints(List<Transform> waypointsToFollow)
     {
@@ -17,18 +18,33 @@ public class RushController : MonoBehaviour
         if (waypoints == null || waypoints.Count == 0)
             return;
 
-        // Mover hacia el siguiente punto
         Transform targetWaypoint = waypoints[currentWaypointIndex];
         transform.position = Vector3.MoveTowards(transform.position, targetWaypoint.position, speed * Time.deltaTime);
 
-        // Comprobar si ha alcanzado el punto actual y pasar al siguiente
         if (Vector3.Distance(transform.position, targetWaypoint.position) < 0.1f)
         {
             currentWaypointIndex++;
             if (currentWaypointIndex >= waypoints.Count)
             {
-                // Cuando llega al último punto, destruir o desactivar el enemigo, o reiniciar
                 Destroy(gameObject);
+            }
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            FirstPersonController playerHealth = other.GetComponent<FirstPersonController>();
+            if (playerHealth != null)
+            {
+                if(playerHealth.currentState == FirstPersonController.PlayerState.Hiding)
+                {
+                    Debug.Log("ESCONDIDO.");
+                    return;
+                }
+                playerHealth.TakeDamage(damageAmount);
+                Debug.Log("Enemy dealt " + damageAmount + " damage to the player.");
             }
         }
     }

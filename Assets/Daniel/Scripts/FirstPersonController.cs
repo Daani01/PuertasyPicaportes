@@ -19,7 +19,11 @@ public class FirstPersonController : MonoBehaviour
     public float crouchHeight;
     public float normalHeight;
     public float gravity;
-    public float jumpHeight;    
+    public float jumpHeight;
+
+    [Header("Player Health Settings")]
+    public float maxHealth = 100f;
+    public float currentHealth;
 
     [Header("Look Settings")]
     public float mouseSensitivity;
@@ -30,14 +34,21 @@ public class FirstPersonController : MonoBehaviour
     public float interactRange;
     public LayerMask interactableLayer;
 
+    [Header("State Control")]
+    public bool canWalk;
+    public bool canRun;
+    public bool canCrouch;
+    public bool blockPlayer;
+    public List<IUsable> inventory = new List<IUsable>();
+    public IUsable selectedObject;
+    public Transform ObjectsTransform;
+
     private CharacterController controller;
     private Vector2 moveInput;
-
     private Vector2 lookInput;
     private Vector2 currentRotation;
     private Vector2 targetRotation;
     private Vector2 rotationVelocity;
-
     private float currentSpeed;
     private Vector3 velocity;
 
@@ -51,30 +62,19 @@ public class FirstPersonController : MonoBehaviour
         Block,
         Dead
     }
-
-    public PlayerState currentState;    
-
-    [Header("State Control")]
-    public bool canWalk;
-    public bool canRun;
-    public bool canCrouch;
-    public bool blockPlayer;
-    public List<IUsable> inventory = new List<IUsable>();
-    public IUsable selectedObject;
-    public Transform ObjectsTransform;
+    public PlayerState currentState;
 
     private void Awake()
     {
         controller = GetComponent<CharacterController>();
         currentState = PlayerState.Walking;
+        currentHealth = maxHealth;
     }
 
     private void OnEnable()
     {
-        //Cursor.lockState = CursorLockMode.Locked;
-        //Cursor.visible = false;
-
         var playerInput = GetComponent<PlayerInput>();
+
         playerInput.actions["Move"].performed += ctx => moveInput = ctx.ReadValue<Vector2>();
         playerInput.actions["Move"].canceled += ctx => moveInput = Vector2.zero;
 
@@ -93,7 +93,6 @@ public class FirstPersonController : MonoBehaviour
         playerInput.actions["SelectObj2"].started += ctx => SelectObj(2);
 
         playerInput.actions["ActivateObj"].started += ctx => ActivateObj();
-
     }
 
     private void Update()
@@ -103,69 +102,12 @@ public class FirstPersonController : MonoBehaviour
         Look();
         RotatePlayer();
         ApplyGravity();
-        //HandleCamera();
     }
 
-    private void Look()
-    {
-        targetRotation.x += lookInput.x * mouseSensitivity;
-        targetRotation.y -= lookInput.y * mouseSensitivity;
-
-        targetRotation.y = Mathf.Clamp(targetRotation.y, minVerticalAngle, maxVerticalAngle);
-
-        currentRotation = Vector2.SmoothDamp(currentRotation, targetRotation, ref rotationVelocity, rotationSmoothness);
-
-        transform.rotation = Quaternion.Euler(0f, currentRotation.x, 0f);
-
-        playerCamera.transform.localRotation = Quaternion.Euler(currentRotation.y, 0f, 0f);
-    }
-
-    private void HandleCamera()
-    {
-        if (currentState == PlayerState.Dead)
-        {
-            // Desactivar el seguimiento del jugador bloqueando la cámara
-            //virtualCamera.Follow = null; // Deja de seguir al jugador
-            //virtualCamera.m_HorizontalAxis.m_MaxSpeed = 0f;
-            //virtualCamera.m_VerticalAxis.m_MaxSpeed = 0f;
-
-        }
-        else
-        {
-            
-        }
-    }
-
-    public void EnterDeadState()
-    {
-        currentState = PlayerState.Dead;
-        //blockPlayer = true;
-        HandleCamera();
-    }
-
-    public void ExitDeadState()
-    {
-        currentState = PlayerState.Walking;
-        //blockPlayer = false;
-        HandleCamera();
-    }
-
-
+    // Movement-related methods
     private void Move()
     {
-        if (currentState == PlayerState.Dead)
-        {
-            //currentSpeed = 0f;
-            return;
-        }
-
-        if (currentState == PlayerState.Block)
-        {
-            currentSpeed = 0f;
-            return;
-        }
-
-        if (currentState == PlayerState.Hiding)
+        if (currentState == PlayerState.Dead || currentState == PlayerState.Block || currentState == PlayerState.Hiding)
         {
             currentSpeed = 0f;
             return;
@@ -190,21 +132,68 @@ public class FirstPersonController : MonoBehaviour
         controller.Move(moveDirection * currentSpeed * Time.deltaTime);
     }
 
-    private void RotatePlayer()
-    {
-        Quaternion cameraRotation = playerCamera.transform.rotation;
-        transform.rotation = Quaternion.Euler(0f, cameraRotation.eulerAngles.y, 0f);
-    }
-
     private void ApplyGravity()
     {
         if (controller.isGrounded && velocity.y < 0)
         {
             velocity.y = -2f;
         }
-
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
+    }
+
+    private void Jump()
+    {
+        if (controller.isGrounded && currentState != PlayerState.Crouching && currentState != PlayerState.Block)
+        {
+            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+        }
+    }
+
+    // Player State Management
+    private void StartRunning()
+    {
+        if (canRun && currentState != PlayerState.Crouching && currentState != PlayerState.Block)
+        {
+            ChangePlayerState(PlayerState.Running);
+        }
+    }
+
+    private void StopRunning()
+    {
+        if (canRun && currentState != PlayerState.Crouching && currentState != PlayerState.Block)
+        {
+            ChangePlayerState(PlayerState.Walking);
+        }
+    }
+
+    private void ToggleCrouch()
+    {
+        if (canCrouch && currentState != PlayerState.Block && currentState != PlayerState.Hiding)
+        {
+            if (currentState == PlayerState.Crouching)
+            {
+                controller.height = normalHeight;
+                ChangePlayerState(PlayerState.Walking);
+            }
+            else
+            {
+                controller.height = crouchHeight;
+                currentState = PlayerState.Crouching;
+            }
+        }
+    }
+
+    private void BlockPlayer()
+    {
+        if (blockPlayer)
+        {
+            ChangePlayerState(PlayerState.Block);
+        }
+        else if (currentState == PlayerState.Block)
+        {
+            ChangePlayerState(PlayerState.Walking);
+        }
     }
 
     public void EnterHiding(Vector3 insidePosition)
@@ -236,60 +225,7 @@ public class FirstPersonController : MonoBehaviour
         transform.position = targetPosition;
     }
 
-
-    private void Jump()
-    {
-        if (controller.isGrounded && currentState != PlayerState.Crouching && currentState != PlayerState.Block)
-        {
-            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-        }
-    }
-
-    private void ToggleCrouch()
-    {
-        if (canCrouch && currentState != PlayerState.Block && currentState != PlayerState.Hiding)
-        {
-            if (currentState == PlayerState.Crouching)
-            {
-                controller.height = normalHeight;
-                ChangePlayerState(PlayerState.Walking);
-            }
-            else
-            {
-                controller.height = crouchHeight;
-                currentState = PlayerState.Crouching;
-            }
-        }
-    }
-
-    private void StartRunning()
-    {
-        if (canRun && currentState != PlayerState.Crouching && currentState != PlayerState.Block)
-        {
-            ChangePlayerState(PlayerState.Running);
-        }
-    }
-
-    private void StopRunning()
-    {
-        if (canRun && currentState != PlayerState.Crouching && currentState != PlayerState.Block)
-        {
-            ChangePlayerState(PlayerState.Walking);
-        }
-    }
-
-    private void BlockPlayer()
-    {
-        if (blockPlayer)
-        {
-            ChangePlayerState(PlayerState.Block);
-        }
-        else if (currentState == PlayerState.Block)
-        {
-            ChangePlayerState(PlayerState.Walking);
-        }
-    }
-
+    // Interaction methods
     private void Interact()
     {
         Ray ray = new Ray(playerCamera.transform.position, playerCamera.transform.forward);
@@ -300,13 +236,11 @@ public class FirstPersonController : MonoBehaviour
             IUsable usable = hit.collider.GetComponent<IUsable>();
             IInteractable interactable = hit.collider.GetComponent<IInteractable>();
 
-            // Primero interactuar si el objeto es interactuable.
             if (interactable != null)
             {
                 interactable.InteractObj();
             }
 
-            // Luego, si es usable y se puede recoger, lo recogemos.
             if (usable != null && CheckPickUpItem(usable))
             {
                 PickUpItem(usable);
@@ -315,8 +249,8 @@ public class FirstPersonController : MonoBehaviour
         }
     }
 
-
-    bool CheckPickUpItem(IUsable usableItem)
+    // Inventory and item selection methods
+    private bool CheckPickUpItem(IUsable usableItem)
     {
         foreach (var item in inventory)
         {
@@ -331,34 +265,21 @@ public class FirstPersonController : MonoBehaviour
 
     public void PickUpItem(IUsable usableItem)
     {
-        foreach (var item in inventory)
-        {           
-            if (item.GetType() == usableItem.GetType())
-            {
-                Debug.Log("Ya tienes un objeto de este tipo en el inventario.");
-                return;
-            }
-        }
-
         if (inventory.Count < 6)
         {
             inventory.Add(usableItem);
             Text_Objets.text += $"\n\n {usableItem.GetType().ToString()}\n\n";
-
-            //Debug.Log("Objeto añadido al inventario.");
         }
         else
         {
-            //Debug.Log("Inventario lleno.");
+            Debug.Log("Inventario lleno.");
         }
     }
-
 
     public void SelectObj(int index)
     {
         if (index > 0 && index <= inventory.Count)
         {
-            // Comprobar si el objeto seleccionado ya está activo.
             if (selectedObject == inventory[index - 1])
             {
                 selectedObject = null;
@@ -376,7 +297,6 @@ public class FirstPersonController : MonoBehaviour
         }
     }
 
-
     public void ActivateObj()
     {
         if (selectedObject != null)
@@ -389,10 +309,31 @@ public class FirstPersonController : MonoBehaviour
         }
     }
 
+    // Health management methods
+    public void TakeDamage(float amount)
+    {
+        if (currentState == PlayerState.Dead) return;
+        currentHealth -= amount;
+        if (currentHealth <= 0) Die();
+    }
 
+    public void Heal(float amount)
+    {
+        if (currentState == PlayerState.Dead) return;
+        currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
+    }
 
+    public void Die()
+    {
+        currentState = PlayerState.Dead;
+        currentHealth = 0;
+        Debug.Log("Player has died.");
+    }
 
+    public void KillInstantly() => Die();
+    public float GetHealth() => currentHealth;
 
+    // State transition and camera handling
     private void ChangePlayerState(PlayerState newState)
     {
         if (currentState != newState)
@@ -402,9 +343,23 @@ public class FirstPersonController : MonoBehaviour
         }
     }
 
-    private void OnPlayerStateChanged(string stateName)
+    private void OnPlayerStateChanged(string stateName) => Text_State.text = stateName;
+
+    private void Look()
     {
-        Text_State.text = stateName;
+        targetRotation.x += lookInput.x * mouseSensitivity;
+        targetRotation.y -= lookInput.y * mouseSensitivity;
+        targetRotation.y = Mathf.Clamp(targetRotation.y, minVerticalAngle, maxVerticalAngle);
+
+        currentRotation = Vector2.SmoothDamp(currentRotation, targetRotation, ref rotationVelocity, rotationSmoothness);
+
+        transform.rotation = Quaternion.Euler(0f, currentRotation.x, 0f);
+        playerCamera.transform.localRotation = Quaternion.Euler(currentRotation.y, 0f, 0f);
     }
 
+    private void RotatePlayer()
+    {
+        Quaternion cameraRotation = playerCamera.transform.rotation;
+        transform.rotation = Quaternion.Euler(0f, cameraRotation.eulerAngles.y, 0f);
+    }
 }

@@ -79,15 +79,19 @@ public class ProceduralRoomGenerator : MonoBehaviour
         return null;
     }
 
-    public List<Transform> GetLastRoomTransforms(int count)
+    public List<Transform> GetTransformsRush(int count)
     {
         List<Transform> lastRoomTransforms = new List<Transform>();
 
         int startIndex = Mathf.Max(0, GetCurrentRoomIndex() - count);
 
-        for (int i = startIndex; i <= GetCurrentRoomIndex(); i++)
+        for (int i = startIndex; i <= GetCurrentRoomIndex() + count; i++)
         {
-            lastRoomTransforms.Add(rooms[i].transform);
+            if(i < numberOfRooms)
+            {
+                lastRoomTransforms.Add(rooms[i].transform.Find("StartDoorSpawnPoint"));
+                lastRoomTransforms.Add(rooms[i].transform.Find("EndDoorSpawnPoint"));
+            }            
         }
 
         return lastRoomTransforms;

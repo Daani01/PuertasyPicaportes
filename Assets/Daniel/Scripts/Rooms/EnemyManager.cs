@@ -30,15 +30,13 @@ public class EnemyManager : MonoBehaviour
                 break;
             case RoomEventType.Rush:
 
-                List<Transform> lastRoomTransforms = roomGenerator.GetLastRoomTransforms(3);
+                List<Transform> lastRoomTransforms = roomGenerator.GetTransformsRush(4);
                 if (lastRoomTransforms.Count > 0)
                 {
-                    Transform initialSpawnPoint = lastRoomTransforms[0].Find("StartDoorSpawnPoint");
+                    Transform initialSpawnPoint = lastRoomTransforms[0];
 
-                    // Instancia el prefab en la posición inicial
                     GameObject rushInstance = Instantiate(pf_Rush, initialSpawnPoint.position, initialSpawnPoint.rotation);
 
-                    // Obtiene el componente RushController desde la instancia de rushInstance y pasa los waypoints
                     RushController rushController = rushInstance.GetComponent<RushController>();
                     if (rushController != null)
                     {
