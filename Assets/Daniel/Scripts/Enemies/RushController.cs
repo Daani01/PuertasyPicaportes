@@ -43,8 +43,7 @@ public class RushController : MonoBehaviour
                     Debug.Log("ESCONDIDO.");
                     return;
                 }
-                playerHealth.TakeDamage(damageAmount);
-                Debug.Log("Enemy dealt " + damageAmount + " damage to the player.");
+                playerHealth.KillInstantly();
             }
         }
     }

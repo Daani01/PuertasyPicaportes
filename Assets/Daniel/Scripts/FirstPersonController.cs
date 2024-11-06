@@ -25,6 +25,9 @@ public class FirstPersonController : MonoBehaviour
     public float maxHealth = 100f;
     public float currentHealth;
 
+    [Header("Money Settings")]
+    public int coinsCount;
+
     [Header("Look Settings")]
     public float mouseSensitivity;
     public float maxVerticalAngle;
@@ -244,7 +247,7 @@ public class FirstPersonController : MonoBehaviour
             if (usable != null && CheckPickUpItem(usable))
             {
                 PickUpItem(usable);
-                usable.DesActivateObj(ObjectsTransform);
+                usable.GetObjPlayer(ObjectsTransform);
             }
         }
     }
@@ -282,12 +285,14 @@ public class FirstPersonController : MonoBehaviour
         {
             if (selectedObject == inventory[index - 1])
             {
+                selectedObject.DesActivate();
                 selectedObject = null;
-                Debug.Log($"Object {index} is already selected.");
+                Debug.Log($"Object {index} desactiavted.");
             }
             else
             {
                 selectedObject = inventory[index - 1];
+                selectedObject.Activate();
                 Debug.Log($"Object {index} selected.");
             }
         }

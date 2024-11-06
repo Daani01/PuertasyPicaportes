@@ -8,7 +8,9 @@ public interface IInteractable
 public interface IUsable : IInteractable
 {
     void Use();
-    void DesActivateObj(Transform position);
+    void GetObjPlayer(Transform position);
+    void Activate();
+    void DesActivate();
 
     public enum ActivationType
     {
