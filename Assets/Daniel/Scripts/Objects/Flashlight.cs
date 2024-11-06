@@ -5,9 +5,9 @@ using static IUsable;
 public class Flashlight : MonoBehaviour, IInteractable, IUsable
 {
     public ActivationType activationType;
-    private bool activatedFlashlight;
     public GameObject FlashlightLight;
-    private float flashlightTime = 180f; //(3 minutos)
+    public float flashlightTime = 180f; //(3 minutos)
+    private bool activatedFlashlight;
     private Coroutine flashlightCoroutine;
 
     public void InteractObj()
@@ -29,6 +29,7 @@ public class Flashlight : MonoBehaviour, IInteractable, IUsable
         {
             StopCoroutine(flashlightCoroutine);
         }
+        flashlightCoroutine = null;
         activatedFlashlight = false;
         FlashlightLight.SetActive(false);
         gameObject.SetActive(false);

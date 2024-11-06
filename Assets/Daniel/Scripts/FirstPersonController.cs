@@ -271,7 +271,7 @@ public class FirstPersonController : MonoBehaviour
         if (inventory.Count < 6)
         {
             inventory.Add(usableItem);
-            Text_Objets.text += $"\n\n {usableItem.GetType().ToString()}\n\n";
+            Text_Objets.text += $"\n {usableItem.GetType().ToString()}\n";
         }
         else
         {
@@ -283,17 +283,22 @@ public class FirstPersonController : MonoBehaviour
     {
         if (index > 0 && index <= inventory.Count)
         {
-            if (selectedObject == inventory[index - 1])
+            var newSelectedObject = inventory[index - 1];
+
+            if (selectedObject != newSelectedObject)
             {
-                selectedObject.DesActivate();
-                selectedObject = null;
-                Debug.Log($"Object {index} desactiavted.");
+                if (selectedObject != null)
+                {
+                    selectedObject.DesActivate();
+                }
+
+                selectedObject = newSelectedObject;
+                selectedObject.Activate();
             }
             else
             {
-                selectedObject = inventory[index - 1];
-                selectedObject.Activate();
-                Debug.Log($"Object {index} selected.");
+                selectedObject.DesActivate();
+                selectedObject = null;
             }
         }
         else
@@ -301,6 +306,7 @@ public class FirstPersonController : MonoBehaviour
             Debug.Log("Invalid selection.");
         }
     }
+
 
     public void ActivateObj()
     {
