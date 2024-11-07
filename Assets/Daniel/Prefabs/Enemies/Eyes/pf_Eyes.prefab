@@ -50,9 +50,8 @@ MonoBehaviour:
   playerTransform: {fileID: 0}
   detectionSphere: {fileID: 7738842955804621583}
   visionSphere: {fileID: 7738842955804621583}
-  detectionRadius: 3.35
-  visionRadius: 1
-  horizontalViewAngle: 20
+  detectionRadius: 3.4
+  visionRadius: 1.27
 --- !u!1 &5632484158025157750
 GameObject:
   m_ObjectHideFlags: 0
