@@ -6,6 +6,7 @@ public class Doors : MonoBehaviour
 {
     public float rotationAngle;
     public float rotationSpeed;
+    public Transform Axis;
 
     private bool isOpening = false;
 
@@ -20,7 +21,7 @@ public class Doors : MonoBehaviour
 
     IEnumerator OpenDoor()
     {
-        Quaternion initialRotation = transform.rotation;
+        Quaternion initialRotation = Axis.rotation;
         Quaternion targetRotation = initialRotation * Quaternion.Euler(0, rotationAngle, 0);
 
         float t = 0;
@@ -28,7 +29,7 @@ public class Doors : MonoBehaviour
         while (t < 1)
         {
             t += Time.deltaTime * rotationSpeed;
-            transform.rotation = Quaternion.Slerp(initialRotation, targetRotation, t);
+            Axis.rotation = Quaternion.Slerp(initialRotation, targetRotation, t);
             yield return null;
         }
 
