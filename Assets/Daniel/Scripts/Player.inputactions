@@ -78,6 +78,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "SelectObj3",
+                    "type": "Button",
+                    "id": "434cc3b4-4f2f-4fa0-8364-a44c73872888",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "ActivateObj",
                     "type": "Button",
                     "id": "dd852ef5-8f05-4490-81a2-dfd844476889",
@@ -261,6 +270,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "SelectObj2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e8499c67-5ca8-4a17-bed9-75f0e5437adc",
+                    "path": "<Keyboard>/3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectObj3",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

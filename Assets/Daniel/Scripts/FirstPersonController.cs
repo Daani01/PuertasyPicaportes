@@ -54,6 +54,9 @@ public class FirstPersonController : MonoBehaviour
     private Vector2 rotationVelocity;
     private float currentSpeed;
     private Vector3 velocity;
+    private bool isPillEffectActive = false; // Nuevo booleano para controlar el efecto de la píldora
+    private Coroutine pillEffectCoroutine; // Guarda la referencia de la corrutina de la píldora
+
 
     public enum PlayerState
     {
@@ -94,6 +97,7 @@ public class FirstPersonController : MonoBehaviour
 
         playerInput.actions["SelectObj1"].started += ctx => SelectObj(1);
         playerInput.actions["SelectObj2"].started += ctx => SelectObj(2);
+        playerInput.actions["SelectObj3"].started += ctx => SelectObj(3);
 
         playerInput.actions["ActivateObj"].started += ctx => ActivateObj();
     }
@@ -125,6 +129,12 @@ public class FirstPersonController : MonoBehaviour
         else if (currentState == PlayerState.Wait)
         {
             ChangePlayerState(PlayerState.Walking);
+        }
+
+        // Si el efecto de la píldora está activo, corre automáticamente (excepto si está agachado)
+        if (isPillEffectActive && currentState != PlayerState.Crouching)
+        {
+            ChangePlayerState(PlayerState.Running);
         }
 
         float targetSpeed = currentState == PlayerState.Running ? runSpeed : (currentState == PlayerState.Crouching ? crouchSpeed : walkSpeed);
@@ -170,6 +180,29 @@ public class FirstPersonController : MonoBehaviour
         }
     }
 
+    public void ActivatePillEffect(float duration)
+    {
+        // Si la corrutina ya está activa, la detenemos para reiniciar el temporizador
+        if (pillEffectCoroutine != null)
+        {
+            StopCoroutine(pillEffectCoroutine);
+        }
+
+        pillEffectCoroutine = StartCoroutine(PillEffectCoroutine(duration));
+    }
+
+    // Corrutina para el efecto de la píldora
+    private IEnumerator PillEffectCoroutine(float duration)
+    {
+        isPillEffectActive = true;
+
+        yield return new WaitForSeconds(duration);
+
+        isPillEffectActive = false;
+        ChangePlayerState(PlayerState.Walking); // Vuelve al estado Walking una vez termina el efecto
+        pillEffectCoroutine = null; // Resetea la referencia de la corrutina
+    }
+
     private void ToggleCrouch()
     {
         if (canCrouch && currentState != PlayerState.Block && currentState != PlayerState.Hiding)
@@ -182,7 +215,7 @@ public class FirstPersonController : MonoBehaviour
             else
             {
                 controller.height = crouchHeight;
-                currentState = PlayerState.Crouching;
+                ChangePlayerState(PlayerState.Crouching);
             }
         }
     }
