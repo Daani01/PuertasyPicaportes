@@ -23,6 +23,11 @@ public class Lighter : MonoBehaviour, IInteractable, IUsable
         gameObject.SetActive(false);
     }
 
+    public void Activate()
+    {
+        gameObject.SetActive(true);
+    }
+
     public void DesActivate()
     {
         if (lightCoroutine != null)
@@ -33,11 +38,17 @@ public class Lighter : MonoBehaviour, IInteractable, IUsable
         activatedLighter = false;
         Flashlighter.SetActive(false);
         gameObject.SetActive(false);
-    }
+    }    
 
-    public void Activate()
+    public void Destroy()
     {
-        gameObject.SetActive(true);
+        FirstPersonController player = FindObjectOfType<FirstPersonController>();
+
+        if (player != null)
+        {
+            player.RemoveItem(this);
+            DesActivate();
+        }
     }
 
     public void Use()
@@ -79,7 +90,6 @@ public class Lighter : MonoBehaviour, IInteractable, IUsable
             yield return null;
         }
 
-        // Apaga la linterna automáticamente cuando se acabe el tiempo
-        DesActivate();
+        Destroy();
     }
 }

@@ -60,7 +60,7 @@ public class FirstPersonController : MonoBehaviour
 
     public enum PlayerState
     {
-        Wait,
+        Waiting,
         Walking,
         Running,
         Crouching,
@@ -122,11 +122,11 @@ public class FirstPersonController : MonoBehaviour
 
         if (moveInput == Vector2.zero && currentState != PlayerState.Crouching)
         {
-            ChangePlayerState(PlayerState.Wait);
+            ChangePlayerState(PlayerState.Waiting);
             currentSpeed = 0f;
             return;
         }
-        else if (currentState == PlayerState.Wait)
+        else if (currentState == PlayerState.Waiting)
         {
             ChangePlayerState(PlayerState.Walking);
         }
@@ -304,11 +304,36 @@ public class FirstPersonController : MonoBehaviour
         if (inventory.Count < 6)
         {
             inventory.Add(usableItem);
-            Text_Objets.text += $"\n {usableItem.GetType().ToString()}\n";
+            UpdateInventoryText();
         }
         else
         {
             Debug.Log("Inventario lleno.");
+        }
+    }
+
+    public void RemoveItem(IUsable usableItem)
+    {
+        if (inventory.Contains(usableItem))
+        {
+            selectedObject = null;
+            inventory.Remove(usableItem);
+            Debug.Log($"{usableItem.GetType().ToString()} eliminado del inventario.");
+
+            UpdateInventoryText();
+        }
+        else
+        {
+            Debug.Log($"{usableItem.GetType().ToString()} no está en el inventario.");
+        }
+    }
+
+    private void UpdateInventoryText()
+    {
+        Text_Objets.text = "Objetos en el inventario:";
+        foreach (var item in inventory)
+        {
+            Text_Objets.text += $"\n {item.GetType().ToString()}";
         }
     }
 

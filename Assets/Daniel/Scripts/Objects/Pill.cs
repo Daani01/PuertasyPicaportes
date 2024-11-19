@@ -20,15 +20,25 @@ public class Pill : MonoBehaviour, IInteractable, IUsable
         gameObject.transform.SetParent(position.transform);
         gameObject.SetActive(false);
     }
+    public void Activate()
+    {
+        gameObject.SetActive(true);
+    }
 
     public void DesActivate()
     {        
         gameObject.SetActive(false);
-    }
+    }    
 
-    public void Activate()
+    public void Destroy()
     {
-        gameObject.SetActive(true);
+        FirstPersonController player = FindObjectOfType<FirstPersonController>();
+
+        if (player != null)
+        {
+            player.RemoveItem(this);
+            DesActivate();
+        }
     }
 
     public void Use()
@@ -41,7 +51,7 @@ public class Pill : MonoBehaviour, IInteractable, IUsable
                 if (player != null)
                 {
                     player.ActivatePillEffect(SpeedTime);
-                    DesActivate();
+                    Destroy();
                 }
                 break;
 
@@ -52,5 +62,7 @@ public class Pill : MonoBehaviour, IInteractable, IUsable
                 break;
         }
     }    
+
+    
 
 }

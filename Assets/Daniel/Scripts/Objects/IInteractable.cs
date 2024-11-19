@@ -11,6 +11,7 @@ public interface IUsable : IInteractable
     void GetObjPlayer(Transform position);
     void Activate();
     void DesActivate();
+    void Destroy();
 
     public enum ActivationType
     {

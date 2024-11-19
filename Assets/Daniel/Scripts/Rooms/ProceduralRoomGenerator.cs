@@ -6,6 +6,7 @@ public class ProceduralRoomGenerator : MonoBehaviour
     public GameObject startRoomPrefab;
     public GameObject finishRoomPrefab;
     public GameObject[] basicRoomPrefabs;
+    public GameObject doorPrefab;
 
     public int numberOfRooms;
     public int roomCount;
@@ -28,6 +29,7 @@ public class ProceduralRoomGenerator : MonoBehaviour
 
         for (int i = 0; i < numberOfRooms; i++)
         {
+            // Crear una nueva sala
             GameObject newRoomPrefab = basicRoomPrefabs[Random.Range(0, basicRoomPrefabs.Length)];
             GameObject newRoom = Instantiate(newRoomPrefab);
             roomEventManager.AssignRoomEvent(newRoom, i, numberOfRooms);
@@ -35,6 +37,8 @@ public class ProceduralRoomGenerator : MonoBehaviour
             Transform newStartDoor = newRoom.transform.Find("StartDoorSpawnPoint");
 
             AlignRooms(previousEndDoor, newStartDoor);
+
+            //CreateDoor(previousEndDoor);//CAMBIAR EL TRANSFORM
 
             rooms.Add(newRoom);
 
@@ -46,6 +50,12 @@ public class ProceduralRoomGenerator : MonoBehaviour
 
         AlignRooms(previousEndDoor, finishStartDoor);
         rooms.Add(finishRoom);
+    }
+
+    void CreateDoor(Transform doorSpawnPoint)
+    {
+        GameObject door = Instantiate(doorPrefab, doorSpawnPoint.position, doorSpawnPoint.rotation);
+        door.transform.SetParent(doorSpawnPoint);
     }
 
     void AlignRooms(Transform previousEnd, Transform newStart)
