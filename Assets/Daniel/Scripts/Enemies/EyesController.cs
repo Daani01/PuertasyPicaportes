@@ -62,7 +62,7 @@ public class EyesController : MonoBehaviour
                 FirstPersonController player = playerTransform.GetComponent<FirstPersonController>();
                 if (player != null && player.currentHealth > 0)
                 {
-                    player.currentHealth -= damageAmount;
+                    player.TakeDamage(damageAmount);
                     Debug.Log($"Player damaged by {damageAmount}. Current health: {player.currentHealth}");
                 }
             }
@@ -80,10 +80,5 @@ public class EyesController : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(visionSphere.position, visionRadius);
 
-        if (playerCamera != null)
-        {
-            Gizmos.color = Color.green;
-            Gizmos.DrawLine(playerCamera.transform.position, playerCamera.transform.position + playerCamera.transform.forward * 10f);
-        }
     }
 }

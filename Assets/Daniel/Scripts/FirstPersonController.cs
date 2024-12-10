@@ -46,6 +46,9 @@ public class FirstPersonController : MonoBehaviour
     public IUsable selectedObject;
     public Transform ObjectsTransform;
 
+    [Header("Screech")]
+    public float screechRadius;
+
     private CharacterController controller;
     private Vector2 moveInput;
     private Vector2 lookInput;
@@ -292,7 +295,7 @@ public class FirstPersonController : MonoBehaviour
         {
             if (item.GetType() == usableItem.GetType())
             {
-                Debug.Log("Ya tienes un objeto de este tipo en el inventario.");
+                //Debug.Log("Ya tienes un objeto de este tipo en el inventario.");
                 return false;
             }
         }
@@ -308,7 +311,7 @@ public class FirstPersonController : MonoBehaviour
         }
         else
         {
-            Debug.Log("Inventario lleno.");
+            //Debug.Log("Inventario lleno.");
         }
     }
 
@@ -318,13 +321,13 @@ public class FirstPersonController : MonoBehaviour
         {
             selectedObject = null;
             inventory.Remove(usableItem);
-            Debug.Log($"{usableItem.GetType().ToString()} eliminado del inventario.");
+            //Debug.Log($"{usableItem.GetType().ToString()} eliminado del inventario.");
 
             UpdateInventoryText();
         }
         else
         {
-            Debug.Log($"{usableItem.GetType().ToString()} no está en el inventario.");
+            //Debug.Log($"{usableItem.GetType().ToString()} no está en el inventario.");
         }
     }
 
@@ -361,7 +364,7 @@ public class FirstPersonController : MonoBehaviour
         }
         else
         {
-            Debug.Log("Invalid selection.");
+            //Debug.Log("Invalid selection.");
         }
     }
 
@@ -374,7 +377,7 @@ public class FirstPersonController : MonoBehaviour
         }
         else
         {
-            Debug.Log("No object selected.");
+            //Debug.Log("No object selected.");
         }
     }
 
@@ -396,7 +399,7 @@ public class FirstPersonController : MonoBehaviour
     {
         currentState = PlayerState.Dead;
         currentHealth = 0;
-        Debug.Log("Player has died.");
+        //Debug.Log("Player has died.");
     }
 
     public void KillInstantly() => Die();
@@ -430,5 +433,13 @@ public class FirstPersonController : MonoBehaviour
     {
         Quaternion cameraRotation = playerCamera.transform.rotation;
         transform.rotation = Quaternion.Euler(0f, cameraRotation.eulerAngles.y, 0f);
+    }
+
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(gameObject.transform.position, screechRadius);
+        
     }
 }
