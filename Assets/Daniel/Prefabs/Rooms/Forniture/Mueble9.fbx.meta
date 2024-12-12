@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: ebfb1efd5a6c9e348bf6937bfa7eb7dc
+guid: 40e313ecf8537944d9e1382fefa558b8
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -8,17 +8,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Negro
-    second: {fileID: 2100000, guid: 6f6c43f3c26d6b243afbb113df40c9ca, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Verde
-    second: {fileID: 2100000, guid: ba66b542eb56ed341a4d140ae8a93f66, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: madera
-    second: {fileID: 2100000, guid: f67b7e973b779bd46ab56e6efcc8b0f4, type: 2}
+    second: {fileID: 2100000, guid: 9c46d459ad0e8564a9420a215aec4f52, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

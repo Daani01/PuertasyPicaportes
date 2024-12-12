@@ -80,7 +80,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8632099432974086672}
   m_Layer: 0
-  m_Name: axis
+  m_Name: Axis
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

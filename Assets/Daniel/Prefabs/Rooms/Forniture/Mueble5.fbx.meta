@@ -1,9 +1,14 @@
 fileFormatVersion: 2
-guid: 87a188fdfec9b084aa5b04a2e1a26fbf
+guid: d43e2f68066d1c44cbee177e42b05064
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Blanco
+    second: {fileID: 2100000, guid: e32b20752a85ccb47993345983707d35, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

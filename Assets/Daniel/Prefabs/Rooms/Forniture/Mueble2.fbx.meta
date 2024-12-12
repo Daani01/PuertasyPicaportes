@@ -1,9 +1,14 @@
 fileFormatVersion: 2
-guid: 40e313ecf8537944d9e1382fefa558b8
+guid: 07d36bc2dfe2b45458c001935c0fd52a
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: madera
+    second: {fileID: 2100000, guid: b4279773c8f946a4db8128ccc5fa1da9, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
