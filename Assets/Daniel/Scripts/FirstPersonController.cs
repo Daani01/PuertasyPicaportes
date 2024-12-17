@@ -160,7 +160,7 @@ public class FirstPersonController : MonoBehaviour
 
     private void Jump()
     {
-        if (controller.isGrounded && currentState != PlayerState.Crouching && currentState != PlayerState.Block)
+        if (controller.isGrounded && currentState != PlayerState.Hiding && currentState != PlayerState.Crouching && currentState != PlayerState.Block)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
