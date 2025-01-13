@@ -237,32 +237,27 @@ public class FirstPersonController : MonoBehaviour
 
     public void EnterHiding(Vector3 insidePosition)
     {
+        Debug.Log("EnterHiding called with position: " + insidePosition);
         ChangePlayerState(PlayerState.Hiding);
         controller.height = normalHeight;
-        StartCoroutine(MoveToPosition(insidePosition));
+        TeleportToPosition(insidePosition);
     }
 
     public void ExitHiding(Vector3 outsidePosition)
     {
+        Debug.Log("ExitHiding called with position: " + outsidePosition);
         ChangePlayerState(PlayerState.Walking);
-        StartCoroutine(MoveToPosition(outsidePosition));
+        TeleportToPosition(outsidePosition);
     }
 
-    private IEnumerator MoveToPosition(Vector3 targetPosition)
+
+    private void TeleportToPosition(Vector3 targetPosition)
     {
-        float timeToMove = 1.0f;
-        Vector3 startPosition = transform.position;
-        float elapsedTime = 0f;
-
-        while (elapsedTime < timeToMove)
-        {
-            transform.position = Vector3.Lerp(startPosition, targetPosition, elapsedTime / timeToMove);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
+        controller.enabled = false; // Desactiva el CharacterController
         transform.position = targetPosition;
+        controller.enabled = true; // Activa el CharacterController
     }
+
 
     // Interaction methods
     private void Interact()

@@ -17,11 +17,21 @@ public class Flashlight : MonoBehaviour, IInteractable, IUsable
 
     public void GetObjPlayer(Transform position)
     {
+        // Establecer la posición del objeto actual
         gameObject.transform.position = position.position;
-        gameObject.transform.rotation = position.rotation;
-        gameObject.transform.SetParent(position.transform);
+
+        // Configurar la rotación para que mire hacia el eje Z del transform pasado
+        Vector3 direction = position.forward; // Dirección del eje Z del transform pasado
+        Quaternion rotation = Quaternion.LookRotation(direction, Vector3.down); // Calcular la rotación
+        gameObject.transform.rotation = rotation;
+
+        // Establecer el transform actual como hijo del transform pasado
+        gameObject.transform.SetParent(position);
+
+        // Desactivar el objeto
         gameObject.SetActive(false);
     }
+
     public void Activate()
     {
         gameObject.SetActive(true);

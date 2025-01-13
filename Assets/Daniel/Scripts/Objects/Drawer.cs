@@ -23,8 +23,8 @@ public class Drawer : MonoBehaviour, IInteractable
         // Calcular posición inicial y final
         Vector3 startPosition = transform.localPosition;
         Vector3 targetPosition = isOpen
-            ? startPosition - new Vector3(0, 0, moveDistance) // Cerrar el cajón
-            : startPosition + new Vector3(0, 0, moveDistance); // Abrir el cajón
+            ? startPosition - new Vector3(-moveDistance, 0, 0) // Cerrar el cajón
+            : startPosition + new Vector3(-moveDistance, 0, 0); // Abrir el cajón
 
         // Animar el movimiento
         float elapsedTime = 0f;
