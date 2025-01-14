@@ -12,6 +12,7 @@ public class TriggerEventHandler : MonoBehaviour
             if (roomEventManager != null)
             {
                 roomEventManager.OnPlayerEnterRoom();
+                gameObject.SetActive(false);
             }
             else
             {

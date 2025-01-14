@@ -10,6 +10,7 @@ public class ProceduralRoomGenerator : MonoBehaviour
 
     public int numberOfRooms;
     public int roomCount;
+    public int maxRoomActived;
 
     public List<GameObject> rooms = new List<GameObject>();
 
@@ -50,6 +51,20 @@ public class ProceduralRoomGenerator : MonoBehaviour
 
         AlignRooms(previousEndDoor, finishStartDoor);
         rooms.Add(finishRoom);
+
+
+        // Activar solo las primeras 3 habitaciones y desactivar el resto
+        for (int i = 0; i < rooms.Count; i++)
+        {
+            if (i < maxRoomActived)
+            {
+                rooms[i].SetActive(true); // Activar las primeras 3 habitaciones
+            }
+            else
+            {
+                rooms[i].SetActive(false); // Desactivar las restantes
+            }
+        }
     }
 
     void CreateDoor(Transform doorSpawnPoint)
@@ -67,8 +82,33 @@ public class ProceduralRoomGenerator : MonoBehaviour
 
     public void IncreaseRoomCount()
     {
+        // Aumentar el contador de habitaciones
         roomCount++;
+
+        // Asegurarse de que roomCount no exceda el número total de habitaciones
+        if (roomCount > numberOfRooms)
+        {
+            //roomCount = numberOfRooms - 1;
+            return; // No realizar más acciones si no hay más habitaciones para activar
+        }
+
+        // Activar la nueva habitación dentro del rango
+        if (roomCount < rooms.Count && (roomCount + maxRoomActived - 1) < rooms.Count)
+        {
+            rooms[roomCount + (maxRoomActived - 1)].SetActive(true);
+        }
+
+        // Desactivar la habitación que está fuera del rango si roomCount es mayor o igual a 3
+        if (roomCount > 2)
+        {
+            int roomToDeactivate = roomCount - 3;
+            if (roomToDeactivate >= 0 && roomToDeactivate < rooms.Count)
+            {
+                rooms[roomToDeactivate].SetActive(false);
+            }
+        }
     }
+
 
     public void DecreaseRoomCount()
     {
