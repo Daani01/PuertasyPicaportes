@@ -7,6 +7,8 @@ public class EnemyManager : MonoBehaviour
     public static EnemyManager Instance { get; private set; }
 
     public GameObject pf_Rush;
+    public GameObject pf_Screech;
+
     public ProceduralRoomGenerator roomGenerator;
 
     private void Awake()
@@ -43,6 +45,11 @@ public class EnemyManager : MonoBehaviour
                         rushController.SetWaypoints(lastRoomTransforms);
                     }
                 }
+                break;
+            case RoomEventType.Screech:
+
+                GameObject screechInstance = Instantiate(pf_Screech);
+
                 break;
 
         }

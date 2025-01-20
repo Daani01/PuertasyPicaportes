@@ -27,7 +27,7 @@ public class RoomEventManager : MonoBehaviour
             Transform triggerEvent = room.transform.Find("TriggerEvent");
             if (triggerEvent != null)
             {
-                _eventType = RoomEventType.Rush;
+                _eventType = RoomEventType.Screech;
                 room.GetComponent<RoomEventManager>()._eventType = _eventType;
                 Debug.Log($"Asignando evento {_eventType} en la habitación {numberRoom}");
             }

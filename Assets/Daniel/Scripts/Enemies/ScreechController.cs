@@ -5,6 +5,9 @@ public class ScreechController : MonoBehaviour
 {
     private Transform playerTransform;
     private Camera playerCamera;
+    private Vector3 randomPosition;
+    private Vector3 relativePosition;
+    private GameObject player;
 
     private float timeNotLookedAt;
     public float maxTimeNotLookedAt;
@@ -23,11 +26,15 @@ public class ScreechController : MonoBehaviour
 
     void Start()
     {
-        GameObject playerObject = GameObject.Find("Player");
-        if (playerObject != null)
+        player = GameObject.Find("Player");
+        if (player != null)
         {
-            playerTransform = playerObject.transform;
-            playerCamera = playerObject.GetComponentInChildren<Camera>();
+            playerTransform = player.transform;
+            playerCamera = player.GetComponentInChildren<Camera>();
+
+            randomPosition = GetRandomPositionInSphere(playerTransform.position, playerTransform.GetComponent<FirstPersonController>().screechRadius);
+
+            //gameObject.transform.SetParent(playerTransform.transform, false);
 
             if (playerCamera == null)
             {
@@ -40,6 +47,13 @@ public class ScreechController : MonoBehaviour
         }
 
         StartCoroutine(WaitAndActivate());
+    }
+
+    private Vector3 GetRandomPositionInSphere(Vector3 center, float radius)
+    {
+        // Generar un punto aleatorio dentro de una esfera unitaria y escalarlo
+        Vector3 randomPoint = Random.insideUnitSphere * radius;
+        return center + randomPoint; // Ajustar la posición relativa al centro
     }
 
     private IEnumerator WaitAndActivate()
@@ -56,6 +70,14 @@ public class ScreechController : MonoBehaviour
         {
             if (playerCamera != null)
             {
+                Debug.Log("POS: " + transform.position);
+
+                // Calcula la posición relativa al jugador
+                relativePosition = randomPosition - player.transform.position;
+
+                // Asigna la posición relativa a este objeto
+                transform.localPosition = player.transform.position + relativePosition;
+
                 if (CheckPlayerView())
                 {
                     Debug.Log("Player is looking at the object.");
