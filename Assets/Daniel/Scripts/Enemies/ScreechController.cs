@@ -1,13 +1,15 @@
 using System.Collections;
 using UnityEngine;
 
-public class ScreechController : MonoBehaviour
+public class ScreechController : MonoBehaviour, IInteractable
 {
     private Transform playerTransform;
     private Camera playerCamera;
     private Vector3 randomPosition;
     private Vector3 relativePosition;
     private GameObject player;
+
+    private bool killScreech;
 
     private float timeNotLookedAt;
     public float maxTimeNotLookedAt;
@@ -22,19 +24,13 @@ public class ScreechController : MonoBehaviour
     public float detectionRadius;
     public float visionRadius;
 
-    private bool isLooking = false;
-
     void Start()
     {
         player = GameObject.Find("Player");
         if (player != null)
         {
             playerTransform = player.transform;
-            playerCamera = player.GetComponentInChildren<Camera>();
-
-            randomPosition = GetRandomPositionInSphere(playerTransform.position, playerTransform.GetComponent<FirstPersonController>().screechRadius);
-
-            //gameObject.transform.SetParent(playerTransform.transform, false);
+            playerCamera = player.GetComponentInChildren<Camera>();            
 
             if (playerCamera == null)
             {
@@ -46,18 +42,32 @@ public class ScreechController : MonoBehaviour
             Debug.LogError("Player object not found in the scene.");
         }
 
-        StartCoroutine(WaitAndActivate());
+    }
+
+    void OnEnable()
+    {
+        if (playerTransform != null && playerTransform.GetComponent<FirstPersonController>() != null)
+        {
+            StartCoroutine(WaitAndActivate());//PRIMERA VEZ NO SE ACTIVA
+        }
+        else
+        {
+            Debug.LogWarning("Player or FirstPersonController is not set. Skipping activation.");
+        }
     }
 
     private Vector3 GetRandomPositionInSphere(Vector3 center, float radius)
     {
-        // Generar un punto aleatorio dentro de una esfera unitaria y escalarlo
         Vector3 randomPoint = Random.insideUnitSphere * radius;
-        return center + randomPoint; // Ajustar la posición relativa al centro
+        return center + randomPoint;
     }
 
     private IEnumerator WaitAndActivate()
     {
+        float radius = playerTransform.GetComponent<FirstPersonController>().screechRadius;
+        randomPosition = GetRandomPositionInSphere(playerTransform.position, radius);
+        relativePosition = randomPosition - playerTransform.position;
+
         yield return new WaitForSeconds(timeToAppear);
 
         screechObj.SetActive(true);
@@ -70,18 +80,11 @@ public class ScreechController : MonoBehaviour
         {
             if (playerCamera != null)
             {
-                Debug.Log("POS: " + transform.position);
+                transform.position = playerTransform.position + relativePosition;
 
-                // Calcula la posición relativa al jugador
-                relativePosition = randomPosition - player.transform.position;
-
-                // Asigna la posición relativa a este objeto
-                transform.localPosition = player.transform.position + relativePosition;
-
-                if (CheckPlayerView())
+                if (killScreech)
                 {
-                    Debug.Log("Player is looking at the object.");
-                    isLooking = true;
+                    Debug.Log("Screech visto");
                     DeactivateObject();
                     yield break;
                 }
@@ -101,6 +104,12 @@ public class ScreechController : MonoBehaviour
 
             yield return null;
         }
+    }
+
+
+    public void InteractObj()
+    {
+        killScreech = true;
     }
 
     private bool CheckPlayerView()
@@ -138,6 +147,9 @@ public class ScreechController : MonoBehaviour
 
     private void DeactivateObject()
     {
+        timeNotLookedAt = 0.0f;
+        screechObj.SetActive(false);
+        killScreech = false;
         gameObject.SetActive(false);
         Debug.Log("Screech object deactivated.");
     }

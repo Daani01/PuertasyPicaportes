@@ -20,9 +20,9 @@ public class RoomEventManager : MonoBehaviour
     
     public void AssignRoomEvent(GameObject room, int numberRoom, int maxNumberRoom)
     {
-        int random = Random.Range(0, maxNumberRoom);
+        //int random = Random.Range(0, maxNumberRoom);
 
-        if (numberRoom > random)
+        if (numberRoom > 0)
         {
             Transform triggerEvent = room.transform.Find("TriggerEvent");
             if (triggerEvent != null)
