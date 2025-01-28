@@ -116,7 +116,8 @@ public class FirstPersonController : MonoBehaviour
 
     // Movement-related methods
     private void Move()
-    {
+    {       
+
         if (currentState == PlayerState.Dead || currentState == PlayerState.Block || currentState == PlayerState.Hiding)
         {
             currentSpeed = 0f;
@@ -237,15 +238,20 @@ public class FirstPersonController : MonoBehaviour
 
     public void EnterHiding(Vector3 insidePosition)
     {
-        Debug.Log("EnterHiding called with position: " + insidePosition);
+        //Debug.Log("EnterHiding called with position: " + insidePosition);
         ChangePlayerState(PlayerState.Hiding);
+        if (selectedObject != null)
+        {
+            selectedObject.DesActivate();
+            selectedObject = null;
+        }
         controller.height = normalHeight;
         TeleportToPosition(insidePosition);
     }
 
     public void ExitHiding(Vector3 outsidePosition)
     {
-        Debug.Log("ExitHiding called with position: " + outsidePosition);
+        //Debug.Log("ExitHiding called with position: " + outsidePosition);
         ChangePlayerState(PlayerState.Walking);
         TeleportToPosition(outsidePosition);
     }
@@ -337,51 +343,57 @@ public class FirstPersonController : MonoBehaviour
 
     public void SelectObj(int index)
     {
-        if (index > 0 && index <= inventory.Count)
+        if (currentState != PlayerState.Hiding && currentState != PlayerState.Block && currentState != PlayerState.Dead)
         {
-            var newSelectedObject = inventory[index - 1];
-
-            if (selectedObject != newSelectedObject)
+            if (index > 0 && index <= inventory.Count)
             {
-                if (selectedObject != null)
+                var newSelectedObject = inventory[index - 1];
+
+                if (selectedObject != newSelectedObject)
+                {
+                    if (selectedObject != null)
+                    {
+                        selectedObject.DesActivate();
+                    }
+
+                    selectedObject = newSelectedObject;
+                    selectedObject.Activate();
+                }
+                else
                 {
                     selectedObject.DesActivate();
+                    selectedObject = null;
                 }
-
-                selectedObject = newSelectedObject;
-                selectedObject.Activate();
             }
             else
             {
-                selectedObject.DesActivate();
-                selectedObject = null;
+                //Debug.Log("Invalid selection.");
             }
-        }
-        else
-        {
-            //Debug.Log("Invalid selection.");
-        }
+        }        
     }
 
 
     public void ActivateObj()
     {
-        if (selectedObject != null)
+        if (currentState != PlayerState.Hiding && currentState != PlayerState.Block && currentState != PlayerState.Dead)
         {
-            selectedObject.Use();
-        }
-        else
-        {
-            //Debug.Log("No object selected.");
-        }
+            if (selectedObject != null)
+            {
+                selectedObject.Use();
+            }
+            else
+            {
+                //Debug.Log("No object selected.");
+            }
+        }        
     }
 
     // Health management methods
-    public void TakeDamage(float amount)
+    public void TakeDamage(float amount, Enemie enemie)
     {
         if (currentState == PlayerState.Dead) return;
         currentHealth -= amount;
-        if (currentHealth <= 0) Die();
+        if (currentHealth <= 0) Die(enemie);
     }
 
     public void Heal(float amount)
@@ -390,14 +402,14 @@ public class FirstPersonController : MonoBehaviour
         currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
     }
 
-    public void Die()
+    public void Die(Enemie enemie)
     {
         currentState = PlayerState.Dead;
         currentHealth = 0;
-        //Debug.Log("Player has died.");
+        //Debug.Log("Enemie:" + enemie.enemyName);
     }
 
-    public void KillInstantly() => Die();
+    public void KillInstantly(Enemie enemie) => Die(enemie);
     public float GetHealth() => currentHealth;
 
     // State transition and camera handling

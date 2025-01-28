@@ -1,12 +1,17 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class RushController : MonoBehaviour
+public class RushController : Enemie
 {
     private List<Transform> waypoints;
     private int currentWaypointIndex = 0;
     public float speed = 5f;
     public float damageAmount = 20f;
+
+    private void Start()
+    {
+        enemyName = "Rush";
+    }
 
     public void SetWaypoints(List<Transform> waypointsToFollow)
     {
@@ -43,7 +48,7 @@ public class RushController : MonoBehaviour
                     Debug.Log("ESCONDIDO.");
                     return;
                 }
-                playerHealth.KillInstantly();
+                playerHealth.KillInstantly(gameObject.GetComponent<Enemie>());
             }
         }
     }

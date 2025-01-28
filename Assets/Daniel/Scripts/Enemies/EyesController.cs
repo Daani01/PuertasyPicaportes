@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EyesController : MonoBehaviour
+public class EyesController : Enemie
 {
     public float damageAmount;                   
     public float checkInterval;
@@ -17,6 +17,8 @@ public class EyesController : MonoBehaviour
 
     void Start()
     {
+        enemyName = "Eyes";
+
         if (playerTransform == null)
         {
 
@@ -62,7 +64,7 @@ public class EyesController : MonoBehaviour
                 FirstPersonController player = playerTransform.GetComponent<FirstPersonController>();
                 if (player != null && player.currentHealth > 0)
                 {
-                    player.TakeDamage(damageAmount);
+                    player.TakeDamage(damageAmount, gameObject.GetComponent<Enemie>());
                     Debug.Log($"Player damaged by {damageAmount}. Current health: {player.currentHealth}");
                 }
             }

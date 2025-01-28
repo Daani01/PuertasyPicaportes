@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class ScreechController : MonoBehaviour, IInteractable
+public class ScreechController : Enemie, IInteractable
 {
     private Transform playerTransform;
     private Camera playerCamera;
@@ -26,6 +26,8 @@ public class ScreechController : MonoBehaviour, IInteractable
 
     void Start()
     {
+        enemyName = "Screech";
+
         player = GameObject.Find("Player");
         if (player != null)
         {
@@ -140,7 +142,7 @@ public class ScreechController : MonoBehaviour, IInteractable
         FirstPersonController player = playerTransform.GetComponent<FirstPersonController>();
         if (player != null && player.currentHealth > 0)
         {
-            player.TakeDamage(damageAmount);
+            player.TakeDamage(damageAmount, gameObject.GetComponent<Enemie>());
             Debug.Log($"Player damaged by {damageAmount}. Current health: {player.currentHealth}");
         }
     }
