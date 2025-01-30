@@ -800,7 +800,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &323469795
 Transform:
   m_ObjectHideFlags: 0
@@ -5064,7 +5064,7 @@ Transform:
   m_GameObject: {fileID: 993320415}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -40, y: 0.49000025, z: 0.493}
+  m_LocalPosition: {x: -6, y: 0.49000025, z: 0.493}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5261,7 +5261,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4598048211679944991, guid: 8a7a9f937b397e446b6c7822e136f380, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7342387028826236997, guid: 8a7a9f937b397e446b6c7822e136f380, type: 3}
       propertyPath: m_LocalScale.x
@@ -5315,6 +5315,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7875540662105722081, guid: 8a7a9f937b397e446b6c7822e136f380, type: 3}
+      propertyPath: csvFile
+      value: 
+      objectReference: {fileID: 4900000, guid: 36939bbfc2259a84ba96bb7b83d6f523, type: 3}
     - target: {fileID: 7875540662105722081, guid: 8a7a9f937b397e446b6c7822e136f380, type: 3}
       propertyPath: damageAmount
       value: 20
