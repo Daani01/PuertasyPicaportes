@@ -15,9 +15,9 @@ public class Lighter : MonoBehaviour, IInteractable, IUsable
 
     }
 
-    string IUsable.GetName()
+    ItemType IUsable.GetName()
     {
-        return ItemType.Lighter.ToString();
+        return ItemType.Lighter;
     }
     public void GetObjPlayer(Transform position)
     {

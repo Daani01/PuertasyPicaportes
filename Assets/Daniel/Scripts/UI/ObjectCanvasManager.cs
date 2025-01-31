@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -27,29 +28,20 @@ public class ObjectCanvasManager : MonoBehaviour
         }
     }
 
-    public void ClearItems()
-    {
-        foreach (GameObject item in createdItems)
-        {
-            Destroy(item);
-        }
-        createdItems.Clear();
-    }
-
-    private GameObject CreateItemPrefab(Sprite img, string textValue)
+    private GameObject CreateItemPrefab(Texture img, string textValue)
     {
         // Instanciar el prefab ya existente
         GameObject item = Instantiate(itemPrefab, contentPanel); // Asegúrate de que itemPrefab está asignado en el Inspector
 
         // Buscar y modificar la imagen
-        Image image = item.transform.Find("Image").GetComponent<Image>();
+        RawImage image = item.transform.Find("Image").GetComponent<RawImage>();
         if (image != null)
         {
-            image.sprite = img;
+            image.texture = img;
         }
 
         // Buscar y modificar el texto
-        Text text = item.transform.Find("Text").GetComponent<Text>();
+        TMP_Text text = item.transform.Find("Text").GetComponent<TMP_Text>();
         if (text != null)
         {
             text.text = textValue;
@@ -57,5 +49,41 @@ public class ObjectCanvasManager : MonoBehaviour
 
         return item;
     }
+
+    public void RemoveItem(int index)
+    {
+        // Verificar si el índice es válido
+        if (index >= 0 && index < createdItems.Count)
+        {
+            // Eliminar el objeto de la lista y destruirlo
+            GameObject itemToRemove = createdItems[index];
+            createdItems.RemoveAt(index);
+            Destroy(itemToRemove);
+
+            // Reordenar los textos de los elementos restantes
+            UpdateItemNumbers();
+        }
+        else
+        {
+            Debug.LogWarning($"Índice {index} fuera de rango. No se pudo eliminar el elemento.");
+        }
+    }
+
+    // Función para actualizar los textos de los elementos restantes
+    private void UpdateItemNumbers()
+    {
+        for (int i = 0; i < createdItems.Count; i++)
+        {
+            TMP_Text textComponent = createdItems[i].transform.Find("Text").GetComponent<TMP_Text>();
+            if (textComponent != null)
+            {
+                textComponent.text = (i + 1).ToString(); // Se numera desde 1 hasta el total
+            }
+        }
+    }
+
+
+
+
 
 }

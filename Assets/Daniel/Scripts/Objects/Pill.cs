@@ -13,9 +13,9 @@ public class Pill : MonoBehaviour, IInteractable, IUsable
 
     }
 
-    string IUsable.GetName()
+    ItemType IUsable.GetName()
     {
-        return ItemType.Pills.ToString();
+        return ItemType.Pills;
     }
     public void GetObjPlayer(Transform position)
     {

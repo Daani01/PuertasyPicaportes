@@ -14,7 +14,6 @@ public class FirstPersonController : MonoBehaviour
 
     [Header("HUD")]
     public TMP_Text Text_State;
-    public TMP_Text Text_Objets;
 
     [Header("Movement Settings")]
     public float walkSpeed;
@@ -311,12 +310,8 @@ public class FirstPersonController : MonoBehaviour
     {
         if (inventory.Count < 6)
         {
-            if(usableItem.GetName() == ItemType.Flashlight.ToString())
-            {
-                inventory.Add(usableItem);
-                canvasManager.AddItem(ItemType.Flashlight, (inventory.Count.ToString() + 1));
-            }
-            //UpdateInventoryText();
+            inventory.Add(usableItem);
+            canvasManager.AddItem(usableItem.GetName(), (inventory.Count).ToString());
         }
         else
         {
@@ -329,23 +324,14 @@ public class FirstPersonController : MonoBehaviour
         if (inventory.Contains(usableItem))
         {
             selectedObject = null;
-            inventory.Remove(usableItem);
-            //Debug.Log($"{usableItem.GetType().ToString()} eliminado del inventario.");
 
-            UpdateInventoryText();
+            canvasManager.RemoveItem(inventory.IndexOf(usableItem));
+            inventory.Remove(usableItem);                        
+
         }
         else
         {
             //Debug.Log($"{usableItem.GetType().ToString()} no está en el inventario.");
-        }
-    }
-
-    private void UpdateInventoryText()
-    {
-        Text_Objets.text = "Objetos en el inventario:";
-        foreach (var item in inventory)
-        {
-            Text_Objets.text += $"\n {item.GetType().ToString()}";
         }
     }
 

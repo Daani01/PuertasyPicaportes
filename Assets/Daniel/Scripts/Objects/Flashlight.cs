@@ -15,9 +15,9 @@ public class Flashlight : MonoBehaviour, IInteractable, IUsable
 
     }
 
-    string IUsable.GetName()
+    ItemType IUsable.GetName()
     {
-        return ItemType.Flashlight.ToString();
+        return ItemType.Flashlight;
     }
 
     public void GetObjPlayer(Transform position)

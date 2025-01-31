@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum ItemType
 {
@@ -13,6 +14,6 @@ public enum ItemType
 public class ItemData
 {
     public ItemType type; // Enum para identificar el item
-    public Sprite image; // Imagen del item
+    public Texture image; // Imagen del item
     public string text; // Texto del item
 }

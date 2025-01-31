@@ -13,7 +13,7 @@ public interface IUsable : IInteractable
     void DesActivate();
     void Destroy();
 
-    string GetName();
+    ItemType GetName();
 
     public enum ActivationType
     {
