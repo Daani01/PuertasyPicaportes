@@ -13,6 +13,10 @@ public class Pill : MonoBehaviour, IInteractable, IUsable
 
     }
 
+    string IUsable.GetName()
+    {
+        return ItemType.Pills.ToString();
+    }
     public void GetObjPlayer(Transform position)
     {
         gameObject.transform.position = position.position;

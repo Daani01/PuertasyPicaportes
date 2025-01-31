@@ -13,6 +13,8 @@ public interface IUsable : IInteractable
     void DesActivate();
     void Destroy();
 
+    string GetName();
+
     public enum ActivationType
     {
         OneTime,

@@ -15,6 +15,11 @@ public class Flashlight : MonoBehaviour, IInteractable, IUsable
 
     }
 
+    string IUsable.GetName()
+    {
+        return ItemType.Flashlight.ToString();
+    }
+
     public void GetObjPlayer(Transform position)
     {
         // Establecer la posición del objeto actual
@@ -122,4 +127,5 @@ public class Flashlight : MonoBehaviour, IInteractable, IUsable
 
         Destroy();
     }
+
 }

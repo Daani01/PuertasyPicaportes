@@ -15,6 +15,10 @@ public class Lighter : MonoBehaviour, IInteractable, IUsable
 
     }
 
+    string IUsable.GetName()
+    {
+        return ItemType.Lighter.ToString();
+    }
     public void GetObjPlayer(Transform position)
     {
         // Establecer la posición del objeto actual

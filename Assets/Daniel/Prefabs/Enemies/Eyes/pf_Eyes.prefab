@@ -45,13 +45,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1f6d60b7fe73ec419d3e9cc8b1d6e2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyName: Eyes
   damageAmount: 0.001
   checkInterval: 0.2
-  playerTransform: {fileID: 0}
-  detectionSphere: {fileID: 7738842955804621583}
-  visionSphere: {fileID: 7738842955804621583}
   detectionRadius: 3.4
   visionRadius: 1.27
+  detectionSphere: {fileID: 7738842955804621583}
+  visionSphere: {fileID: 7738842955804621583}
 --- !u!1 &5632484158025157750
 GameObject:
   m_ObjectHideFlags: 0

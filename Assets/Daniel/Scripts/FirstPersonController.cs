@@ -8,6 +8,10 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(PlayerInput), typeof(CharacterController))]
 public class FirstPersonController : MonoBehaviour
 {
+    [Header("Canvas Manager")]
+    public ObjectCanvasManager canvasManager;
+
+
     [Header("HUD")]
     public TMP_Text Text_State;
     public TMP_Text Text_Objets;
@@ -307,8 +311,12 @@ public class FirstPersonController : MonoBehaviour
     {
         if (inventory.Count < 6)
         {
-            inventory.Add(usableItem);
-            UpdateInventoryText();
+            if(usableItem.GetName() == ItemType.Flashlight.ToString())
+            {
+                inventory.Add(usableItem);
+                canvasManager.AddItem(ItemType.Flashlight, (inventory.Count.ToString() + 1));
+            }
+            //UpdateInventoryText();
         }
         else
         {

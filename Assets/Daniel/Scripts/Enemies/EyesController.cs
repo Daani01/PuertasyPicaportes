@@ -3,11 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class EyesController : Enemie
-{
-    public TextAsset csvFile; // Asigna el archivo CSV en el Inspector
-    private List<Dictionary<string, string>> data = new List<Dictionary<string, string>>();
-
-
+{   
     public float damageAmount;                   
     public float checkInterval;
     public float detectionRadius;
@@ -17,35 +13,16 @@ public class EyesController : Enemie
     private Transform playerTransform;
 
     private Camera playerCamera;                       
-    private float nextCheckTime = 0f;                  
+    private float nextCheckTime = 0f;
+
+    private void OnEnable()
+    {
+        string enemyInfo = CSVManager.Instance.GetSpecificData(enemyName, ExcelValues.Prob.ToString());               
+        Debug.Log($"Info de {enemyName}: {enemyInfo}");
+    }
 
     void Start()
-    {
-        if (csvFile == null)
-        {
-            Debug.LogError("No se ha asignado un archivo CSV en el Inspector.");
-            return;
-        }
-
-        LoadCSV();
-        enemyName = "Eyes"; // Cambia esto por el nombre del enemigo que buscas
-        Dictionary<string, string> enemyData = GetRowByEnemyName(enemyName);
-
-        if (enemyData != null)
-        {
-            Debug.Log($"Datos de {enemyName}: {string.Join(", ", enemyData)}");
-
-            // Ejemplo de cómo obtener solo un dato específico
-            string info = GetSpecificData(enemyName, "Info");
-            Debug.Log($"Info de {enemyName}: {info}");
-        }
-        else
-        {
-            Debug.LogWarning($"No se encontró información para {enemyName}");
-        }
-
-
-        //enemyName = "Eyes";
+    {       
 
         if (playerTransform == null)
         {
@@ -67,49 +44,6 @@ public class EyesController : Enemie
             }
         }
     }
-
-
-    void LoadCSV()
-    {
-        string[] lines = csvFile.text.Split('\n');
-        string[] headers = lines[0].Split(','); // Obtener nombres de columnas
-
-        for (int i = 1; i < lines.Length; i++)
-        {
-            string[] values = lines[i].Split(',');
-            Dictionary<string, string> row = new Dictionary<string, string>();
-
-            for (int j = 0; j < headers.Length; j++)
-            {
-                row[headers[j].Trim()] = values[j].Trim();
-            }
-            data.Add(row);
-        }
-    }
-
-    Dictionary<string, string> GetRowByEnemyName(string enemyName)
-    {
-        foreach (var row in data)
-        {
-            if (row.ContainsKey("Name") && row["Name"] == enemyName)
-            {
-                return row; // Devuelve toda la fila
-            }
-        }
-        return null;
-    }
-
-    string GetSpecificData(string enemyName, string columnName)
-    {
-        Dictionary<string, string> row = GetRowByEnemyName(enemyName);
-        if (row != null && row.ContainsKey(columnName))
-        {
-            return row[columnName]; // Devuelve solo el dato solicitado
-        }
-        return "Dato no encontrado";
-    }
-
-
 
     void Update()
     {

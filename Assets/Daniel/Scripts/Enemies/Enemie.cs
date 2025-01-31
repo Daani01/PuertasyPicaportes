@@ -5,4 +5,11 @@ using UnityEngine;
 public class Enemie : MonoBehaviour
 {
     public string enemyName;
+    public enum ExcelValues
+    {
+        Damage,
+        Info,
+        Prob
+    }
+
 }
