@@ -1,12 +1,14 @@
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 
-public class CSVManager : MonoBehaviour
+public class CSVManager : MonoBehaviour, IProcess
 {
     public TextAsset csvFile;
 
-    static private List<Dictionary<string, string>> data = new List<Dictionary<string, string>>();
     private static CSVManager instance;
+    private List<Dictionary<string, string>> data = new List<Dictionary<string, string>>();
+    public bool IsCompleted { get; private set; } = false;
 
     public static CSVManager Instance
     {
@@ -22,20 +24,36 @@ public class CSVManager : MonoBehaviour
         }
     }
 
-    void Awake()
+    private void Awake()
     {
-        if (csvFile != null)
+        if (instance == null)
         {
-            LoadCSV();
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+            if (csvFile != null)
+            {
+                LoadCSV(null); // Carga inicial si es necesario
+            }
+        }
+        else if (instance != this)
+        {
+            Destroy(gameObject);
         }
     }
 
-    public void LoadCSV()
+    public void ExecuteProcess(System.Action onComplete)
     {
+        StartCoroutine(LoadCSV(onComplete));
+    }
+
+    private IEnumerator LoadCSV(System.Action onComplete)
+    {
+
         if (csvFile == null)
         {
-            Debug.LogError("No se ha asignado un archivo CSV.");
-            return;
+            IsCompleted = true;
+            onComplete?.Invoke();
+            yield break;
         }
 
         data.Clear();
@@ -53,6 +71,9 @@ public class CSVManager : MonoBehaviour
             }
             data.Add(row);
         }
+
+        IsCompleted = true;
+        onComplete?.Invoke();
     }
 
     public Dictionary<string, string> GetRowByEnemyName(string enemyName)

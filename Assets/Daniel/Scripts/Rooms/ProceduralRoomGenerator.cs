@@ -1,8 +1,12 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 
-public class ProceduralRoomGenerator : MonoBehaviour
+public class ProceduralRoomGenerator : MonoBehaviour, IProcess
 {
+
+    public bool IsCompleted { get; private set; } = false;
+
     public GameObject startRoomPrefab;
     public GameObject finishRoomPrefab;
     public GameObject[] basicRoomPrefabs;
@@ -13,15 +17,33 @@ public class ProceduralRoomGenerator : MonoBehaviour
     public int maxRoomActived;
 
     public List<GameObject> rooms = new List<GameObject>();
+    private RoomEventManager roomEventManager;
 
-    void Start()
+
+    public void ExecuteProcess(System.Action onComplete)
     {
-        GenerateRooms();
+        StartCoroutine(ProcessRoutine(onComplete));
     }
 
-    void GenerateRooms()
+    private IEnumerator ProcessRoutine(System.Action onComplete)
     {
-        RoomEventManager roomEventManager = GetComponent<RoomEventManager>();
+
+        yield return StartCoroutine(GenerateRooms());
+
+        IsCompleted = true;
+
+        onComplete?.Invoke();
+    }
+
+
+    private IEnumerator GenerateRooms()
+    {
+        roomEventManager = GetComponent<RoomEventManager>();
+        if (roomEventManager == null)
+        {
+            Debug.LogError("No se encontró RoomEventManager en el objeto.");
+            yield break;
+        }
 
         GameObject startRoom = Instantiate(startRoomPrefab);
         rooms.Add(startRoom);
@@ -36,14 +58,13 @@ public class ProceduralRoomGenerator : MonoBehaviour
             roomEventManager.AssignRoomEvent(newRoom, i, numberOfRooms);
 
             Transform newStartDoor = newRoom.transform.Find("StartDoorSpawnPoint");
-
             AlignRooms(previousEndDoor, newStartDoor);
 
             //CreateDoor(previousEndDoor);//CAMBIAR EL TRANSFORM
 
             rooms.Add(newRoom);
-
             previousEndDoor = newRoom.transform.Find("EndDoorSpawnPoint");
+
         }
 
         GameObject finishRoom = Instantiate(finishRoomPrefab);
@@ -53,17 +74,9 @@ public class ProceduralRoomGenerator : MonoBehaviour
         rooms.Add(finishRoom);
 
 
-        // Activar solo las primeras 3 habitaciones y desactivar el resto
         for (int i = 0; i < rooms.Count; i++)
         {
-            if (i < maxRoomActived)
-            {
-                rooms[i].SetActive(true); // Activar las primeras 3 habitaciones
-            }
-            else
-            {
-                rooms[i].SetActive(false); // Desactivar las restantes
-            }
+            rooms[i].SetActive(i < maxRoomActived);
         }
     }
 
@@ -108,7 +121,6 @@ public class ProceduralRoomGenerator : MonoBehaviour
             }
         }
     }
-
 
     public void DecreaseRoomCount()
     {

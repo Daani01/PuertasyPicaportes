@@ -29,7 +29,7 @@ public class RoomEventManager : MonoBehaviour
             {
                 _eventType = RoomEventType.Screech;
                 room.GetComponent<RoomEventManager>()._eventType = _eventType;
-                Debug.Log($"Asignando evento {_eventType} en la habitación {numberRoom}");
+                //Debug.Log($"Asignando evento {_eventType} en la habitación {numberRoom}");
             }
         }
         else
