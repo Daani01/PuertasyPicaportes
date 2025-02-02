@@ -1,19 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class GameLoop : MonoBehaviour
 {
-    [SerializeField] private List<GameObject> prefabProcesses; // Prefabs a instanciar y ejecutar
-    [SerializeField] private GDTFadeEffect fadeEffect; // Referencia al efecto de fade
+    [SerializeField] private List<GameObject> prefabProcesses;
+    [SerializeField] private GDTFadeEffect fadeEffect;
+
+    [SerializeField] private TMP_Text info_Text;
+
 
     private List<GameObject> instantiatedObjects = new List<GameObject>();
     private int currentIndex = 0;
-    private System.Diagnostics.Stopwatch totalStopwatch = new System.Diagnostics.Stopwatch(); // Cronómetro para tiempo total
+    private System.Diagnostics.Stopwatch totalStopwatch = new System.Diagnostics.Stopwatch();
 
     private void Start()
     {
-        totalStopwatch.Start(); // Inicia el tiempo total
+        totalStopwatch.Start();
         StartCoroutine(RunGameLoop());
     }
 
@@ -34,12 +38,13 @@ public class GameLoop : MonoBehaviour
                 {
                     System.Diagnostics.Stopwatch processStopwatch = System.Diagnostics.Stopwatch.StartNew();
 
+                    info_Text.text = $"Cargando: {currentIndex}/{prefabProcesses.Count}";
                     //Debug.Log($"[GameLoop] Iniciando proceso en {currentGameObject.name}");
+
                     process.ExecuteProcess(() =>
                     {
                         processStopwatch.Stop();
-                        Debug.Log($"[GameLoop] Proceso completado en {currentGameObject.name} (Tiempo: {processStopwatch.ElapsedMilliseconds} ms)");
-                        OnProcessCompleted();
+                        //Debug.Log($"[GameLoop] Proceso completado en {currentGameObject.name} (Tiempo: {processStopwatch.ElapsedMilliseconds} ms)");
                     });
 
                     yield return new WaitUntil(() => process.IsCompleted);
@@ -54,22 +59,30 @@ public class GameLoop : MonoBehaviour
         }
 
         totalStopwatch.Stop();
-        Debug.Log($"[GameLoop] Todos los procesos han finalizado. Tiempo total: {totalStopwatch.ElapsedMilliseconds} ms");
+        info_Text.text = $"Carga completa en \n{totalStopwatch.ElapsedMilliseconds} ms";
+        //Debug.Log($"[GameLoop] Todos los procesos han finalizado. Tiempo total: {totalStopwatch.ElapsedMilliseconds} ms");
 
-        //Llamamos al efecto de fade cuando todos los procesos terminan
         if (fadeEffect != null)
         {
-            Debug.Log("[GameLoop] Activando efecto de fade...");
             fadeEffect.StartEffect();
+            //StartCoroutine(FadeOutText());
         }
-        else
-        {
-            Debug.LogWarning("[GameLoop] No se ha asignado el efecto de fade.");
-        }
+
     }
 
-    private void OnProcessCompleted()
+    private IEnumerator FadeOutText()
     {
-        //Debug.Log("[GameLoop] Proceso finalizado, avanzando al siguiente.");
+        float startAlpha = info_Text.alpha;
+        float elapsedTime = 0f;
+
+        while (elapsedTime < fadeEffect.timeEffect)
+        {
+            elapsedTime += Time.deltaTime;
+            info_Text.alpha = Mathf.Lerp(startAlpha, 0f, elapsedTime / fadeEffect.timeEffect);
+            yield return null;
+        }
+
+        info_Text.alpha = 0f;
     }
+
 }

@@ -112,14 +112,28 @@ public class ProceduralRoomGenerator : MonoBehaviour, IProcess
         }
 
         // Desactivar la habitación que está fuera del rango si roomCount es mayor o igual a 3
-        if (roomCount > 2)
+        if (roomCount > maxRoomActived)
         {
-            int roomToDeactivate = roomCount - 3;
-            if (roomToDeactivate >= 0 && roomToDeactivate < rooms.Count)
+            int roomToDeactivate = roomCount - (maxRoomActived + 1);
+            if (roomToDeactivate >= 0 && roomToDeactivate + 1 < rooms.Count)
             {
+                GameObject room = rooms[roomToDeactivate + 1];
+                Transform doorTransform = room.transform.Find("pf_Door");
+
+                if (doorTransform != null)
+                {
+                    Doors door = doorTransform.GetComponent<Doors>();
+                    if (door != null)
+                    {
+                        door.StartCoroutine(door.CloseDoor());
+                    }
+                }
+
                 rooms[roomToDeactivate].SetActive(false);
             }
         }
+
+
     }
 
     public void DecreaseRoomCount()

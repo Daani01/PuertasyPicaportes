@@ -8,13 +8,14 @@ public class Doors : MonoBehaviour
     public float rotationSpeed;
     public Transform Axis;
 
-    private bool isOpening = false;
+    private bool isMoving = false;
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") && !isOpening)
+        if (other.CompareTag("Player") && !isMoving)
         {
-            isOpening = true;
+            isMoving = true;
+            gameObject.GetComponent<BoxCollider>().enabled = false;
             StartCoroutine(OpenDoor());
         }
     }
@@ -23,16 +24,25 @@ public class Doors : MonoBehaviour
     {
         Quaternion initialRotation = Axis.rotation;
         Quaternion targetRotation = initialRotation * Quaternion.Euler(0, rotationAngle, 0);
+        yield return RotateDoor(initialRotation, targetRotation);
+    }
 
+    public IEnumerator CloseDoor()
+    {
+        Quaternion initialRotation = Axis.rotation;
+        Quaternion targetRotation = initialRotation * Quaternion.Euler(0, -rotationAngle, 0);
+        yield return RotateDoor(initialRotation, targetRotation);
+    }
+
+    IEnumerator RotateDoor(Quaternion from, Quaternion to)
+    {
         float t = 0;
-
         while (t < 1)
         {
             t += Time.deltaTime * rotationSpeed;
-            Axis.rotation = Quaternion.Slerp(initialRotation, targetRotation, t);
+            Axis.rotation = Quaternion.Slerp(from, to, t);
             yield return null;
         }
-
-        this.enabled = false;
+        isMoving = false;
     }
 }

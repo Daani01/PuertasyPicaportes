@@ -59,7 +59,7 @@ MonoBehaviour:
   doorPrefab: {fileID: 1801285175986735217, guid: 7f272cddf62fb014fac526dcb80c061b, type: 3}
   numberOfRooms: 1000
   roomCount: 0
-  maxRoomActived: 2
+  maxRoomActived: 3
   rooms: []
 --- !u!114 &6936462981567905697
 MonoBehaviour:
