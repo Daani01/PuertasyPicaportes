@@ -66,6 +66,15 @@ public class GameLoop : MonoBehaviour
         if (fadeEffect != null)
         {
             fadeEffect.StartEffect();
+
+            GameObject player = GameObject.FindWithTag("Player");
+            if (player != null)
+            {
+                yield return new WaitForSeconds(2.0f);
+                player.GetComponent<FirstPersonController>().blockPlayer = false;
+            }
+
+
             //StartCoroutine(FadeOutText());
         }
 

@@ -4871,6 +4871,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114967711075746240, guid: 7e3a30cb42e139c42b606114374f2928, type: 3}
+      propertyPath: showOnStart
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114967711075746240, guid: 7e3a30cb42e139c42b606114374f2928, type: 3}
       propertyPath: saveMinMaxAvgData
       value: 0
       objectReference: {fileID: 0}
@@ -5351,7 +5355,7 @@ MonoBehaviour:
   canWalk: 1
   canRun: 0
   canCrouch: 1
-  blockPlayer: 0
+  blockPlayer: 1
   ObjectsTransform: {fileID: 95246094}
   screechRadius: 1
   currentState: 5

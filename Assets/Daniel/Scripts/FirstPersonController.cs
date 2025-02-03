@@ -79,7 +79,7 @@ public class FirstPersonController : MonoBehaviour
     private void Awake()
     {
         controller = GetComponent<CharacterController>();
-        currentState = PlayerState.Walking;
+        blockPlayer = true;
         currentHealth = maxHealth;
     }
 
@@ -110,16 +110,20 @@ public class FirstPersonController : MonoBehaviour
 
     private void Update()
     {
-        BlockPlayer();
-        Move();
-        Look();
-        RotatePlayer();
+        if (!blockPlayer)
+        {
+            Move();
+            Look();
+            RotatePlayer();
+        }
+        
+        BlockPlayer();        
         ApplyGravity();
     }
 
     // Movement-related methods
     private void Move()
-    {       
+    {
 
         if (currentState == PlayerState.Dead || currentState == PlayerState.Block || currentState == PlayerState.Hiding)
         {
@@ -133,22 +137,17 @@ public class FirstPersonController : MonoBehaviour
             currentSpeed = 0f;
             return;
         }
-        else if (currentState == PlayerState.Waiting)
-        {
-            ChangePlayerState(PlayerState.Walking);
-        }
 
-        // Si el efecto de la píldora está activo, corre automáticamente (excepto si está agachado)
         if (isPillEffectActive && currentState != PlayerState.Crouching)
         {
             ChangePlayerState(PlayerState.Running);
         }
 
-        float targetSpeed = currentState == PlayerState.Running ? runSpeed : (currentState == PlayerState.Crouching ? crouchSpeed : walkSpeed);
+        float targetSpeed = currentState == PlayerState.Running ? runSpeed :
+                            (currentState == PlayerState.Crouching ? crouchSpeed : walkSpeed);
         currentSpeed = Mathf.Lerp(currentSpeed, targetSpeed, Time.deltaTime * 10f);
 
-        Vector3 moveDirection = new Vector3(moveInput.x, 0f, moveInput.y);
-        moveDirection = transform.TransformDirection(moveDirection);
+        Vector3 moveDirection = transform.TransformDirection(new Vector3(moveInput.x, 0f, moveInput.y));
         controller.Move(moveDirection * currentSpeed * Time.deltaTime);
     }
 

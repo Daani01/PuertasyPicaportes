@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
+using TMPro;
 
 public class ProceduralRoomGenerator : MonoBehaviour, IProcess
 {
@@ -10,7 +11,6 @@ public class ProceduralRoomGenerator : MonoBehaviour, IProcess
     public GameObject startRoomPrefab;
     public GameObject finishRoomPrefab;
     public GameObject[] basicRoomPrefabs;
-    public GameObject doorPrefab;
 
     public int numberOfRooms;
     public int roomCount;
@@ -38,6 +38,9 @@ public class ProceduralRoomGenerator : MonoBehaviour, IProcess
 
     private IEnumerator GenerateRooms()
     {
+        int contadorLocal = 1;
+        int maxDigits = numberOfRooms.ToString().Length;
+
         roomEventManager = GetComponent<RoomEventManager>();
         if (roomEventManager == null)
         {
@@ -48,28 +51,28 @@ public class ProceduralRoomGenerator : MonoBehaviour, IProcess
         GameObject startRoom = Instantiate(startRoomPrefab);
         rooms.Add(startRoom);
 
+        TextMeshPro textMesh = startRoom.GetComponentInChildren<TextMeshPro>();
+
+        if (textMesh != null)
+        {
+            textMesh.text = contadorLocal.ToString($"D{maxDigits}");
+        }
+
         GameObject player = GameObject.FindWithTag("Player");
         if (player != null)
         {
-            // Obtener la posición de la primera habitación (StartDoorSpawnPoint)
             Transform playerSpawnPoint = startRoom.transform.Find("PlayerSpawnPoint");
             if (playerSpawnPoint != null)
             {
-                // Colocar al jugador en la posición de la primera habitación
                 player.transform.position = playerSpawnPoint.position;
             }
-            else
-            {
-                Debug.LogError("No se encontró StartDoorSpawnPoint en la primera habitación.");
-            }
         }
-        else
-        {
-            Debug.LogError("No se encontró al jugador en la escena.");
-        }
+
 
 
         Transform previousEndDoor = startRoom.transform.Find("EndDoorSpawnPoint");
+
+        contadorLocal++;
 
         for (int i = 0; i < numberOfRooms; i++)
         {
@@ -81,10 +84,17 @@ public class ProceduralRoomGenerator : MonoBehaviour, IProcess
             Transform newStartDoor = newRoom.transform.Find("StartDoorSpawnPoint");
             AlignRooms(previousEndDoor, newStartDoor);
 
-            //CreateDoor(previousEndDoor);//CAMBIAR EL TRANSFORM
-
             rooms.Add(newRoom);
             previousEndDoor = newRoom.transform.Find("EndDoorSpawnPoint");
+
+
+            TextMeshPro doorText = newRoom.GetComponentInChildren<TextMeshPro>();
+
+            if (doorText != null)
+            {
+                doorText.text = contadorLocal.ToString($"D{maxDigits}");
+                contadorLocal++;
+            }
 
         }
 
@@ -99,12 +109,6 @@ public class ProceduralRoomGenerator : MonoBehaviour, IProcess
         {
             rooms[i].SetActive(i < maxRoomActived);
         }
-    }
-
-    void CreateDoor(Transform doorSpawnPoint)
-    {
-        GameObject door = Instantiate(doorPrefab, doorSpawnPoint.position, doorSpawnPoint.rotation);
-        door.transform.SetParent(doorSpawnPoint);
     }
 
     void AlignRooms(Transform previousEnd, Transform newStart)

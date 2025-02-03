@@ -56,8 +56,7 @@ MonoBehaviour:
   - {fileID: 4790591924577290706, guid: 2fdcade2399b3f14d8dc999ed4f75456, type: 3}
   - {fileID: 310142163004902800, guid: 784ecf732fff53243b337c6ea222c98c, type: 3}
   - {fileID: 7366301997251150556, guid: c5d906d48c105ed40bca42a2cc3d67e9, type: 3}
-  doorPrefab: {fileID: 1801285175986735217, guid: 7f272cddf62fb014fac526dcb80c061b, type: 3}
-  numberOfRooms: 20
+  numberOfRooms: 100
   roomCount: 0
   maxRoomActived: 3
   rooms: []

@@ -61,14 +61,29 @@ public class EnemyPool : MonoBehaviour, IProcess
 
     public GameObject GetEnemy(GameObject prefab, Vector3 position, Quaternion rotation)
     {
-        if (poolDictionary.ContainsKey(prefab) && poolDictionary[prefab].enemies.Count > 0)
+        if (poolDictionary.ContainsKey(prefab))
         {
-            GameObject enemy = poolDictionary[prefab].enemies.Dequeue();
-            enemy.transform.position = position;
-            enemy.transform.rotation = rotation;
-            enemy.SetActive(true);
-            return enemy;
+            Pool pool = poolDictionary[prefab];
+
+            // Si solo queda 1 enemigo en la pool, generamos uno nuevo y lo agregamos a la pool
+            if (pool.enemies.Count == 1)
+            {
+                GameObject newEnemy = Instantiate(prefab);
+                newEnemy.SetActive(false);
+                enemyToPrefab[newEnemy] = prefab;
+                pool.enemies.Enqueue(newEnemy);
+            }
+
+            if (pool.enemies.Count > 0)
+            {
+                GameObject enemy = pool.enemies.Dequeue();
+                enemy.transform.position = position;
+                enemy.transform.rotation = rotation;
+                enemy.SetActive(true);
+                return enemy;
+            }
         }
+
         return null;
     }
 

@@ -39,10 +39,7 @@ public class RoomEventManager : MonoBehaviour
                 //Debug.Log($"Asignando evento {_eventType} en la habitación {numberRoom}");
             }
         }
-        else
-        {
-            Debug.Log($"No se generó evento para la habitación {numberRoom}");
-        }
+
     }
 
     public void OnPlayerEnterRoom()

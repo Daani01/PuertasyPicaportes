@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
+using static FirstPersonController;
 
 public class EyesController : Enemie
 {
@@ -75,24 +76,27 @@ public class EyesController : Enemie
     {
         if (playerTransform == null || detectionSphere == null || visionSphere == null || playerCamera == null) return;
 
-        Vector3 directionToDetectionSphere = detectionSphere.position - playerTransform.position;
-        if (directionToDetectionSphere.magnitude <= detectionRadius)
+        if (playerTransform.GetComponent<FirstPersonController>().currentState != PlayerState.Hiding) 
         {
-            Vector3 directionToVisionSphere = (visionSphere.position - playerCamera.transform.position).normalized;
-            float dotProduct = Vector3.Dot(playerCamera.transform.forward, directionToVisionSphere);
-
-            if (dotProduct > 0.9f && directionToVisionSphere.magnitude <= visionRadius) // Ajusta 0.9f para aumentar o disminuir el rango
+            Vector3 directionToDetectionSphere = detectionSphere.position - playerTransform.position;
+            if (directionToDetectionSphere.magnitude <= detectionRadius)
             {
-                FirstPersonController player = playerTransform.GetComponent<FirstPersonController>();
-                if (player != null && player.currentHealth > 0)
-                {
-                    player.TakeDamage(damageAmount, gameObject.GetComponent<Enemie>());
-                    Debug.Log($"Player damaged by {damageAmount}. Current health: {player.currentHealth}");
+                Vector3 directionToVisionSphere = (visionSphere.position - playerCamera.transform.position).normalized;
+                float dotProduct = Vector3.Dot(playerCamera.transform.forward, directionToVisionSphere);
 
-                    //EnemyPool.Instance.ReturnEnemy(gameObject);
+                if (dotProduct > 0.9f && directionToVisionSphere.magnitude <= visionRadius) // Ajusta 0.9f para aumentar o disminuir el rango
+                {
+                    FirstPersonController player = playerTransform.GetComponent<FirstPersonController>();
+                    if (player != null && player.currentHealth > 0)
+                    {
+                        player.TakeDamage(damageAmount, gameObject.GetComponent<Enemie>());
+                        //Debug.Log($"Player damaged by {damageAmount}. Current health: {player.currentHealth}");
+
+                        //EnemyPool.Instance.ReturnEnemy(gameObject);
+                    }
                 }
             }
-        }
+        }        
     }
 
     // Dibujar Gizmos en el Editor
