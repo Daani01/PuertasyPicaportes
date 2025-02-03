@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4789959517379869344
 Transform:
   m_ObjectHideFlags: 0
@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eefb4e288fa055548a3a1f3a5cb62310, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyName: 
   maxTimeNotLookedAt: 12
   lookThreshold: 0.8
   timeToAppear: 2

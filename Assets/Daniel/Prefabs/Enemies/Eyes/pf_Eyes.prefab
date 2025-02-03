@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7738842955804621583}
   - component: {fileID: 7875540662105722081}
+  - component: {fileID: 6310146164262235715}
   m_Layer: 0
   m_Name: pf_Eyes
   m_TagString: Untagged
@@ -48,10 +49,31 @@ MonoBehaviour:
   enemyName: Eyes
   damageAmount: 0.001
   checkInterval: 0.2
-  detectionRadius: 3.4
-  visionRadius: 1.27
+  detectionRadius: 7
+  visionRadius: 5
   detectionSphere: {fileID: 7738842955804621583}
   visionSphere: {fileID: 7738842955804621583}
+--- !u!65 &6310146164262235715
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4598048211679944991}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.2, y: 1.2, z: 1.2}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5632484158025157750
 GameObject:
   m_ObjectHideFlags: 0

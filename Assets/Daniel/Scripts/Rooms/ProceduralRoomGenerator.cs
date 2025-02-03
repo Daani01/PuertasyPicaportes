@@ -48,6 +48,27 @@ public class ProceduralRoomGenerator : MonoBehaviour, IProcess
         GameObject startRoom = Instantiate(startRoomPrefab);
         rooms.Add(startRoom);
 
+        GameObject player = GameObject.FindWithTag("Player");
+        if (player != null)
+        {
+            // Obtener la posición de la primera habitación (StartDoorSpawnPoint)
+            Transform playerSpawnPoint = startRoom.transform.Find("PlayerSpawnPoint");
+            if (playerSpawnPoint != null)
+            {
+                // Colocar al jugador en la posición de la primera habitación
+                player.transform.position = playerSpawnPoint.position;
+            }
+            else
+            {
+                Debug.LogError("No se encontró StartDoorSpawnPoint en la primera habitación.");
+            }
+        }
+        else
+        {
+            Debug.LogError("No se encontró al jugador en la escena.");
+        }
+
+
         Transform previousEndDoor = startRoom.transform.Find("EndDoorSpawnPoint");
 
         for (int i = 0; i < numberOfRooms; i++)
@@ -153,6 +174,11 @@ public class ProceduralRoomGenerator : MonoBehaviour, IProcess
             return rooms[roomCount].transform;
         }
         return null;
+    }
+
+    public Transform GetTransformEyes()
+    {
+        return rooms[GetCurrentRoomIndex()].transform.Find("EyesSpawnPoint");
     }
 
     public List<Transform> GetTransformsRush(int count)

@@ -24,7 +24,9 @@ public class ScreechController : Enemie, IInteractable
     public float detectionRadius;
     public float visionRadius;
 
-    void Start()
+    private bool isInitialized = false;
+
+    void Awake()
     {
         enemyName = "Screech";
 
@@ -32,7 +34,7 @@ public class ScreechController : Enemie, IInteractable
         if (player != null)
         {
             playerTransform = player.transform;
-            playerCamera = player.GetComponentInChildren<Camera>();            
+            playerCamera = player.GetComponentInChildren<Camera>();
 
             if (playerCamera == null)
             {
@@ -43,14 +45,23 @@ public class ScreechController : Enemie, IInteractable
         {
             Debug.LogError("Player object not found in the scene.");
         }
+    }
 
+    void Start()
+    {
+        isInitialized = true;
     }
 
     void OnEnable()
     {
+        if (!isInitialized)
+        {
+            Start(); // Asegurar que Start() se ejecute si OnEnable() se llama antes de Start()
+        }
+
         if (playerTransform != null && playerTransform.GetComponent<FirstPersonController>() != null)
         {
-            StartCoroutine(WaitAndActivate());//PRIMERA VEZ NO SE ACTIVA
+            StartCoroutine(WaitAndActivate()); // Ahora se ejecutará correctamente
         }
         else
         {
@@ -86,14 +97,14 @@ public class ScreechController : Enemie, IInteractable
 
                 if (killScreech)
                 {
-                    Debug.Log("Screech visto");
+                    //Debug.Log("Screech visto");
                     DeactivateObject();
                     yield break;
                 }
                 else
                 {
                     timeNotLookedAt += Time.deltaTime;
-                    Debug.Log($"Time not looked at: {timeNotLookedAt}");
+                    //Debug.Log($"Time not looked at: {timeNotLookedAt}");
 
                     if (timeNotLookedAt >= maxTimeNotLookedAt)
                     {
@@ -143,6 +154,7 @@ public class ScreechController : Enemie, IInteractable
         if (player != null && player.currentHealth > 0)
         {
             player.TakeDamage(damageAmount, gameObject.GetComponent<Enemie>());
+            EnemyPool.Instance.ReturnEnemy(gameObject);
             Debug.Log($"Player damaged by {damageAmount}. Current health: {player.currentHealth}");
         }
     }
@@ -152,8 +164,9 @@ public class ScreechController : Enemie, IInteractable
         timeNotLookedAt = 0.0f;
         screechObj.SetActive(false);
         killScreech = false;
-        gameObject.SetActive(false);
-        Debug.Log("Screech object deactivated.");
+        EnemyPool.Instance.ReturnEnemy(gameObject);
+        //gameObject.SetActive(false);
+        //Debug.Log("Screech object deactivated.");
     }
 
     private void OnDrawGizmos()

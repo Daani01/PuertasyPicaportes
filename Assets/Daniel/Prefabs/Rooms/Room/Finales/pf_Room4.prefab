@@ -30,6 +30,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 9005186664336541893}
   - {fileID: 1950106801356606834}
   - {fileID: 5654591853870497818}
   - {fileID: 1981416374895314699}
@@ -397,6 +398,37 @@ MonoBehaviour:
   targetTransform: {fileID: 5654591853870497818}
   gizmoColor: {r: 1, g: 0, b: 0, a: 1}
   sphereRadius: 0.2
+--- !u!1 &7226924156981794818
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9005186664336541893}
+  m_Layer: 0
+  m_Name: EyesSpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9005186664336541893
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7226924156981794818}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -2.702, y: 2, z: -2.682}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2258764669074475718}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8105897280816062416
 GameObject:
   m_ObjectHideFlags: 0

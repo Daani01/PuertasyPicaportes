@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 
 public class RushController : Enemie
@@ -7,33 +8,55 @@ public class RushController : Enemie
     private int currentWaypointIndex = 0;
     public float speed = 5f;
     public float damageAmount = 20f;
+    private bool isMoving = false;
+
+    private bool isInitialized = false;
+
+    private void Awake()
+    {
+        enemyName = "Rush";
+    }
 
     private void Start()
     {
-        enemyName = "Rush";
+        isInitialized = true;
+    }
+
+    private void OnEnable()
+    {
+        if (!isInitialized)
+        {
+            Start();
+        }
     }
 
     public void SetWaypoints(List<Transform> waypointsToFollow)
     {
         waypoints = waypointsToFollow;
+        currentWaypointIndex = 0;
+        if (waypoints != null && waypoints.Count > 0 && !isMoving)
+        {
+            StartCoroutine(MoveThroughWaypoints());
+        }
     }
 
-    private void Update()
+    private IEnumerator MoveThroughWaypoints()
     {
-        if (waypoints == null || waypoints.Count == 0)
-            return;
-
-        Transform targetWaypoint = waypoints[currentWaypointIndex];
-        transform.position = Vector3.MoveTowards(transform.position, targetWaypoint.position, speed * Time.deltaTime);
-
-        if (Vector3.Distance(transform.position, targetWaypoint.position) < 0.1f)
+        isMoving = true;
+        while (currentWaypointIndex < waypoints.Count)
         {
-            currentWaypointIndex++;
-            if (currentWaypointIndex >= waypoints.Count)
+            Transform targetWaypoint = waypoints[currentWaypointIndex];
+            while (Vector3.Distance(transform.position, targetWaypoint.position) > 0.1f)
             {
-                Destroy(gameObject);
+                transform.position = Vector3.MoveTowards(transform.position, targetWaypoint.position, speed * Time.deltaTime);
+                yield return null;
             }
+
+            currentWaypointIndex++;
         }
+
+        isMoving = false;
+        EnemyPool.Instance.ReturnEnemy(gameObject);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -43,7 +66,7 @@ public class RushController : Enemie
             FirstPersonController playerHealth = other.GetComponent<FirstPersonController>();
             if (playerHealth != null)
             {
-                if(playerHealth.currentState == FirstPersonController.PlayerState.Hiding)
+                if (playerHealth.currentState == FirstPersonController.PlayerState.Hiding)
                 {
                     Debug.Log("ESCONDIDO.");
                     return;

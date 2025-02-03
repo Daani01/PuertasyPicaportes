@@ -11,6 +11,7 @@ public class GameLoop : MonoBehaviour
     [SerializeField] private TMP_Text info_Text;
 
 
+
     private List<GameObject> instantiatedObjects = new List<GameObject>();
     private int currentIndex = 0;
     private System.Diagnostics.Stopwatch totalStopwatch = new System.Diagnostics.Stopwatch();

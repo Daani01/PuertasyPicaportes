@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
 
 public class EyesController : Enemie
-{   
-    public float damageAmount;                   
+{
+    public float damageAmount;
     public float checkInterval;
     public float detectionRadius;
     public float visionRadius;
@@ -12,21 +13,22 @@ public class EyesController : Enemie
     public Transform visionSphere;
     private Transform playerTransform;
 
-    private Camera playerCamera;                       
+    private Camera playerCamera;
     private float nextCheckTime = 0f;
+    private float timeElapsed = 0f;
 
     private void OnEnable()
     {
-        string enemyInfo = CSVManager.Instance.GetSpecificData(enemyName, ExcelValues.Prob.ToString());               
-        Debug.Log($"Info de {enemyName}: {enemyInfo}");
+        string enemyInfo = CSVManager.Instance.GetSpecificData(enemyName, ExcelValues.Prob.ToString());
+        //Debug.Log($"Info de {enemyName}: {enemyInfo}");
+
+        timeElapsed = 0.0f;
     }
 
     void Start()
-    {       
-
+    {
         if (playerTransform == null)
         {
-
             GameObject playerObject = GameObject.Find("Player");
             if (playerObject != null)
             {
@@ -52,6 +54,21 @@ public class EyesController : Enemie
             nextCheckTime = Time.time + checkInterval;
             CheckPlayerView();
         }
+
+        timeElapsed += Time.deltaTime;
+
+        if (timeElapsed >= 60f)
+        {
+            EnemyPool.Instance.ReturnEnemy(gameObject);
+
+        }
+
+        transform.LookAt(playerCamera.transform);
+    }
+
+    public void SetPosition(Transform spawnPosition)
+    {
+        gameObject.transform.position = spawnPosition.position;
     }
 
     private void CheckPlayerView()
@@ -71,6 +88,8 @@ public class EyesController : Enemie
                 {
                     player.TakeDamage(damageAmount, gameObject.GetComponent<Enemie>());
                     Debug.Log($"Player damaged by {damageAmount}. Current health: {player.currentHealth}");
+
+                    //EnemyPool.Instance.ReturnEnemy(gameObject);
                 }
             }
         }
@@ -86,6 +105,5 @@ public class EyesController : Enemie
 
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(visionSphere.position, visionRadius);
-
     }
 }

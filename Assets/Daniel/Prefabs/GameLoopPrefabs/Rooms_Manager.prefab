@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bd8502cc2519e148a27e82216880612, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startRoomPrefab: {fileID: 2762875599884668373, guid: fa0ecad5f5f6dc64ab4e0c166405708b, type: 3}
+  startRoomPrefab: {fileID: 2762875599884668373, guid: 109d7550271a0b3439e952c2ae395e51, type: 3}
   finishRoomPrefab: {fileID: 7366301997251150556, guid: c5d906d48c105ed40bca42a2cc3d67e9, type: 3}
   basicRoomPrefabs:
   - {fileID: 2762875599884668373, guid: fa0ecad5f5f6dc64ab4e0c166405708b, type: 3}
@@ -57,7 +57,7 @@ MonoBehaviour:
   - {fileID: 310142163004902800, guid: 784ecf732fff53243b337c6ea222c98c, type: 3}
   - {fileID: 7366301997251150556, guid: c5d906d48c105ed40bca42a2cc3d67e9, type: 3}
   doorPrefab: {fileID: 1801285175986735217, guid: 7f272cddf62fb014fac526dcb80c061b, type: 3}
-  numberOfRooms: 1000
+  numberOfRooms: 20
   roomCount: 0
   maxRoomActived: 3
   rooms: []
@@ -87,4 +87,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pf_Rush: {fileID: 2519625118080284939, guid: 9f05cb6b37dc54f4f81c0b896973ec9d, type: 3}
   pf_Screech: {fileID: 100282186354382211, guid: b33871a047b0d4c42a6c4f183f2b1fbe, type: 3}
+  pf_Eyes: {fileID: 4598048211679944991, guid: 8a7a9f937b397e446b6c7822e136f380, type: 3}
   roomGenerator: {fileID: 5432418227036310142}
