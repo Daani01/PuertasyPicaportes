@@ -1,9 +1,8 @@
-using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(PlayerInput), typeof(CharacterController))]
 public class FirstPersonController : MonoBehaviour
@@ -13,7 +12,16 @@ public class FirstPersonController : MonoBehaviour
 
 
     [Header("HUD")]
-    public TMP_Text Text_State;
+    public Image StateImage; // La imagen a cambiar según el estado
+    public Sprite WaitingSprite;
+    public Sprite WalkingSprite;
+    public Sprite RunningSprite;
+    public Sprite CrouchingSprite;
+    public Sprite HidingSprite;
+    public Sprite BlockSprite;
+    public Sprite DeadSprite;
+
+    private Dictionary<PlayerState, Sprite> stateSprites;
 
     [Header("Movement Settings")]
     public float walkSpeed;
@@ -81,6 +89,18 @@ public class FirstPersonController : MonoBehaviour
         controller = GetComponent<CharacterController>();
         blockPlayer = true;
         currentHealth = maxHealth;
+
+        // Asignamos cada sprite al diccionario según el estado
+        stateSprites = new Dictionary<PlayerState, Sprite>
+        {
+            { PlayerState.Waiting, WaitingSprite },
+            { PlayerState.Walking, WalkingSprite },
+            { PlayerState.Running, RunningSprite },
+            { PlayerState.Crouching, CrouchingSprite },
+            { PlayerState.Hiding, HidingSprite },
+            { PlayerState.Block, BlockSprite },
+            { PlayerState.Dead, DeadSprite }
+        };
     }
 
     private void OnEnable()
@@ -141,6 +161,10 @@ public class FirstPersonController : MonoBehaviour
         if (isPillEffectActive && currentState != PlayerState.Crouching)
         {
             ChangePlayerState(PlayerState.Running);
+        }
+        else if (!isPillEffectActive && moveInput != Vector2.zero && currentState != PlayerState.Running && currentState != PlayerState.Crouching)
+        {
+            ChangePlayerState(PlayerState.Walking);
         }
 
         float targetSpeed = currentState == PlayerState.Running ? runSpeed :
@@ -411,12 +435,17 @@ public class FirstPersonController : MonoBehaviour
         if (currentState != newState)
         {
             currentState = newState;
-            OnPlayerStateChanged(currentState.ToString());
+            OnPlayerStateChanged(currentState);
         }
     }
 
-    private void OnPlayerStateChanged(string stateName) => Text_State.text = stateName;
-
+    public void OnPlayerStateChanged(PlayerState newState)
+    {
+        if (stateSprites.TryGetValue(newState, out Sprite newSprite))
+        {
+            StateImage.sprite = newSprite;
+        }
+    }
     private void Look()
     {
         targetRotation.x += lookInput.x * mouseSensitivity;
