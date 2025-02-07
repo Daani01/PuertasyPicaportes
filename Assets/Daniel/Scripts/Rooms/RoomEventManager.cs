@@ -13,7 +13,8 @@ public class RoomEventManager : MonoBehaviour
         Dupe,
         A_60,
         A_90,
-        A_120
+        A_120,
+        End
     }
 
     private RoomEventType _eventType;
@@ -40,6 +41,15 @@ public class RoomEventManager : MonoBehaviour
             }
         }
 
+    }
+
+    public void AssignEndRoomEvent(GameObject room)
+    {
+        Transform triggerEvent = room.transform.Find("TriggerEvent");
+        if (triggerEvent != null)
+        {
+            room.GetComponent<RoomEventManager>()._eventType = RoomEventType.End;
+        }
     }
 
     public void OnPlayerEnterRoom()

@@ -19,7 +19,7 @@ public class Lighter : MonoBehaviour, IInteractable, IUsable
     {
         return ItemType.Lighter;
     }
-    public void GetObjPlayer(Transform position)
+    public void GetObjPlayer(Transform position, Transform lookat)
     {
         // Establecer la posición del objeto actual
         gameObject.transform.position = position.position;

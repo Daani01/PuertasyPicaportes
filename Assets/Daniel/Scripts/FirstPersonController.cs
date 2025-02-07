@@ -49,13 +49,14 @@ public class FirstPersonController : MonoBehaviour
     public LayerMask interactableLayer;
 
     [Header("State Control")]
-    public bool canWalk;
+    public bool canJump;
     public bool canRun;
     public bool canCrouch;
     public bool blockPlayer;
     public List<IUsable> inventory = new List<IUsable>();
     public IUsable selectedObject;
     public Transform ObjectsTransform;
+    public Transform ObjectsLookAtTransform;
 
     [Header("Screech")]
     public float screechRadius;
@@ -87,7 +88,7 @@ public class FirstPersonController : MonoBehaviour
     private void Awake()
     {
         controller = GetComponent<CharacterController>();
-        blockPlayer = true;
+        //blockPlayer = true;
         currentHealth = maxHealth;
 
         // Asignamos cada sprite al diccionario según el estado
@@ -187,7 +188,7 @@ public class FirstPersonController : MonoBehaviour
 
     private void Jump()
     {
-        if (controller.isGrounded && currentState != PlayerState.Hiding && currentState != PlayerState.Crouching && currentState != PlayerState.Block)
+        if (canJump && controller.isGrounded && currentState != PlayerState.Hiding && currentState != PlayerState.Crouching && currentState != PlayerState.Block)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
@@ -310,7 +311,7 @@ public class FirstPersonController : MonoBehaviour
             if (usable != null && CheckPickUpItem(usable))
             {
                 PickUpItem(usable);
-                usable.GetObjPlayer(ObjectsTransform);
+                usable.GetObjPlayer(ObjectsTransform, ObjectsLookAtTransform);
             }
         }
     }

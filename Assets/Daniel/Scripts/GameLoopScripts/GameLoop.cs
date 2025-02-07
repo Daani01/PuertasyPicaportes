@@ -6,7 +6,8 @@ using UnityEngine;
 public class GameLoop : MonoBehaviour
 {
     [SerializeField] private List<GameObject> prefabProcesses;
-    [SerializeField] private GDTFadeEffect fadeEffect;
+    [SerializeField] private GDTFadeEffect startFadeEffect;
+    [SerializeField] private GDTFadeEffect endFadeEffect;
 
     [SerializeField] private TMP_Text info_Text;
 
@@ -63,9 +64,9 @@ public class GameLoop : MonoBehaviour
         info_Text.text = $"Carga completa en \n{totalStopwatch.ElapsedMilliseconds} ms";
         //Debug.Log($"[GameLoop] Todos los procesos han finalizado. Tiempo total: {totalStopwatch.ElapsedMilliseconds} ms");
 
-        if (fadeEffect != null)
+        if (startFadeEffect != null)
         {
-            fadeEffect.StartEffect();
+            startFadeEffect.StartEffect();
 
             GameObject player = GameObject.FindWithTag("Player");
             if (player != null)
@@ -80,15 +81,35 @@ public class GameLoop : MonoBehaviour
 
     }
 
+    public void FadeEffectFinish()
+    {
+        StartCoroutine(EndGame());
+    }
+
+    private IEnumerator EndGame()
+    {
+        if (endFadeEffect != null)
+        {
+            endFadeEffect.StartEffect();
+
+            GameObject player = GameObject.FindWithTag("Player");
+            if (player != null)
+            {
+                yield return new WaitForSeconds(5.0f);
+                player.GetComponent<FirstPersonController>().blockPlayer = true;
+            }
+        }
+    }
+
     private IEnumerator FadeOutText()
     {
         float startAlpha = info_Text.alpha;
         float elapsedTime = 0f;
 
-        while (elapsedTime < fadeEffect.timeEffect)
+        while (elapsedTime < startFadeEffect.timeEffect)
         {
             elapsedTime += Time.deltaTime;
-            info_Text.alpha = Mathf.Lerp(startAlpha, 0f, elapsedTime / fadeEffect.timeEffect);
+            info_Text.alpha = Mathf.Lerp(startAlpha, 0f, elapsedTime / startFadeEffect.timeEffect);
             yield return null;
         }
 

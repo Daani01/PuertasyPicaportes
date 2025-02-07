@@ -74,12 +74,12 @@ public class ProceduralRoomGenerator : MonoBehaviour, IProcess
 
         contadorLocal++;
 
-        for (int i = 0; i < numberOfRooms; i++)
+        for (int i = 0; i < (numberOfRooms - 1); i++)
         {
             // Crear una nueva sala
             GameObject newRoomPrefab = basicRoomPrefabs[Random.Range(0, basicRoomPrefabs.Length)];
             GameObject newRoom = Instantiate(newRoomPrefab);
-            roomEventManager.AssignRoomEvent(newRoom, i, numberOfRooms);
+            roomEventManager.AssignRoomEvent(newRoom, contadorLocal, numberOfRooms);
 
             Transform newStartDoor = newRoom.transform.Find("StartDoorSpawnPoint");
             AlignRooms(previousEndDoor, newStartDoor);
@@ -99,6 +99,8 @@ public class ProceduralRoomGenerator : MonoBehaviour, IProcess
         }
 
         GameObject finishRoom = Instantiate(finishRoomPrefab);
+        roomEventManager.AssignEndRoomEvent(finishRoom);
+
         Transform finishStartDoor = finishRoom.transform.Find("StartDoorSpawnPoint");
 
         AlignRooms(previousEndDoor, finishStartDoor);
@@ -182,7 +184,11 @@ public class ProceduralRoomGenerator : MonoBehaviour, IProcess
 
     public Transform GetTransformEyes()
     {
-        return rooms[GetCurrentRoomIndex()].transform.Find("EyesSpawnPoint");
+        if(rooms[GetCurrentRoomIndex()].transform.Find("EyesSpawnPoint") != null)
+        {
+            return rooms[GetCurrentRoomIndex()].transform.Find("EyesSpawnPoint");
+        }
+        return this.transform;
     }
 
     public List<Transform> GetTransformsRush(int count)

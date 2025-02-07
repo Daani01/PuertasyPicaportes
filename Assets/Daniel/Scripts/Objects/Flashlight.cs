@@ -20,22 +20,27 @@ public class Flashlight : MonoBehaviour, IInteractable, IUsable
         return ItemType.Flashlight;
     }
 
-    public void GetObjPlayer(Transform position)
+    public void GetObjPlayer(Transform position, Transform lookat)
     {
         // Establecer la posición del objeto actual
         gameObject.transform.position = position.position;
 
-        // Configurar la rotación para que mire hacia el eje Z del transform pasado
-        Vector3 direction = position.forward; // Dirección del eje Z del transform pasado
-        Quaternion rotation = Quaternion.LookRotation(direction, Vector3.down); // Calcular la rotación
-        gameObject.transform.rotation = rotation;
+
+        Vector3 lookDirection = new Vector3(lookat.position.x, transform.position.y, lookat.position.z);
+        transform.LookAt(lookDirection);
+
+        //añadir al eje x 90 grados
+        transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x - 75, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
 
         // Establecer el transform actual como hijo del transform pasado
         gameObject.transform.SetParent(position);
 
+        
+
         // Desactivar el objeto
         gameObject.SetActive(false);
     }
+
 
     public void Activate()
     {

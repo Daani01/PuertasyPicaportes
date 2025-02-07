@@ -8,7 +8,7 @@ public interface IInteractable
 public interface IUsable : IInteractable
 {
     void Use();
-    void GetObjPlayer(Transform position);
+    void GetObjPlayer(Transform position, Transform lookat);
     void Activate();
     void DesActivate();
     void Destroy();

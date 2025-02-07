@@ -55,6 +55,9 @@ public class EnemyManager : MonoBehaviour
                 EyesController eyesController = eyesInstance.GetComponent<EyesController>();
                 eyesController.SetPosition(roomGenerator.GetTransformEyes());
                 break;
+            case RoomEventType.End:
+                GameObject.Find("GAMELOOP").GetComponent<GameLoop>().FadeEffectFinish();
+                break;
         
         }
     }

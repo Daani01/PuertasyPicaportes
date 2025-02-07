@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startRoomPrefab: {fileID: 2762875599884668373, guid: 109d7550271a0b3439e952c2ae395e51, type: 3}
-  finishRoomPrefab: {fileID: 7366301997251150556, guid: c5d906d48c105ed40bca42a2cc3d67e9, type: 3}
+  finishRoomPrefab: {fileID: 2762875599884668373, guid: 93c5d99c4ddfe2845ab9e434233962af, type: 3}
   basicRoomPrefabs:
   - {fileID: 2762875599884668373, guid: fa0ecad5f5f6dc64ab4e0c166405708b, type: 3}
   - {fileID: 517492350207367024, guid: b6e488cd2023d734d8d1046f406fc710, type: 3}
@@ -56,7 +56,7 @@ MonoBehaviour:
   - {fileID: 4790591924577290706, guid: 2fdcade2399b3f14d8dc999ed4f75456, type: 3}
   - {fileID: 310142163004902800, guid: 784ecf732fff53243b337c6ea222c98c, type: 3}
   - {fileID: 7366301997251150556, guid: c5d906d48c105ed40bca42a2cc3d67e9, type: 3}
-  numberOfRooms: 100
+  numberOfRooms: 20
   roomCount: 0
   maxRoomActived: 3
   rooms: []

@@ -17,7 +17,7 @@ public class Pill : MonoBehaviour, IInteractable, IUsable
     {
         return ItemType.Pills;
     }
-    public void GetObjPlayer(Transform position)
+    public void GetObjPlayer(Transform position, Transform lookat)
     {
         gameObject.transform.position = position.position;
         gameObject.transform.rotation = position.rotation;

@@ -69,7 +69,10 @@ public class EyesController : Enemie
 
     public void SetPosition(Transform spawnPosition)
     {
-        gameObject.transform.position = spawnPosition.position;
+        if(spawnPosition != null)
+        {
+            gameObject.transform.position = spawnPosition.position;
+        }
     }
 
     private void CheckPlayerView()
