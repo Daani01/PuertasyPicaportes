@@ -9,7 +9,7 @@ public class FirstPersonController : MonoBehaviour
 {
     [Header("Canvas Manager")]
     public ObjectCanvasManager canvasManager;
-
+    public GameLoop gameloopManager;
 
     [Header("HUD")]
     public Image StateImage; // La imagen a cambiar según el estado
@@ -20,6 +20,11 @@ public class FirstPersonController : MonoBehaviour
     public Sprite HidingSprite;
     public Sprite BlockSprite;
     public Sprite DeadSprite;
+
+    public Image AlertImage;
+    public int RepetitionAlert;
+    public float MaxDurationAlert;
+    public Slider healthSlider;
 
     private Dictionary<PlayerState, Sprite> stateSprites;
 
@@ -131,7 +136,7 @@ public class FirstPersonController : MonoBehaviour
 
     private void Update()
     {
-        if (!blockPlayer)
+        if (!blockPlayer && currentState != PlayerState.Dead)
         {
             Move();
             Look();
@@ -410,25 +415,57 @@ public class FirstPersonController : MonoBehaviour
     public void TakeDamage(float amount, Enemie enemie)
     {
         if (currentState == PlayerState.Dead) return;
+        float previousHealth = currentHealth;
         currentHealth -= amount;
+        StartCoroutine(UpdateHealthSlider(previousHealth, currentHealth, 0.2f));
         if (currentHealth <= 0) Die(enemie);
     }
 
     public void Heal(float amount)
     {
         if (currentState == PlayerState.Dead) return;
+        float previousHealth = currentHealth;
         currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
+        StartCoroutine(UpdateHealthSlider(previousHealth, currentHealth, 0.2f));
     }
 
     public void Die(Enemie enemie)
     {
-        currentState = PlayerState.Dead;
+        ChangePlayerState(PlayerState.Dead);
         currentHealth = 0;
-        //Debug.Log("Enemie:" + enemie.enemyName);
+        StartCoroutine(UpdateHealthSlider(healthSlider.value, 0, 0.2f));
+        DetachCamera();
+        gameloopManager.FadeEffectFinish();
+        Debug.Log("Enemie:" + enemie.enemyName);
+    }
+
+    private IEnumerator UpdateHealthSlider(float startValue, float endValue, float duration)
+    {
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            healthSlider.value = Mathf.Lerp(startValue, endValue, elapsed / duration);
+            yield return null;
+        }
+        healthSlider.value = endValue;
     }
 
     public void KillInstantly(Enemie enemie) => Die(enemie);
     public float GetHealth() => currentHealth;
+
+
+    public void DetachCamera()
+    {
+        if (playerCamera != null)
+        {
+            playerCamera.transform.parent = null;
+            BoxCollider bc = playerCamera.gameObject.AddComponent<BoxCollider>();
+            Rigidbody rb = playerCamera.gameObject.AddComponent<Rigidbody>();
+            rb.useGravity = true;
+            rb.constraints = RigidbodyConstraints.FreezeRotation;
+        }
+    }
 
     // State transition and camera handling
     private void ChangePlayerState(PlayerState newState)
@@ -447,6 +484,38 @@ public class FirstPersonController : MonoBehaviour
             StateImage.sprite = newSprite;
         }
     }
+
+    public void StartAlertEnemy()
+    {
+        StartCoroutine(FadeAlertCoroutine(RepetitionAlert, MaxDurationAlert));
+    }
+
+    private IEnumerator FadeAlertCoroutine(int maxRepeats, float duration)
+    {
+        for (int i = 0; i < maxRepeats; i++)
+        {
+            yield return StartCoroutine(FadeAlpha(0f, 1f, duration / 2));
+            yield return StartCoroutine(FadeAlpha(1f, 0f, duration / 2));
+        }
+    }
+
+    private IEnumerator FadeAlpha(float startAlpha, float endAlpha, float duration)
+    {
+        float elapsed = 0f;
+        Color color = AlertImage.color;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            color.a = Mathf.Lerp(startAlpha, endAlpha, elapsed / duration);
+            AlertImage.color = color;
+            yield return null;
+        }
+
+        color.a = endAlpha;
+        AlertImage.color = color;
+    }
+
     private void Look()
     {
         targetRotation.x += lookInput.x * mouseSensitivity;

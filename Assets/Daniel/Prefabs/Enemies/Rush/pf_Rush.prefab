@@ -68,7 +68,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyName: 
-  speed: 0.01
+  speed: 40
   damageAmount: 20
 --- !u!1 &8643797455039461863
 GameObject:

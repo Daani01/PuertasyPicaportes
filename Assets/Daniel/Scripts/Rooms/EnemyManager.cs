@@ -46,14 +46,20 @@ public class EnemyManager : MonoBehaviour
                     rushController.SetWaypoints(lastRoomTransforms);
 
                 }
+                GameObject.Find("Player").GetComponent<FirstPersonController>().StartAlertEnemy();
+
                 break;
             case RoomEventType.Screech:
                 GameObject screechInstance = EnemyPool.Instance.GetEnemy(pf_Screech, Vector3.zero, Quaternion.identity);
+                GameObject.Find("Player").GetComponent<FirstPersonController>().StartAlertEnemy();
+
                 break;
             case RoomEventType.Eyes:
                 GameObject eyesInstance = EnemyPool.Instance.GetEnemy(pf_Eyes, Vector3.zero, Quaternion.identity);
                 EyesController eyesController = eyesInstance.GetComponent<EyesController>();
                 eyesController.SetPosition(roomGenerator.GetTransformEyes());
+                GameObject.Find("Player").GetComponent<FirstPersonController>().StartAlertEnemy();
+
                 break;
             case RoomEventType.End:
                 GameObject.Find("GAMELOOP").GetComponent<GameLoop>().FadeEffectFinish();
