@@ -98,39 +98,20 @@ public class GameLoop : MonoBehaviour
             GameObject player = GameObject.FindWithTag("Player");
             if (player != null)
             {
-                // Bloqueamos al jugador antes de esperar (evita errores)
                 FirstPersonController playerController = player.GetComponent<FirstPersonController>();
                 if (playerController != null)
                 {
                     playerController.blockPlayer = true;
-                    playerController.StopAllCoroutines();
+                    player.GetComponent<FirstPersonController>().DisableInputs();
+                    //playerController.StopAllCoroutines();
                 }
 
                 yield return new WaitForSeconds(5.0f);
 
-                if (player != null)
-                {
-                    // Desactivamos el objeto o desactivamos sus componentes
-                    
-                    player.GetComponent<FirstPersonController>().enabled = false; // Desactiva los scripts del jugador
-                    player.GetComponent<Collider>().enabled = false; // Desactiva el collider, si lo tiene
-
-                    // Destruye el jugador anterior después de desactivar sus componentes
-                    Destroy(player.gameObject); // Espera un segundo antes de destruirlo para asegurarte de que todo se haya desactivado
-                }
-
-
-                yield return new WaitForSeconds(0.5f);
-
-                // Recargar la escena desde cero
-                SceneManager.LoadScene(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
+                SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
             }
         }
     }
-
-    // Asegura que OnSceneLoaded no se registre múltiples veces
-
-
 
 
 
