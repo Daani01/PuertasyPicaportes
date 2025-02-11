@@ -30,7 +30,7 @@ public class EyesController : Enemie
     {
         if (playerTransform == null)
         {
-            GameObject playerObject = GameObject.Find("Player");
+            GameObject playerObject = GameObject.FindWithTag("Player");
             if (playerObject != null)
             {
                 playerTransform = playerObject.transform;
@@ -64,7 +64,10 @@ public class EyesController : Enemie
 
         }
 
-        transform.LookAt(playerCamera.transform);
+        if(playerCamera != null)
+        {
+            transform.LookAt(playerCamera.transform);
+        }
     }
 
     public void SetPosition(Transform spawnPosition)

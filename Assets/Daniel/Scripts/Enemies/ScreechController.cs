@@ -30,7 +30,7 @@ public class ScreechController : Enemie, IInteractable
     {
         enemyName = "Screech";
 
-        player = GameObject.Find("Player");
+        player = GameObject.FindWithTag("Player");
         if (player != null)
         {
             playerTransform = player.transform;

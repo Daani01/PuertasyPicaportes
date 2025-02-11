@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -7,64 +8,66 @@ using UnityEngine.UI;
 [RequireComponent(typeof(PlayerInput), typeof(CharacterController))]
 public class FirstPersonController : MonoBehaviour
 {
+    private PlayerInput playerInput;
+
     [Header("Canvas Manager")]
-    public ObjectCanvasManager canvasManager;
-    public GameLoop gameloopManager;
+    [SerializeField] private ObjectCanvasManager canvasManager;
+    [SerializeField] private GameLoop gameloopManager;
 
     [Header("HUD")]
-    public Image StateImage; // La imagen a cambiar según el estado
-    public Sprite WaitingSprite;
-    public Sprite WalkingSprite;
-    public Sprite RunningSprite;
-    public Sprite CrouchingSprite;
-    public Sprite HidingSprite;
-    public Sprite BlockSprite;
-    public Sprite DeadSprite;
+    [SerializeField] private Image StateImage; // La imagen a cambiar según el estado
+    [SerializeField] private Sprite WaitingSprite;
+    [SerializeField] private Sprite WalkingSprite;
+    [SerializeField] private Sprite RunningSprite;
+    [SerializeField] private Sprite CrouchingSprite;
+    [SerializeField] private Sprite HidingSprite;
+    [SerializeField] private Sprite BlockSprite;
+    [SerializeField] private Sprite DeadSprite;
 
-    public Image AlertImage;
-    public int RepetitionAlert;
-    public float MaxDurationAlert;
-    public Slider healthSlider;
+    [SerializeField] private Image AlertImage;
+    [SerializeField] private int RepetitionAlert;
+    [SerializeField] private float MaxDurationAlert;
+    [SerializeField] private Slider healthSlider;
 
     private Dictionary<PlayerState, Sprite> stateSprites;
 
     [Header("Movement Settings")]
-    public float walkSpeed;
-    public float runSpeed;
-    public float crouchSpeed;
-    public float crouchHeight;
-    public float normalHeight;
-    public float gravity;
-    public float jumpHeight;
+    [SerializeField] private float walkSpeed;
+    [SerializeField] private float runSpeed;
+    [SerializeField] private float crouchSpeed;
+    [SerializeField] private float crouchHeight;
+    [SerializeField] private float normalHeight;
+    [SerializeField] private float gravity;
+    [SerializeField] private float jumpHeight;
 
     [Header("Player Health Settings")]
-    public float maxHealth = 100f;
-    public float currentHealth;
+    [SerializeField] public float maxHealth = 100f;
+    [SerializeField] public float currentHealth;
 
     [Header("Money Settings")]
-    public int coinsCount;
+    [SerializeField] public int coinsCount;
 
     [Header("Look Settings")]
-    public float mouseSensitivity;
-    public float maxVerticalAngle;
-    public float minVerticalAngle;
-    public float rotationSmoothness;
-    public Camera playerCamera;
-    public float interactRange;
-    public LayerMask interactableLayer;
+    [SerializeField] private float mouseSensitivity;
+    [SerializeField] private float maxVerticalAngle;
+    [SerializeField] private float minVerticalAngle;
+    [SerializeField] private float rotationSmoothness;
+    [SerializeField] private Camera playerCamera;
+    [SerializeField] private float interactRange;
+    [SerializeField] private LayerMask interactableLayer;
 
     [Header("State Control")]
-    public bool canJump;
-    public bool canRun;
-    public bool canCrouch;
-    public bool blockPlayer;
-    public List<IUsable> inventory = new List<IUsable>();
-    public IUsable selectedObject;
-    public Transform ObjectsTransform;
-    public Transform ObjectsLookAtTransform;
+    [SerializeField] private bool canJump;
+    [SerializeField] private bool canRun;
+    [SerializeField] private bool canCrouch;
+    [SerializeField] public bool blockPlayer;
+    [SerializeField] private List<IUsable> inventory = new List<IUsable>();
+    [SerializeField] private IUsable selectedObject;
+    [SerializeField] private Transform ObjectsTransform;
+    [SerializeField] private Transform ObjectsLookAtTransform;
 
     [Header("Screech")]
-    public float screechRadius;
+    [SerializeField] public float screechRadius;
 
     private CharacterController controller;
     private Vector2 moveInput;
@@ -88,30 +91,12 @@ public class FirstPersonController : MonoBehaviour
         Block,
         Dead
     }
-    public PlayerState currentState;
+
+    [SerializeField] public PlayerState currentState;
 
     private void Awake()
     {
-        controller = GetComponent<CharacterController>();
-        //blockPlayer = true;
-        currentHealth = maxHealth;
-
-        // Asignamos cada sprite al diccionario según el estado
-        stateSprites = new Dictionary<PlayerState, Sprite>
-        {
-            { PlayerState.Waiting, WaitingSprite },
-            { PlayerState.Walking, WalkingSprite },
-            { PlayerState.Running, RunningSprite },
-            { PlayerState.Crouching, CrouchingSprite },
-            { PlayerState.Hiding, HidingSprite },
-            { PlayerState.Block, BlockSprite },
-            { PlayerState.Dead, DeadSprite }
-        };
-    }
-
-    private void OnEnable()
-    {
-        var playerInput = GetComponent<PlayerInput>();
+        playerInput = GetComponent<PlayerInput>();
 
         playerInput.actions["Move"].performed += ctx => moveInput = ctx.ReadValue<Vector2>();
         playerInput.actions["Move"].canceled += ctx => moveInput = Vector2.zero;
@@ -127,15 +112,106 @@ public class FirstPersonController : MonoBehaviour
 
         playerInput.actions["Interact"].started += ctx => Interact();
 
-        playerInput.actions["SelectObj1"].started += ctx => SelectObj(1);
+        playerInput.actions["SelectObj1"].started += ctx => DieInsta();
         playerInput.actions["SelectObj2"].started += ctx => SelectObj(2);
         playerInput.actions["SelectObj3"].started += ctx => SelectObj(3);
 
         playerInput.actions["ActivateObj"].started += ctx => ActivateObj();
+
+
+        /*
+        if (playerCamera == null)
+            playerCamera = Camera.main;
+
+        //controller = GetComponent<CharacterController>();
+        controller = FindObjectOfType<CharacterController>();
+
+        ObjectsTransform = GameObject.Find("OBJECT_PLACEMENT").transform;
+        ObjectsLookAtTransform = GameObject.Find("OBJECT_LOOKAT").transform;
+
+        controller.enabled = false;
+        controller.enabled = true;
+
+        //blockPlayer = true;
+        currentHealth = maxHealth;
+
+        // Asignamos cada sprite al diccionario según el estado
+        stateSprites = new Dictionary<PlayerState, Sprite>
+        {
+            { PlayerState.Waiting, WaitingSprite },
+            { PlayerState.Walking, WalkingSprite },
+            { PlayerState.Running, RunningSprite },
+            { PlayerState.Crouching, CrouchingSprite },
+            { PlayerState.Hiding, HidingSprite },
+            { PlayerState.Block, BlockSprite },
+            { PlayerState.Dead, DeadSprite }
+        };
+        */
+
     }
+
+    private void Start()
+    {
+
+
+        // Asignar componentes que pueden no haberse asignado directamente
+        if (canvasManager == null)
+            canvasManager = GameObject.Find("UI_Canvas_Manager").GetComponent<ObjectCanvasManager>();
+
+        if (gameloopManager == null)
+            gameloopManager = GameObject.Find("GAMELOOP").GetComponent<GameLoop>();
+
+
+        if (StateImage == null)
+            StateImage = GameObject.Find("State_Image").GetComponent<Image>();
+
+        if (AlertImage == null)
+            AlertImage = GameObject.Find("INFO_Enemy").GetComponent<Image>();
+
+        if (healthSlider == null)
+            healthSlider = GameObject.Find("INFO_Health").GetComponent<Slider>();
+
+
+        controller = GetComponent<CharacterController>();
+        ObjectsTransform = GameObject.Find("OBJECT_PLACEMENT").transform;
+        ObjectsLookAtTransform = GameObject.Find("OBJECT_LOOKAT").transform;
+
+        controller.enabled = false;
+        controller.enabled = true;
+
+        // Inicializar otras variables
+        currentHealth = maxHealth;
+        stateSprites = new Dictionary<PlayerState, Sprite>
+        {
+            { PlayerState.Waiting, WaitingSprite },
+            { PlayerState.Walking, WalkingSprite },
+            { PlayerState.Running, RunningSprite },
+            { PlayerState.Crouching, CrouchingSprite },
+            { PlayerState.Hiding, HidingSprite },
+            { PlayerState.Block, BlockSprite },
+            { PlayerState.Dead, DeadSprite }
+        };
+    }
+
+
+    public bool IsBeingDestroyed;
+    private void OnDestroy()
+    {
+        IsBeingDestroyed = true;
+        DisableInputs();
+    }
+
+    private void DisableInputs()
+    {        
+
+        playerInput.DeactivateInput();
+    }
+
 
     private void Update()
     {
+        if (IsBeingDestroyed) return;
+
         if (!blockPlayer && currentState != PlayerState.Dead)
         {
             Move();
@@ -300,6 +376,7 @@ public class FirstPersonController : MonoBehaviour
     // Interaction methods
     private void Interact()
     {
+
         Ray ray = new Ray(playerCamera.transform.position, playerCamera.transform.forward);
         RaycastHit hit;
 
@@ -434,9 +511,18 @@ public class FirstPersonController : MonoBehaviour
         ChangePlayerState(PlayerState.Dead);
         currentHealth = 0;
         StartCoroutine(UpdateHealthSlider(healthSlider.value, 0, 0.2f));
-        DetachCamera();
+        //DetachCamera();
         gameloopManager.FadeEffectFinish();
         Debug.Log("Enemie:" + enemie.enemyName);
+    }
+
+    public void DieInsta()
+    {
+        ChangePlayerState(PlayerState.Dead);
+        currentHealth = 0;
+        StartCoroutine(UpdateHealthSlider(healthSlider.value, 0, 0.2f));
+        //DetachCamera();
+        gameloopManager.FadeEffectFinish();
     }
 
     private IEnumerator UpdateHealthSlider(float startValue, float endValue, float duration)
