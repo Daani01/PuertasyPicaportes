@@ -265,7 +265,7 @@ MonoBehaviour:
   m_ActionEvents: []
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
-  m_DefaultActionMap: 7b758c59-846f-49c8-96c0-6d9db34d9036
+  m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!114 &4272099060790322982
@@ -280,15 +280,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7361fa3006caa35408bce6d8ec36b04c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pauseMenuUI: {fileID: 0}
   canvasManager: {fileID: 0}
   gameloopManager: {fileID: 0}
   StateImage: {fileID: 0}
-  WaitingSprite: {fileID: 21300000, guid: 8dbe363afd6362847937db4114eb8b6f, type: 3}
-  WalkingSprite: {fileID: 21300000, guid: bb633ba8f432c364d90acedd76161d30, type: 3}
-  RunningSprite: {fileID: 21300000, guid: 39949b6eb5a522a47b85eaf4af04d639, type: 3}
-  CrouchingSprite: {fileID: 21300000, guid: b9ba762226fc9bd4884000928fbef5ba, type: 3}
+  CrouchingSprite: {fileID: 21300000, guid: 6ca9346e9fd64b440a78d41e3add53c4, type: 3}
   HidingSprite: {fileID: 21300000, guid: 9aab1d0700bcf9e419b17512b0062844, type: 3}
-  BlockSprite: {fileID: 21300000, guid: 72b198f82fdf3bb46b576b75e6fa8e1c, type: 3}
+  BlockSprite: {fileID: 21300000, guid: 3d8678cb7548a9449bcd7a0cd49a513b, type: 3}
   DeadSprite: {fileID: 21300000, guid: 23bbd851c8187af43a9830e9301601f7, type: 3}
   AlertImage: {fileID: 0}
   RepetitionAlert: 3
@@ -321,7 +319,6 @@ MonoBehaviour:
   ObjectsLookAtTransform: {fileID: 8814858625440316355}
   screechRadius: 1
   currentState: 5
-  IsBeingDestroyed: 0
 --- !u!1 &7303695523485932157
 GameObject:
   m_ObjectHideFlags: 0

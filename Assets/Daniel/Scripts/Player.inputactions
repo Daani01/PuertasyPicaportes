@@ -96,15 +96,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Die",
-                    "type": "Button",
-                    "id": "f51e0ee6-316a-4a60-abbc-d5bc804a336e",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Pause",
                     "type": "Button",
                     "id": "0ff7f13a-672d-42f8-bcf5-2d709fca87e5",
@@ -310,17 +301,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "ActivateObj",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "15b28e76-1297-4fa2-96ac-c83d5d062818",
-                    "path": "<Keyboard>/backspace",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Die",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

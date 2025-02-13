@@ -20,10 +20,7 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] private GameLoop gameloopManager;
 
     [Header("HUD")]
-    [SerializeField] private Image StateImage; // La imagen a cambiar según el estado
-    [SerializeField] private Sprite WaitingSprite;
-    [SerializeField] private Sprite WalkingSprite;
-    [SerializeField] private Sprite RunningSprite;
+    [SerializeField] private Image StateImage;
     [SerializeField] private Sprite CrouchingSprite;
     [SerializeField] private Sprite HidingSprite;
     [SerializeField] private Sprite BlockSprite;
@@ -98,6 +95,7 @@ public class FirstPersonController : MonoBehaviour
     }
 
     [SerializeField] public PlayerState currentState;
+    private PlayerState StateBeforePause;
 
     private void Awake()
     {
@@ -164,7 +162,7 @@ public class FirstPersonController : MonoBehaviour
         playerInputActions.Player.SelectObj3.started += ctx => SelectObj(3);
 
         playerInputActions.Player.ActivateObj.started += ctx => ActivateObj();
-        playerInputActions.Player.Die.started += ctx => InstaDie();
+
         playerInputActions.Player.Pause.started += ctx => TogglePause();
 
 
@@ -211,9 +209,6 @@ public class FirstPersonController : MonoBehaviour
         currentHealth = maxHealth;
         stateSprites = new Dictionary<PlayerState, Sprite>
         {
-            { PlayerState.Waiting, WaitingSprite },
-            { PlayerState.Walking, WalkingSprite },
-            { PlayerState.Running, RunningSprite },
             { PlayerState.Crouching, CrouchingSprite },
             { PlayerState.Hiding, HidingSprite },
             { PlayerState.Block, BlockSprite },
@@ -247,9 +242,10 @@ public class FirstPersonController : MonoBehaviour
 
     private void PauseGame()
     {
+        StateBeforePause = currentState;
         blockPlayer = true;
+        //ChangePlayerState(currentState);
         playerInput.DeactivateInput();
-
         //playerInputActions.Disable();
 
         Time.timeScale = 0f; // Pausa el juego
@@ -261,6 +257,8 @@ public class FirstPersonController : MonoBehaviour
     public void ResumeGame()
     {
         blockPlayer = false;
+        currentState = StateBeforePause;
+        ChangePlayerState(currentState);
 
         playerInput.ActivateInput();
 
@@ -580,6 +578,7 @@ public class FirstPersonController : MonoBehaviour
 
     public void InstaDie()
     {
+        ResumeGame();
         ChangePlayerState(PlayerState.Dead);
         currentHealth = 0;
         UpdateHealthSlider(currentHealth);
@@ -615,10 +614,12 @@ public class FirstPersonController : MonoBehaviour
     // State transition and camera handling
     private void ChangePlayerState(PlayerState newState)
     {
+        currentState = newState;
+        OnPlayerStateChanged(currentState);
+
         if (currentState != newState)
         {
-            currentState = newState;
-            OnPlayerStateChanged(currentState);
+            
         }
     }
 
@@ -627,8 +628,14 @@ public class FirstPersonController : MonoBehaviour
         if (stateSprites.TryGetValue(newState, out Sprite newSprite))
         {
             StateImage.sprite = newSprite;
+            StateImage.gameObject.SetActive(true); // Asegurar que la imagen se vea
+        }
+        else
+        {
+            StateImage.gameObject.SetActive(false); // Ocultar la imagen
         }
     }
+
 
     public void StartAlertEnemy()
     {
