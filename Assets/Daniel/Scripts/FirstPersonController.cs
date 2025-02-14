@@ -135,6 +135,8 @@ public class FirstPersonController : MonoBehaviour
 
     private void Start()
     {
+        currentState = PlayerState.Block;
+
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 
@@ -274,7 +276,7 @@ public class FirstPersonController : MonoBehaviour
 
     private void Update()
     {
-        if (!blockPlayer && currentState != PlayerState.Dead)
+        if (!blockPlayer && currentState != PlayerState.Block && currentState != PlayerState.Dead)
         {
             Move();
             Look();
@@ -438,24 +440,26 @@ public class FirstPersonController : MonoBehaviour
     // Interaction methods
     private void Interact()
     {
-
-        Ray ray = new Ray(playerCamera.transform.position, playerCamera.transform.forward);
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit, interactRange, interactableLayer))
+        if (currentState != PlayerState.Block && currentState != PlayerState.Dead)
         {
-            IUsable usable = hit.collider.GetComponent<IUsable>();
-            IInteractable interactable = hit.collider.GetComponent<IInteractable>();
+            Ray ray = new Ray(playerCamera.transform.position, playerCamera.transform.forward);
+            RaycastHit hit;
 
-            if (interactable != null)
+            if (Physics.Raycast(ray, out hit, interactRange, interactableLayer))
             {
-                interactable.InteractObj();
-            }
+                IUsable usable = hit.collider.GetComponent<IUsable>();
+                IInteractable interactable = hit.collider.GetComponent<IInteractable>();
 
-            if (usable != null && CheckPickUpItem(usable))
-            {
-                PickUpItem(usable);
-                usable.GetObjPlayer(ObjectsTransform, ObjectsLookAtTransform);
+                if (interactable != null)
+                {
+                    interactable.InteractObj();
+                }
+
+                if (usable != null && CheckPickUpItem(usable))
+                {
+                    PickUpItem(usable);
+                    usable.GetObjPlayer(ObjectsTransform, ObjectsLookAtTransform);
+                }
             }
         }
     }
@@ -614,12 +618,12 @@ public class FirstPersonController : MonoBehaviour
     // State transition and camera handling
     private void ChangePlayerState(PlayerState newState)
     {
-        currentState = newState;
         OnPlayerStateChanged(currentState);
+        currentState = newState;
+
 
         if (currentState != newState)
         {
-            
         }
     }
 
