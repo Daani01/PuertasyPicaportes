@@ -12,6 +12,7 @@ public class GameLoop : MonoBehaviour
     [SerializeField] private GDTFadeEffect endFadeEffect;
 
     [SerializeField] private TMP_Text info_Text;
+    [SerializeField] private TMP_Text final_Text;
 
 
 
@@ -73,8 +74,11 @@ public class GameLoop : MonoBehaviour
             GameObject player = GameObject.FindWithTag("Player");
             if (player != null)
             {
-                yield return new WaitForSeconds(2.0f);
-                player.GetComponent<FirstPersonController>().blockPlayer = false;
+                yield return new WaitForSeconds(startFadeEffect.timeEffect);
+                if(player != null)
+                {
+                    player.GetComponent<FirstPersonController>().blockPlayer = false;
+                }
             }
 
 
@@ -84,12 +88,12 @@ public class GameLoop : MonoBehaviour
     }
 
 
-    public void FadeEffectFinish()
+    public void FadeEffectFinish(string text)
     {
-        StartCoroutine(EndGame());
+        StartCoroutine(EndGame(text));
     }
 
-    private IEnumerator EndGame()
+    private IEnumerator EndGame(string text)
     {
         if (endFadeEffect != null)
         {
@@ -103,17 +107,33 @@ public class GameLoop : MonoBehaviour
                 {
                     playerController.blockPlayer = true;
                     player.GetComponent<FirstPersonController>().DisableInputs();
+                    text += player.GetComponent<FirstPersonController>().StopTimer();
                     //playerController.StopAllCoroutines();
                 }
 
-                yield return new WaitForSeconds(5.0f);
+                yield return new WaitForSeconds(2.0f);
+
+                yield return StartCoroutine(TypeTextEffect(text, 5.0f));
+
+                yield return new WaitForSeconds(4.0f);
+
 
                 SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
             }
         }
     }
 
+    private IEnumerator TypeTextEffect(string text, float duration)
+    {
+        final_Text.text = "";
+        float delay = duration / text.Length;
 
+        foreach (char letter in text)
+        {
+            final_Text.text += letter;
+            yield return new WaitForSeconds(delay);
+        }
+    }
 
     private IEnumerator FadeOutText()
     {

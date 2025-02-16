@@ -15,6 +15,8 @@ public class RushController : Enemie
     private void Awake()
     {
         enemyName = "Rush";
+        dieInfo = "Has muerto por Rush\n\nPrueba a esconderte antes de que te alcance";
+
     }
 
     private void Start()

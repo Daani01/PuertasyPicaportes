@@ -125,6 +125,15 @@ public class ProceduralRoomGenerator : MonoBehaviour, IProcess
         // Aumentar el contador de habitaciones
         roomCount++;
 
+        if(roomCount == 1)
+        {
+            GameObject player = GameObject.FindWithTag("Player");
+            if (player != null)
+            {
+                player.GetComponent<FirstPersonController>().StartCoroutine("StartTimer");
+            }
+        }
+
         // Asegurarse de que roomCount no exceda el número total de habitaciones
         if (roomCount > numberOfRooms)
         {

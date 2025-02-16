@@ -62,7 +62,7 @@ public class EnemyManager : MonoBehaviour
 
                 break;
             case RoomEventType.End:
-                GameObject.Find("GAMELOOP").GetComponent<GameLoop>().FadeEffectFinish();
+                GameObject.Find("GAMELOOP").GetComponent<GameLoop>().FadeEffectFinish("HAS GANADO\n\n\n");
                 break;
         
         }

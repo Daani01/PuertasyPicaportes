@@ -47,6 +47,12 @@ public class ObjectCanvasManager : MonoBehaviour
             text.text = textValue;
         }
 
+        Slider slider = item.transform.Find("Slider").GetComponent<Slider>();
+        if (slider != null)
+        {
+            //slider.value = ;
+        }
+
         return item;
     }
 
