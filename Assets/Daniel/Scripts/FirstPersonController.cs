@@ -67,6 +67,7 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] private float interactRange;
     [SerializeField] private LayerMask interactableLayer;
 
+
     [Header("State Control")]
     [SerializeField] private bool canJump;
     [SerializeField] private bool canRun;
@@ -144,6 +145,7 @@ public class FirstPersonController : MonoBehaviour
 
     private void Start()
     {
+
         currentState = PlayerState.Block;
 
         Cursor.visible = false;
@@ -497,12 +499,30 @@ public class FirstPersonController : MonoBehaviour
             ShowMessage($"Has obtenido: {usableItem.GetName()}", 4f);
             inventory.Add(usableItem);
             canvasManager.AddItem(usableItem.GetName(), (inventory.Count).ToString());
+
+            // Cambiar la capa del objeto y de todos sus hijos a "Objects"
+            if (usableItem is MonoBehaviour itemObject)
+            {
+                ChangeLayerRecursively(itemObject.gameObject, LayerMask.NameToLayer("Objects"));
+            }
         }
         else
         {
             ShowMessage("Inventario lleno", 4f);
         }
     }
+
+    // Función recursiva para cambiar la capa de un objeto y todos sus hijos
+    private void ChangeLayerRecursively(GameObject obj, int layer)
+    {
+        obj.layer = layer;
+        foreach (Transform child in obj.transform)
+        {
+            ChangeLayerRecursively(child.gameObject, layer);
+        }
+    }
+
+
 
     public void ShowMessage(string message, float duration)
     {
@@ -750,7 +770,9 @@ public class FirstPersonController : MonoBehaviour
 
         transform.rotation = Quaternion.Euler(0f, currentRotation.x, 0f);
         playerCamera.transform.localRotation = Quaternion.Euler(currentRotation.y, 0f, 0f);
+
     }
+
 
     private void RotatePlayer()
     {

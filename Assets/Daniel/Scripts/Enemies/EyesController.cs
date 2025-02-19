@@ -17,6 +17,8 @@ public class EyesController : Enemie
     private Camera playerCamera;
     private float nextCheckTime = 0f;
     private float timeElapsed = 0f;
+    private AudioSource audioSource;
+    private string soundName;
 
     private void OnEnable()
     {
@@ -26,8 +28,12 @@ public class EyesController : Enemie
         timeElapsed = 0.0f;
     }
 
-    void Start()
+    void Awake()
     {
+        enemyName = "Eyes";
+        dieInfo = "Has muerto por Eyes\n\nPrueba a no mirarlo por mucho tiempo";
+        //damageAmount = 40.0f;
+
         if (playerTransform == null)
         {
             GameObject playerObject = GameObject.FindWithTag("Player");
@@ -74,6 +80,9 @@ public class EyesController : Enemie
     {
         if(spawnPosition != null)
         {
+            soundName = "EyesSound";
+            audioSource = SoundPoolManager.Instance.PlaySound(soundName, gameObject);
+
             gameObject.transform.position = spawnPosition.position;
         }
     }

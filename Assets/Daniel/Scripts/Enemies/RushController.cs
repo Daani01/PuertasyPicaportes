@@ -11,12 +11,15 @@ public class RushController : Enemie
     private bool isMoving = false;
 
     private bool isInitialized = false;
+    private AudioSource audioSource;
+    private string soundName;
 
     private void Awake()
     {
         enemyName = "Rush";
         dieInfo = "Has muerto por Rush\n\nPrueba a esconderte antes de que te alcance";
-
+        //damageAmount = 40.0f;
+        //speed
     }
 
     private void Start()
@@ -44,6 +47,9 @@ public class RushController : Enemie
 
     private IEnumerator MoveThroughWaypoints()
     {
+        soundName = "RushSound";
+        audioSource = SoundPoolManager.Instance.PlaySound(soundName, gameObject);
+
         isMoving = true;
         while (currentWaypointIndex < waypoints.Count)
         {
@@ -57,7 +63,12 @@ public class RushController : Enemie
             currentWaypointIndex++;
         }
 
+        
         isMoving = false;
+
+        // Detener y devolver el sonido a la pool
+        SoundPoolManager.Instance.ReturnToPool(soundName, audioSource);
+
         EnemyPool.Instance.ReturnEnemy(gameObject);
     }
 
@@ -65,15 +76,14 @@ public class RushController : Enemie
     {
         if (other.CompareTag("Player"))
         {
-            FirstPersonController playerHealth = other.GetComponent<FirstPersonController>();
-            if (playerHealth != null)
+            FirstPersonController player = other.GetComponent<FirstPersonController>();
+            if (player != null)
             {
-                if (playerHealth.currentState == FirstPersonController.PlayerState.Hiding)
+                if (player.currentState == FirstPersonController.PlayerState.Hiding)
                 {
-                    Debug.Log("ESCONDIDO.");
                     return;
                 }
-                playerHealth.KillInstantly(gameObject.GetComponent<Enemie>());
+                player.KillInstantly(gameObject.GetComponent<Enemie>());
             }
         }
     }

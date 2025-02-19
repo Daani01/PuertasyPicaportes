@@ -217,6 +217,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3867459449364096016}
     m_Modifications:
+    - target: {fileID: 595688115662546497, guid: d07f4eca02cfd1e4ba892c4941bf3f76, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1253844039543653848, guid: d07f4eca02cfd1e4ba892c4941bf3f76, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.21028091
@@ -272,6 +276,10 @@ PrefabInstance:
     - target: {fileID: 2759966634042362508, guid: d07f4eca02cfd1e4ba892c4941bf3f76, type: 3}
       propertyPath: m_Name
       value: pf_flashlight_final
+      objectReference: {fileID: 0}
+    - target: {fileID: 2759966634042362508, guid: d07f4eca02cfd1e4ba892c4941bf3f76, type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -9,6 +9,7 @@ public class Doors : MonoBehaviour
     public Transform Axis;
 
     private bool isMoving = false;
+    private AudioSource audioSource;
 
     void OnTriggerEnter(Collider other)
     {
@@ -22,6 +23,8 @@ public class Doors : MonoBehaviour
 
     IEnumerator OpenDoor()
     {
+        audioSource = SoundPoolManager.Instance.PlaySound("Open_Door", gameObject);
+
         Quaternion initialRotation = Axis.rotation;
         Quaternion targetRotation = initialRotation * Quaternion.Euler(0, rotationAngle, 0);
         yield return RotateDoor(initialRotation, targetRotation);

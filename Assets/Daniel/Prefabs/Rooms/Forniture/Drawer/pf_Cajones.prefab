@@ -196,7 +196,8 @@ GameObject:
   - component: {fileID: 2546715535097140446}
   - component: {fileID: 2067408660864971261}
   - component: {fileID: 3000781301627802303}
-  m_Layer: 0
+  - component: {fileID: 7584472172979836015}
+  m_Layer: 3
   m_Name: Cajon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -268,6 +269,28 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &7584472172979836015
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4781824784173352829}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -5198267681279241171, guid: 8d063cb8cb9bcd84a8405e1166788dfb, type: 3}
 --- !u!1 &5633720262547266822
 GameObject:
   m_ObjectHideFlags: 0

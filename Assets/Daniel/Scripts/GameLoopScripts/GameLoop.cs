@@ -105,9 +105,9 @@ public class GameLoop : MonoBehaviour
                 FirstPersonController playerController = player.GetComponent<FirstPersonController>();
                 if (playerController != null)
                 {
-                    playerController.blockPlayer = true;
+                    //playerController.blockPlayer = true;
                     player.GetComponent<FirstPersonController>().DisableInputs();
-                    text += player.GetComponent<FirstPersonController>().StopTimer();
+                    text += "\n\n\n" + player.GetComponent<FirstPersonController>().StopTimer();
                     //playerController.StopAllCoroutines();
                 }
 

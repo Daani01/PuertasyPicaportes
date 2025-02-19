@@ -7,6 +7,7 @@ public class Drawer : MonoBehaviour, IInteractable
     public float moveDuration = 0.5f; // Duración del movimiento
     private bool isOpen = false; // Estado del cajón (abierto o cerrado)
     private bool isMoving = false; // Evitar múltiples interacciones mientras se mueve
+    private AudioSource audioSource;
 
     public void InteractObj()
     {
@@ -19,6 +20,10 @@ public class Drawer : MonoBehaviour, IInteractable
     private IEnumerator MoveDrawer()
     {
         isMoving = true;
+
+        // Determinar el sonido correcto
+        string soundToPlay = isOpen ? "Close_Drawer" : "Open_Drawer";
+        audioSource = SoundPoolManager.Instance.PlaySound(soundToPlay, gameObject);
 
         // Calcular posición inicial y final
         Vector3 startPosition = transform.localPosition;

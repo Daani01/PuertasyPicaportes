@@ -25,10 +25,16 @@ public class ScreechController : Enemie, IInteractable
     public float visionRadius;
 
     private bool isInitialized = false;
+    private AudioSource audioSource;
+    private string soundName;
 
     void Awake()
     {
         enemyName = "Screech";
+        dieInfo = "Has muerto por Screech\n\nPrueba a plantarle cara antes de que sea demasiado tarde";
+        damageAmount = 40.0f;
+        //timeToAppear
+        //maxTimeNotLookedAt
 
         player = GameObject.FindWithTag("Player");
         if (player != null)
@@ -77,6 +83,9 @@ public class ScreechController : Enemie, IInteractable
 
     private IEnumerator WaitAndActivate()
     {
+        soundName = "ScreechSound";
+        audioSource = SoundPoolManager.Instance.PlaySound(soundName, gameObject);
+
         float radius = playerTransform.GetComponent<FirstPersonController>().screechRadius;
         randomPosition = GetRandomPositionInSphere(playerTransform.position, radius);
         relativePosition = randomPosition - playerTransform.position;
@@ -164,6 +173,7 @@ public class ScreechController : Enemie, IInteractable
         timeNotLookedAt = 0.0f;
         screechObj.SetActive(false);
         killScreech = false;
+        SoundPoolManager.Instance.ReturnToPool(soundName, audioSource);
         EnemyPool.Instance.ReturnEnemy(gameObject);
         //gameObject.SetActive(false);
         //Debug.Log("Screech object deactivated.");
