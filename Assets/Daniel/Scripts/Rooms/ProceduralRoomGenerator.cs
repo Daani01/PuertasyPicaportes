@@ -96,6 +96,21 @@ public class ProceduralRoomGenerator : MonoBehaviour, IProcess
                 contadorLocal++;
             }
 
+            // Verifica si se ha generado al menos el 20% de las habitaciones
+            if (contadorLocal > numberOfRooms * 0.2f)
+            {
+                // Probabilidad del 50% de apagar la luz
+                if (Random.value <= 0.5f)
+                {
+                    Transform ambientLight = newRoom.transform.Find("Ambient_Light");
+                    if (ambientLight != null)
+                    {
+                        ambientLight.gameObject.SetActive(false);
+                    }
+                }
+            }
+
+
         }
 
         GameObject finishRoom = Instantiate(finishRoomPrefab);

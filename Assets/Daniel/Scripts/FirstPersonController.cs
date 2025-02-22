@@ -36,8 +36,13 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] private float MaxDurationAlert;
     [SerializeField] private Slider healthSlider;
 
+    [SerializeField] private Image damageIndicator;
+    private float fadeDuration = 3f; // Duración total para desvanecer el efecto
+    private float maxAlphaIncrease = 0.1f; // Aumenta el alpha en 30 puntos (0.3 en escala 0-1)
+    private Coroutine fadeDamageIndicatorCoroutine;
+
     [SerializeField] private TMP_Text helpText; // Asigna un TextMeshPro en el inspector
-    private Coroutine fadeCoroutine; // Para manejar la corrutina
+    private Coroutine fadeTextInfoCoroutine; // Para manejar la corrutina
 
 
     private Dictionary<PlayerState, Sprite> stateSprites;
@@ -198,6 +203,10 @@ public class FirstPersonController : MonoBehaviour
 
         if (helpText == null)
             helpText = GameObject.Find("Help_Text").GetComponent<TMP_Text>();
+
+        if (damageIndicator == null)
+            damageIndicator = GameObject.Find("Damage_Indicator").GetComponent<Image>();
+        
 
         if (pauseMenuUI == null)
         {
@@ -526,9 +535,9 @@ public class FirstPersonController : MonoBehaviour
 
     public void ShowMessage(string message, float duration)
     {
-        if (fadeCoroutine != null)
+        if (fadeTextInfoCoroutine != null)
         {
-            StopCoroutine(fadeCoroutine);
+            StopCoroutine(fadeTextInfoCoroutine);
         }
 
         helpText.text = message;
@@ -536,7 +545,7 @@ public class FirstPersonController : MonoBehaviour
         Color originalColor = helpText.color;
         helpText.color = new Color(originalColor.r, originalColor.g, originalColor.b, 1f);
 
-        fadeCoroutine = StartCoroutine(FadeOutText(duration));
+        fadeTextInfoCoroutine = StartCoroutine(FadeOutText(duration));
     }
 
     private IEnumerator FadeOutText(float duration)
@@ -552,7 +561,7 @@ public class FirstPersonController : MonoBehaviour
         }
 
         helpText.color = new Color(originalColor.r, originalColor.g, originalColor.b, 0);
-        fadeCoroutine = null;
+        fadeTextInfoCoroutine = null;
     }
 
 
@@ -658,7 +667,40 @@ public class FirstPersonController : MonoBehaviour
 
     private void UpdateHealthSlider(float value)
     {
-        healthSlider.value = Mathf.RoundToInt(value); // Redondea para asegurar números enteros
+        healthSlider.value = Mathf.RoundToInt(value);
+
+        // Obtener el color actual de la imagen
+        Color currentColor = damageIndicator.color;
+
+        // Aumentar el alpha sin superar 1
+        float newAlpha = Mathf.Min(currentColor.a + maxAlphaIncrease, 1f);
+        damageIndicator.color = new Color(currentColor.r, currentColor.g, currentColor.b, newAlpha);
+
+        // Reiniciar la corrutina para desvanecer el efecto
+        if (fadeDamageIndicatorCoroutine != null)
+            StopCoroutine(fadeDamageIndicatorCoroutine);
+
+        fadeDamageIndicatorCoroutine = StartCoroutine(FadeOutDamageEffect());
+    }
+
+    private IEnumerator FadeOutDamageEffect()
+    {
+        yield return new WaitForSeconds(0.2f); // Mantener el alpha por 0.2 segundos
+
+        float elapsedTime = 0f;
+        Color startColor = damageIndicator.color;
+        float startAlpha = startColor.a;
+
+        while (elapsedTime < fadeDuration)
+        {
+            float newAlpha = Mathf.Lerp(startAlpha, 0f, elapsedTime / fadeDuration);
+            damageIndicator.color = new Color(startColor.r, startColor.g, startColor.b, newAlpha);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // Asegurar que el alpha llegue a 0 al final
+        damageIndicator.color = new Color(startColor.r, startColor.g, startColor.b, 0f);
     }
 
 
