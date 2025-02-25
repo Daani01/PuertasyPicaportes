@@ -15,9 +15,9 @@ public class Bandage : MonoBehaviour, IInteractable
         {
             if (player.currentHealth > 0 && player.currentHealth < player.maxHealth)
             {
-                player.currentHealth = Mathf.Min(player.currentHealth + HealAmount, player.maxHealth);
+                player.Heal(HealAmount);
                 gameObject.SetActive(false);
-                Debug.Log($"Player healed by {HealAmount}. Current health: {player.currentHealth}");
+                //Debug.Log($"Player healed by {HealAmount}. Current health: {player.currentHealth}");
             }
             else
             {

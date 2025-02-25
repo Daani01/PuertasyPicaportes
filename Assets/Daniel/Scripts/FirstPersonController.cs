@@ -34,7 +34,8 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] private Image AlertImage;
     [SerializeField] private int RepetitionAlert;
     [SerializeField] private float MaxDurationAlert;
-    [SerializeField] private Slider healthSlider;
+    [SerializeField] private Image healthImage;
+    [SerializeField] private Text healthText;
 
     [SerializeField] private Image damageIndicator;
     private float fadeDuration = 3f; // Duración total para desvanecer el efecto
@@ -198,8 +199,11 @@ public class FirstPersonController : MonoBehaviour
         if (AlertImage == null)
             AlertImage = GameObject.Find("INFO_Enemy").GetComponent<Image>();
 
-        if (healthSlider == null)
-            healthSlider = GameObject.Find("INFO_Health").GetComponent<Slider>();
+        if (healthImage == null)
+            healthImage = GameObject.Find("INFO_Health").GetComponent<Image>();
+
+        if (healthText == null)
+            healthText = GameObject.Find("INFO_Text_Health").GetComponent<Text>();
 
         if (helpText == null)
             helpText = GameObject.Find("Help_Text").GetComponent<TMP_Text>();
@@ -632,8 +636,9 @@ public class FirstPersonController : MonoBehaviour
     public void TakeDamage(float amount, Enemie enemie)
     {
         if (currentState == PlayerState.Dead) return;
-        currentHealth -= amount;
+        currentHealth = Mathf.Clamp(currentHealth - amount, 0.0f, maxHealth);
         UpdateHealthSlider(currentHealth);
+        healthText.text = currentHealth.ToString();
         if (currentHealth <= 0) Die(enemie);
     }
 
@@ -641,7 +646,11 @@ public class FirstPersonController : MonoBehaviour
     {
         if (currentState == PlayerState.Dead) return;
         currentHealth = Mathf.Clamp(currentHealth + amount, 0.0f, maxHealth);
-        UpdateHealthSlider(currentHealth);
+        //UpdateHealthSlider(currentHealth);
+        //healthSlider.value = Mathf.RoundToInt(currentHealth);
+        healthImage.fillAmount = Mathf.Clamp01(currentHealth / 100f); // Asegúrate de que el valor esté entre 0 y 1
+        healthText.text = currentHealth.ToString();
+
     }
 
     public void Die(Enemie enemie)
@@ -649,9 +658,10 @@ public class FirstPersonController : MonoBehaviour
         ChangePlayerState(PlayerState.Dead);
         currentHealth = 0;
         UpdateHealthSlider(currentHealth);
+        healthText.text = currentHealth.ToString();
         DetachCamera();
         gameloopManager.FadeEffectFinish(enemie.dieInfo);
-        Debug.Log("Enemie:" + enemie.enemyName);
+        //Debug.Log("Enemie:" + enemie.enemyName);
     }
 
     public void InstaDie()
@@ -660,6 +670,7 @@ public class FirstPersonController : MonoBehaviour
         ChangePlayerState(PlayerState.Dead);
         currentHealth = 0;
         UpdateHealthSlider(currentHealth);
+        healthText.text = currentHealth.ToString();
         DetachCamera();
         gameloopManager.FadeEffectFinish("...");
     }
@@ -667,7 +678,7 @@ public class FirstPersonController : MonoBehaviour
 
     private void UpdateHealthSlider(float value)
     {
-        healthSlider.value = Mathf.RoundToInt(value);
+        healthImage.fillAmount = Mathf.Clamp01(value / 100f); // Asegúrate de que el valor esté entre 0 y 1
 
         // Obtener el color actual de la imagen
         Color currentColor = damageIndicator.color;

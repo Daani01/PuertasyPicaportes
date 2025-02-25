@@ -41,16 +41,10 @@ public class ObjectCanvasManager : MonoBehaviour
         }
 
         // Buscar y modificar el texto
-        TMP_Text text = item.transform.Find("Text").GetComponent<TMP_Text>();
+        TMP_Text text = item.transform.Find("Number_Box").GetComponent<TMP_Text>();
         if (text != null)
         {
             text.text = textValue;
-        }
-
-        Slider slider = item.transform.Find("Slider").GetComponent<Slider>();
-        if (slider != null)
-        {
-            //slider.value = ;
         }
 
         return item;

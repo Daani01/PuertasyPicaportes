@@ -21,7 +21,7 @@ public class Drawer : MonoBehaviour, IInteractable
     {
         isMoving = true;
 
-        // Determinar el sonido correcto
+        // Determinar el sonido correcto a reproducir
         string soundToPlay = isOpen ? "Close_Drawer" : "Open_Drawer";
         audioSource = SoundPoolManager.Instance.PlaySound(soundToPlay, gameObject);
 
@@ -43,8 +43,11 @@ public class Drawer : MonoBehaviour, IInteractable
         // Asegurarse de llegar exactamente al destino
         transform.localPosition = targetPosition;
 
+        SoundPoolManager.Instance.ReturnToPool(soundToPlay, audioSource);
+
         // Alternar el estado del cajón
         isOpen = !isOpen;
-        isMoving = false;
+        isMoving = false;        
+
     }
 }

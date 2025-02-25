@@ -23,7 +23,7 @@ public class CSVManager : MonoBehaviour, IProcess
             return instance;
         }
     }
-
+    /*
     private void Awake()
     {
         if (instance == null)
@@ -40,7 +40,7 @@ public class CSVManager : MonoBehaviour, IProcess
             Destroy(gameObject);
         }
     }
-
+    */
     public void ExecuteProcess(System.Action onComplete)
     {
         StartCoroutine(LoadCSV(onComplete));

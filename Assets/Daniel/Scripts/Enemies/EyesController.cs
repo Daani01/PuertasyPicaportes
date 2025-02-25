@@ -91,7 +91,7 @@ public class EyesController : Enemie
     {
         if (playerTransform == null || detectionSphere == null || visionSphere == null || playerCamera == null) return;
 
-        if (playerTransform.GetComponent<FirstPersonController>().currentState != PlayerState.Hiding) 
+        if (playerTransform.GetComponent<FirstPersonController>().currentState != PlayerState.Hiding)
         {
             Vector3 directionToDetectionSphere = detectionSphere.position - playerTransform.position;
             if (directionToDetectionSphere.magnitude <= detectionRadius)
@@ -99,8 +99,20 @@ public class EyesController : Enemie
                 Vector3 directionToVisionSphere = (visionSphere.position - playerCamera.transform.position).normalized;
                 float dotProduct = Vector3.Dot(playerCamera.transform.forward, directionToVisionSphere);
 
-                if (dotProduct > 0.9f && directionToVisionSphere.magnitude <= visionRadius) // Ajusta 0.9f para aumentar o disminuir el rango
+                if (dotProduct > 0.9f && directionToVisionSphere.magnitude <= visionRadius) // Ajusta 0.9f para modificar el ángulo
                 {
+                    // Comprobamos si hay una pared entre el jugador y el visionSphere
+                    RaycastHit hit;
+                    if (Physics.Raycast(playerCamera.transform.position, directionToVisionSphere, out hit, visionRadius))
+                    {
+                        // Si el rayo golpea algo y NO es el visionSphere, significa que hay una pared en medio
+                        if (hit.collider.gameObject != visionSphere.gameObject)
+                        {
+                            return; // Se detiene la detección porque hay un obstáculo
+                        }
+                    }
+
+                    // Si no hay pared, aplicar daño al jugador
                     FirstPersonController player = playerTransform.GetComponent<FirstPersonController>();
                     if (player != null && player.currentHealth > 0)
                     {
@@ -111,8 +123,9 @@ public class EyesController : Enemie
                     }
                 }
             }
-        }        
+        }
     }
+
 
     // Dibujar Gizmos en el Editor
     private void OnDrawGizmos()

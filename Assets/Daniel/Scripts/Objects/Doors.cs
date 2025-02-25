@@ -28,6 +28,9 @@ public class Doors : MonoBehaviour
         Quaternion initialRotation = Axis.rotation;
         Quaternion targetRotation = initialRotation * Quaternion.Euler(0, rotationAngle, 0);
         yield return RotateDoor(initialRotation, targetRotation);
+
+        SoundPoolManager.Instance.ReturnToPool("Open_Door", audioSource);
+
     }
 
     public IEnumerator CloseDoor()
