@@ -8,6 +8,9 @@ public class Pill : MonoBehaviour, IInteractable, IUsable
     public ActivationType activationType;
     public int SpeedTime;
 
+    private AudioSource audioSource;
+    private string soundName;
+
     public void InteractObj()
     {
 
@@ -47,6 +50,8 @@ public class Pill : MonoBehaviour, IInteractable, IUsable
 
     public void Use()
     {
+        soundName = "Pills";
+
         switch (activationType)
         {
             case ActivationType.OneTime:
@@ -54,8 +59,14 @@ public class Pill : MonoBehaviour, IInteractable, IUsable
 
                 if (player != null)
                 {
+                    audioSource = SoundPoolManager.Instance.PlaySound(soundName, gameObject);
+                    if (audioSource != null && audioSource.clip != null)
+                    {
+                        StartCoroutine(ReturnSoundToPool(audioSource.clip.length, soundName, audioSource));
+                    }
+
                     player.ActivatePillEffect(SpeedTime);
-                    Destroy();
+                    //Destroy();
                 }
                 break;
 
@@ -65,8 +76,14 @@ public class Pill : MonoBehaviour, IInteractable, IUsable
             case ActivationType.Charge:                
                 break;
         }
-    }    
+    }
 
-    
+    private IEnumerator ReturnSoundToPool(float delay, string name, AudioSource audio)
+    {
+        yield return new WaitForSeconds(delay);
+        SoundPoolManager.Instance.ReturnToPool(name, audio);
+        gameObject.gameObject.SetActive(false);
+
+    }
 
 }

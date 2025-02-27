@@ -285,6 +285,7 @@ public class FirstPersonController : MonoBehaviour
 
     public void ResumeGame()
     {
+        isPaused = false;
         blockPlayer = false;
         currentState = StateBeforePause;
         ChangePlayerState(currentState);
@@ -650,6 +651,7 @@ public class FirstPersonController : MonoBehaviour
         //healthSlider.value = Mathf.RoundToInt(currentHealth);
         healthImage.fillAmount = Mathf.Clamp01(currentHealth / 100f); // Asegúrate de que el valor esté entre 0 y 1
         healthText.text = currentHealth.ToString();
+        ShowMessage("Te has curado", 4f);
 
     }
 

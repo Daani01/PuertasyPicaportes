@@ -376,10 +376,12 @@ MonoBehaviour:
   AlertImage: {fileID: 0}
   RepetitionAlert: 3
   MaxDurationAlert: 0.2
-  healthSlider: {fileID: 0}
+  healthImage: {fileID: 0}
+  healthText: {fileID: 0}
+  damageIndicator: {fileID: 0}
   helpText: {fileID: 0}
-  walkSpeed: 10
-  runSpeed: 15
+  walkSpeed: 7
+  runSpeed: 12
   crouchSpeed: 2.5
   crouchHeight: 0.5
   normalHeight: 2

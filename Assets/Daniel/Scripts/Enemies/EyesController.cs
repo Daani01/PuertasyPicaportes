@@ -66,8 +66,8 @@ public class EyesController : Enemie
 
         if (timeElapsed >= 60f)
         {
+            SoundPoolManager.Instance.ReturnToPool(soundName, audioSource);
             EnemyPool.Instance.ReturnEnemy(gameObject);
-
         }
 
         if(playerCamera != null)

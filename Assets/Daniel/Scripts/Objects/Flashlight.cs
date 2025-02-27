@@ -7,6 +7,12 @@ public class Flashlight : MonoBehaviour, IInteractable, IUsable
     public ActivationType activationType;
     public GameObject FlashlightLight;
     public float flashlightTime = 180f; //(3 minutos)
+
+    private AudioSource audioSourceActivate;
+    private AudioSource audioSourceDesactivate;
+    private string soundNameActivate;
+    private string soundNameDesctivate;
+
     private bool activatedFlashlight;
     private Coroutine flashlightCoroutine;
 
@@ -71,14 +77,24 @@ public class Flashlight : MonoBehaviour, IInteractable, IUsable
     }
     public void Use()
     {
+        soundNameActivate = "Flashlight_On";
+        soundNameDesctivate = "Flashlight_Off";
+
         switch (activationType)
         {
+
             case ActivationType.OneTime:
                 if (!activatedFlashlight)
                 {
                     activatedFlashlight = true;
                     FlashlightLight.SetActive(true);
                     flashlightCoroutine = StartCoroutine(FlashlightTimer());
+
+                    audioSourceActivate = SoundPoolManager.Instance.PlaySound(soundNameActivate, gameObject);
+                    if (audioSourceActivate != null && audioSourceActivate.clip != null)
+                    {
+                        StartCoroutine(ReturnSoundToPool(audioSourceActivate.clip.length, soundNameActivate, audioSourceActivate));
+                    }
                 }
                 break;
 
@@ -91,12 +107,24 @@ public class Flashlight : MonoBehaviour, IInteractable, IUsable
                     if (flashlightCoroutine == null)
                     {
                         flashlightCoroutine = StartCoroutine(FlashlightTimer());
+
+                        audioSourceActivate = SoundPoolManager.Instance.PlaySound(soundNameActivate, gameObject);
+                        if (audioSourceActivate != null && audioSourceActivate.clip != null)
+                        {
+                            StartCoroutine(ReturnSoundToPool(audioSourceActivate.clip.length, soundNameActivate, audioSourceActivate));
+                        }
                     }
                 }
                 else
                 {
                     StopCoroutine(flashlightCoroutine);
                     flashlightCoroutine = null;
+
+                    audioSourceDesactivate = SoundPoolManager.Instance.PlaySound(soundNameDesctivate, gameObject);
+                    if (audioSourceDesactivate != null && audioSourceDesactivate.clip != null)
+                    {
+                        StartCoroutine(ReturnSoundToPool(audioSourceDesactivate.clip.length, soundNameDesctivate, audioSourceDesactivate));
+                    }
                 }
                 break;
 
@@ -110,12 +138,24 @@ public class Flashlight : MonoBehaviour, IInteractable, IUsable
                     if (flashlightCoroutine == null)
                     {
                         flashlightCoroutine = StartCoroutine(FlashlightTimer());
+
+                        audioSourceActivate = SoundPoolManager.Instance.PlaySound(soundNameActivate, gameObject);
+                        if (audioSourceActivate != null && audioSourceActivate.clip != null)
+                        {
+                            StartCoroutine(ReturnSoundToPool(audioSourceActivate.clip.length, soundNameActivate, audioSourceActivate));
+                        }
                     }
                 }
                 else
                 {
                     StopCoroutine(flashlightCoroutine);
                     flashlightCoroutine = null;
+
+                    audioSourceDesactivate = SoundPoolManager.Instance.PlaySound(soundNameDesctivate, gameObject);
+                    if (audioSourceDesactivate != null && audioSourceDesactivate.clip != null)
+                    {
+                        StartCoroutine(ReturnSoundToPool(audioSourceDesactivate.clip.length, soundNameDesctivate, audioSourceDesactivate));
+                    }
                 }
                 break;
         }
@@ -131,6 +171,12 @@ public class Flashlight : MonoBehaviour, IInteractable, IUsable
         }
 
         Destroy();
+    }
+
+    private IEnumerator ReturnSoundToPool(float delay, string name, AudioSource audio)
+    {
+        yield return new WaitForSeconds(delay);
+        SoundPoolManager.Instance.ReturnToPool(name, audio);
     }
 
 }

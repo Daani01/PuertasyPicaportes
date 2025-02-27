@@ -17,11 +17,10 @@ public class Bandage : MonoBehaviour, IInteractable
             {
                 player.Heal(HealAmount);
                 gameObject.SetActive(false);
-                //Debug.Log($"Player healed by {HealAmount}. Current health: {player.currentHealth}");
             }
             else
             {
-                Debug.Log("Player health is full or player is dead.");
+                player.ShowMessage("Vida completa", 4.0f);
             }
         }
     }

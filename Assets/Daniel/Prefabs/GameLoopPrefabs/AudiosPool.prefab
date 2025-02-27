@@ -51,4 +51,11 @@ MonoBehaviour:
   - {fileID: 8300000, guid: ee7fdd2bb0d65b744bab75d3accb989d, type: 3}
   - {fileID: 8300000, guid: 1d5a4aeb024fbce41a0ff4369241a900, type: 3}
   - {fileID: 8300000, guid: 7f66525ecf721c048b255f0fcd3a164f, type: 3}
+  - {fileID: 8300000, guid: 78487f0bd3bd80847b24f229247dfe7a, type: 3}
+  - {fileID: 8300000, guid: 81f3ae5019afb254bbe10a23c9f14919, type: 3}
+  - {fileID: 8300000, guid: 4c4728d95071fb9448ee4b4a29a4ec54, type: 3}
+  - {fileID: 8300000, guid: c8f7ba99b84ca774692e083a680bf8f7, type: 3}
+  - {fileID: 8300000, guid: b91d620e399892b4e803328fd6c77304, type: 3}
+  - {fileID: 8300000, guid: 4ad240557a855d64991acc27f7686809, type: 3}
+  sfxAudioMixerGroup: {fileID: -7209248621603476664, guid: 4323ba8966c41c741a91b27963a8fa49, type: 2}
   poolSize: 20

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class SoundPoolManager : MonoBehaviour, IProcess
 {
@@ -11,6 +12,8 @@ public class SoundPoolManager : MonoBehaviour, IProcess
     }
 
     public List<AudioClip> audioClips; // Lista de AudioClips
+    public AudioMixerGroup sfxAudioMixerGroup;  // ASIGNAR DESDE EL INSPECTOR
+
     [SerializeField] private int poolSize = 10;
 
     private Dictionary<string, SoundPool> poolDictionary = new Dictionary<string, SoundPool>();
@@ -66,6 +69,7 @@ public class SoundPoolManager : MonoBehaviour, IProcess
 
         // Configuración del AudioSource
         audioSource.clip = clip;
+        audioSource.outputAudioMixerGroup = sfxAudioMixerGroup;
         audioSource.playOnAwake = true;
         audioSource.spatialBlend = 1.0f;
         audioSource.rolloffMode = AudioRolloffMode.Linear;

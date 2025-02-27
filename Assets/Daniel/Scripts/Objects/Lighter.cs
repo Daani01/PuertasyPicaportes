@@ -10,6 +10,11 @@ public class Lighter : MonoBehaviour, IInteractable, IUsable
     private bool activatedLighter;
     private Coroutine lightCoroutine;
 
+    private AudioSource audioSourceActivate;
+    private AudioSource audioSourceDesactivate;
+    private string soundNameActivate;
+    private string soundNameDesctivate;
+
     public void InteractObj()
     {
 
@@ -67,6 +72,9 @@ public class Lighter : MonoBehaviour, IInteractable, IUsable
 
     public void Use()
     {
+        soundNameActivate = "Lighter_On";
+        soundNameDesctivate = "Lighter_Off";
+
         switch (activationType)
         {
             case ActivationType.OneTime:                
@@ -81,12 +89,24 @@ public class Lighter : MonoBehaviour, IInteractable, IUsable
                     if (lightCoroutine == null)
                     {
                         lightCoroutine = StartCoroutine(LighterTimer());
+
+                        audioSourceActivate = SoundPoolManager.Instance.PlaySound(soundNameActivate, gameObject);
+                        if (audioSourceActivate != null && audioSourceActivate.clip != null)
+                        {
+                            StartCoroutine(ReturnSoundToPool(audioSourceActivate.clip.length, soundNameActivate, audioSourceActivate));
+                        }
                     }
                 }
                 else
                 {
                     StopCoroutine(lightCoroutine);
                     lightCoroutine = null;
+
+                    audioSourceDesactivate = SoundPoolManager.Instance.PlaySound(soundNameDesctivate, gameObject);
+                    if (audioSourceDesactivate != null && audioSourceDesactivate.clip != null)
+                    {
+                        StartCoroutine(ReturnSoundToPool(audioSourceDesactivate.clip.length, soundNameDesctivate, audioSourceDesactivate));
+                    }
                 }
                 break;
 
@@ -105,5 +125,11 @@ public class Lighter : MonoBehaviour, IInteractable, IUsable
         }
 
         Destroy();
+    }
+
+    private IEnumerator ReturnSoundToPool(float delay, string name, AudioSource audio)
+    {
+        yield return new WaitForSeconds(delay);
+        SoundPoolManager.Instance.ReturnToPool(name, audio);
     }
 }

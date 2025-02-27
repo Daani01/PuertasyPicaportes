@@ -64,7 +64,9 @@ public class ProceduralRoomGenerator : MonoBehaviour, IProcess
             Transform playerSpawnPoint = startRoom.transform.Find("PlayerSpawnPoint");
             if (playerSpawnPoint != null)
             {
+                player.SetActive(false);
                 player.transform.position = playerSpawnPoint.position;
+                player.SetActive(true);
             }
         }
 
