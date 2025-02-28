@@ -398,7 +398,7 @@ MonoBehaviour:
   interactRange: 3
   interactableLayer:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 4294967295
   canJump: 0
   canRun: 0
   canCrouch: 1

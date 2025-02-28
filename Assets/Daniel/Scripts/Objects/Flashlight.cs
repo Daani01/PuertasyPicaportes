@@ -6,7 +6,8 @@ public class Flashlight : MonoBehaviour, IInteractable, IUsable
 {
     public ActivationType activationType;
     public GameObject FlashlightLight;
-    public float flashlightTime = 180f; //(3 minutos)
+    public float maxflashlightTime; //(3 minutos)
+    public float flashlightTime;
 
     private AudioSource audioSourceActivate;
     private AudioSource audioSourceDesactivate;
@@ -15,6 +16,12 @@ public class Flashlight : MonoBehaviour, IInteractable, IUsable
 
     private bool activatedFlashlight;
     private Coroutine flashlightCoroutine;
+
+
+    private void Start()
+    {
+        flashlightTime = maxflashlightTime;
+    }
 
     public void InteractObj()
     {
@@ -26,22 +33,55 @@ public class Flashlight : MonoBehaviour, IInteractable, IUsable
         return ItemType.Flashlight;
     }
 
+    public bool Energy()
+    {
+        return true;
+    }
+
+    public float getEnergy()
+    {
+        if (Energy())
+        {
+            return flashlightTime;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    public float getMaxEnergy()
+    {
+        if (Energy())
+        {
+            return maxflashlightTime;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
     public void GetObjPlayer(Transform position, Transform lookat)
     {
         // Establecer la posición del objeto actual
         gameObject.transform.position = position.position;
 
-
-        Vector3 lookDirection = new Vector3(lookat.position.x, transform.position.y, lookat.position.z);
-        transform.LookAt(lookDirection);
+        //-95, 3, 0
+        //Vector3 lookDirection = new Vector3(lookat.position.x, transform.position.y, lookat.position.z);
+        //transform.LookAt(lookDirection);
 
         //añadir al eje x 90 grados
-        transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x - 75, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
+        //transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x - 55, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
+
+
+
 
         // Establecer el transform actual como hijo del transform pasado
         gameObject.transform.SetParent(position);
 
-        
+
+        gameObject.transform.localRotation = Quaternion.Euler(-95, -3, 0);
 
         // Desactivar el objeto
         gameObject.SetActive(false);
@@ -134,7 +174,17 @@ public class Flashlight : MonoBehaviour, IInteractable, IUsable
 
                 if (activatedFlashlight)
                 {
-                    flashlightTime += 20f; //+20 segundos
+                    // Comprobar si el tiempo de la linterna no excede el máximo permitido
+                    if (flashlightTime + 2f <= maxflashlightTime)
+                    {
+                        flashlightTime += 2f; // Añadir 2 segundos
+                    }
+                    else
+                    {
+                        flashlightTime = maxflashlightTime; // Ajustar al máximo si se excede
+                    }
+
+                    // Iniciar la corrutina solo si es necesario
                     if (flashlightCoroutine == null)
                     {
                         flashlightCoroutine = StartCoroutine(FlashlightTimer());
@@ -158,6 +208,7 @@ public class Flashlight : MonoBehaviour, IInteractable, IUsable
                     }
                 }
                 break;
+
         }
     }
 
@@ -166,7 +217,7 @@ public class Flashlight : MonoBehaviour, IInteractable, IUsable
         while (flashlightTime > 0)
         {
             flashlightTime -= Time.deltaTime;
-            Debug.Log("LINTERNA: " + flashlightTime.ToString());
+            //Debug.Log("LINTERNA: " + flashlightTime.ToString());
             yield return null;
         }
 

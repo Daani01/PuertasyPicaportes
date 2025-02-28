@@ -89,7 +89,7 @@ GameObject:
   - component: {fileID: 6214394735688529836}
   - component: {fileID: 7098585605004847413}
   - component: {fileID: 5458122111502549800}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Screech
   m_TagString: Untagged
   m_Icon: {fileID: 0}

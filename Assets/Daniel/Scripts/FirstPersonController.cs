@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using static FirstPersonController;
 
 [RequireComponent(typeof(PlayerInput), typeof(CharacterController))]
 public class FirstPersonController : MonoBehaviour
@@ -36,6 +37,10 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] private float MaxDurationAlert;
     [SerializeField] private Image healthImage;
     [SerializeField] private Text healthText;
+    [SerializeField] private TMP_Text coinsCountText;
+    [SerializeField] private Image interactedImage;
+    [SerializeField] private Image interactedObjImage;
+
 
     [SerializeField] private Image damageIndicator;
     private float fadeDuration = 3f; // Duración total para desvanecer el efecto
@@ -185,6 +190,7 @@ public class FirstPersonController : MonoBehaviour
         playerInputActions.Player.Pause.started += ctx => TogglePause();
 
 
+
         // Asignar componentes que pueden no haberse asignado directamente
         if (canvasManager == null)
             canvasManager = GameObject.Find("UI_Canvas_Manager").GetComponent<ObjectCanvasManager>();
@@ -210,7 +216,17 @@ public class FirstPersonController : MonoBehaviour
 
         if (damageIndicator == null)
             damageIndicator = GameObject.Find("Damage_Indicator").GetComponent<Image>();
-        
+
+        if (coinsCountText == null)
+            coinsCountText = GameObject.Find("Coins_Count").GetComponent<TMP_Text>();
+
+        coinsCountText.text = coinsCount.ToString();
+
+        if (interactedImage == null)
+            interactedImage = GameObject.Find("Interacted_Image").GetComponent<Image>();
+
+        if (interactedObjImage == null)
+            interactedObjImage = GameObject.Find("Interacted_Obj_Image").GetComponent<Image>();
 
         if (pauseMenuUI == null)
         {
@@ -309,6 +325,7 @@ public class FirstPersonController : MonoBehaviour
             Move();
             Look();
             RotatePlayer();
+            CheckInteractImage();
         }
         
         BlockPlayer();        
@@ -492,8 +509,47 @@ public class FirstPersonController : MonoBehaviour
         }
     }
 
-    // Inventory and item selection methods
-    private bool CheckPickUpItem(IUsable usableItem)
+
+private void CheckInteractImage()
+{
+    if (currentState != PlayerState.Block && currentState != PlayerState.Dead)
+    {
+        Ray ray = new Ray(playerCamera.transform.position, playerCamera.transform.forward);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, interactRange, interactableLayer))
+        {
+            IInteractable interactable = hit.collider.GetComponent<IInteractable>();
+            IUsable usable = hit.collider.GetComponent<IUsable>();
+
+            // Cambiar el alpha de la imagen según si el objeto es interactuable o usable
+            SetImageAlpha(interactedImage, interactable != null ? 1f : 0f);
+            SetImageAlpha(interactedObjImage, usable != null ? 1f : 0f);
+        }
+        else
+        {
+            // Si no se detecta nada, hacer invisibles ambas imágenes
+            SetImageAlpha(interactedImage, 0f);
+            SetImageAlpha(interactedObjImage, 0f);
+        }
+    }
+}
+
+// Función auxiliar para cambiar la transparencia de una imagen
+private void SetImageAlpha(Image image, float alpha)
+{
+    if (image != null)
+    {
+        Color color = image.color;
+        color.a = alpha;
+        image.color = color;
+    }
+}
+
+
+
+// Inventory and item selection methods
+private bool CheckPickUpItem(IUsable usableItem)
     {
         foreach (var item in inventory)
         {
@@ -512,7 +568,7 @@ public class FirstPersonController : MonoBehaviour
         {
             ShowMessage($"Has obtenido: {usableItem.GetName()}", 4f);
             inventory.Add(usableItem);
-            canvasManager.AddItem(usableItem.GetName(), (inventory.Count).ToString());
+            canvasManager.AddItem(usableItem, (inventory.Count).ToString(), usableItem.Energy());
 
             // Cambiar la capa del objeto y de todos sus hijos a "Objects"
             if (usableItem is MonoBehaviour itemObject)
@@ -577,8 +633,12 @@ public class FirstPersonController : MonoBehaviour
             selectedObject = null;
 
             canvasManager.RemoveItem(inventory.IndexOf(usableItem));
-            inventory.Remove(usableItem);                        
+            inventory.Remove(usableItem);
 
+            if (usableItem.Energy())
+            {
+                ShowMessage($"Sin energia en {usableItem.GetName()}", 4.0f);
+            }
         }
         else
         {
@@ -633,6 +693,15 @@ public class FirstPersonController : MonoBehaviour
         }        
     }
 
+
+    public void AddCoins(int amount)
+    {
+        coinsCount += amount;
+        coinsCountText.text = coinsCount.ToString();
+        ShowMessage($"Has recibido: {amount} monedas", 4f);
+
+    }
+
     // Health management methods
     public void TakeDamage(float amount, Enemie enemie)
     {
@@ -662,7 +731,7 @@ public class FirstPersonController : MonoBehaviour
         UpdateHealthSlider(currentHealth);
         healthText.text = currentHealth.ToString();
         DetachCamera();
-        gameloopManager.FadeEffectFinish(enemie.dieInfo);
+        gameloopManager.PlayerEndGameDead(enemie.dieInfo);
         //Debug.Log("Enemie:" + enemie.enemyName);
     }
 
@@ -674,7 +743,7 @@ public class FirstPersonController : MonoBehaviour
         UpdateHealthSlider(currentHealth);
         healthText.text = currentHealth.ToString();
         DetachCamera();
-        gameloopManager.FadeEffectFinish("...");
+        gameloopManager.PlayerEndGameRestart();
     }
 
 
@@ -720,7 +789,7 @@ public class FirstPersonController : MonoBehaviour
 
 
     public void KillInstantly(Enemie enemie) => Die(enemie);
-    public float GetHealth() => currentHealth;
+    //public float GetHealth() => currentHealth;
 
 
     public void DetachCamera()

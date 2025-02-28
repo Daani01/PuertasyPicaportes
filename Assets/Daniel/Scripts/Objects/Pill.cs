@@ -11,6 +11,7 @@ public class Pill : MonoBehaviour, IInteractable, IUsable
     private AudioSource audioSource;
     private string soundName;
 
+
     public void InteractObj()
     {
 
@@ -20,6 +21,36 @@ public class Pill : MonoBehaviour, IInteractable, IUsable
     {
         return ItemType.Pills;
     }
+
+    public bool Energy()
+    {
+        return false;
+    }
+
+    public float getEnergy()
+    {
+        if (Energy())
+        {
+            return 1;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    public float getMaxEnergy()
+    {
+        if (Energy())
+        {
+            return 1;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
     public void GetObjPlayer(Transform position, Transform lookat)
     {
         gameObject.transform.position = position.position;
@@ -59,14 +90,21 @@ public class Pill : MonoBehaviour, IInteractable, IUsable
 
                 if (player != null)
                 {
-                    audioSource = SoundPoolManager.Instance.PlaySound(soundName, gameObject);
-                    if (audioSource != null && audioSource.clip != null)
+                    AudioSource audioSource = SoundPoolManager.Instance.PlaySound(soundName, gameObject);
+
+                    if (audioSource != null)
                     {
-                        StartCoroutine(ReturnSoundToPool(audioSource.clip.length, soundName, audioSource));
+                        // Desvincular el sonido del objeto Pill para que no se desactive con él
+                        audioSource.transform.parent = null;
+
+                        if (audioSource.clip != null)
+                        {
+                            StartCoroutine(ReturnSoundToPool(audioSource.clip.length, soundName, audioSource));
+                        }
                     }
 
                     player.ActivatePillEffect(SpeedTime);
-                    //Destroy();
+                    Destroy();
                 }
                 break;
 
@@ -82,8 +120,6 @@ public class Pill : MonoBehaviour, IInteractable, IUsable
     {
         yield return new WaitForSeconds(delay);
         SoundPoolManager.Instance.ReturnToPool(name, audio);
-        gameObject.gameObject.SetActive(false);
-
     }
 
 }

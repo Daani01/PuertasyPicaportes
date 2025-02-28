@@ -8,9 +8,16 @@ public class Wardrobe : MonoBehaviour, IInteractable
 
     private void OnEnable()
     {
-        insideWardrobe = transform.Find("INSIDE_WARDROBE");
-        outsideWardrobe = transform.Find("OUTSIDE_WARDROBE");
+        Transform parent = transform.parent;
+
+        if (parent != null)
+        {
+            insideWardrobe = parent.Find("INSIDE_WARDROBE");
+            outsideWardrobe = parent.Find("OUTSIDE_WARDROBE");
+        }
+
     }
+
 
     public void InteractObj()
     {

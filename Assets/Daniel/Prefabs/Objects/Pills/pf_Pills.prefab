@@ -120,7 +120,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   activationType: 0
-  SpeedTime: 2
+  SpeedTime: 15
 --- !u!1001 &814629363994032016
 PrefabInstance:
   m_ObjectHideFlags: 0

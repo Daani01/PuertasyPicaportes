@@ -79,10 +79,11 @@ public class RushController : Enemie
             FirstPersonController player = other.GetComponent<FirstPersonController>();
             if (player != null)
             {
-                if (player.currentState == FirstPersonController.PlayerState.Hiding)
+                if (player.currentState == FirstPersonController.PlayerState.Hiding || player.currentState == FirstPersonController.PlayerState.Dead)
                 {
                     return;
                 }
+
                 if (player.currentState != FirstPersonController.PlayerState.Dead && player.currentState != FirstPersonController.PlayerState.Hiding)
                 {
                     player.KillInstantly(gameObject.GetComponent<Enemie>());

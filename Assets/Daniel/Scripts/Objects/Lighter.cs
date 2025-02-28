@@ -6,7 +6,8 @@ public class Lighter : MonoBehaviour, IInteractable, IUsable
 {
     public ActivationType activationType;
     public GameObject Flashlighter;
-    public float lighterTime = 180f; //(3 minutos)
+    public float maxlighterTime; //(3 minutos)
+    public float lighterTime; //(3 minutos)
     private bool activatedLighter;
     private Coroutine lightCoroutine;
 
@@ -14,6 +15,11 @@ public class Lighter : MonoBehaviour, IInteractable, IUsable
     private AudioSource audioSourceDesactivate;
     private string soundNameActivate;
     private string soundNameDesctivate;
+
+    private void Start()
+    {
+        lighterTime = maxlighterTime;
+    }
 
     public void InteractObj()
     {
@@ -24,6 +30,36 @@ public class Lighter : MonoBehaviour, IInteractable, IUsable
     {
         return ItemType.Lighter;
     }
+
+    public bool Energy()
+    {
+        return true;
+    }
+
+    public float getEnergy()
+    {
+        if (Energy())
+        {
+            return lighterTime;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    public float getMaxEnergy()
+    {
+        if (Energy())
+        {
+            return maxlighterTime;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
     public void GetObjPlayer(Transform position, Transform lookat)
     {
         // Establecer la posición del objeto actual
@@ -120,7 +156,7 @@ public class Lighter : MonoBehaviour, IInteractable, IUsable
         while (lighterTime > 0)
         {
             lighterTime -= Time.deltaTime;
-            Debug.Log("MECHERO: " + lighterTime.ToString());
+            //Debug.Log("MECHERO: " + lighterTime.ToString());
             yield return null;
         }
 

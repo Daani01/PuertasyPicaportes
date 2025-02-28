@@ -13,6 +13,10 @@ public interface IUsable : IInteractable
     void DesActivate();
     void Destroy();
 
+    bool Energy();
+    float getEnergy();
+    float getMaxEnergy();
+
     ItemType GetName();
 
     public enum ActivationType

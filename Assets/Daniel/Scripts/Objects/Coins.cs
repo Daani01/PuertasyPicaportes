@@ -5,8 +5,7 @@ using static FirstPersonController;
 public class Coins : MonoBehaviour, IInteractable
 {
     public int value;
-    private AudioSource audioSource;
-    private string soundName;
+    private string soundName = "Coins";
 
     public void InteractObj()
     {
@@ -14,26 +13,31 @@ public class Coins : MonoBehaviour, IInteractable
 
         if (player != null)
         {
-            player.coinsCount += value;
-            player.ShowMessage($"Has recibido: {value} monedas", 4f);
+            player.AddCoins(value);
 
-            soundName = "Coins";
-            audioSource = SoundPoolManager.Instance.PlaySound(soundName, gameObject);
+            // Reproducir el sonido y obtener el AudioSource
+            AudioSource audioSource = SoundPoolManager.Instance.PlaySound(soundName, gameObject);
 
-            if (audioSource != null && audioSource.clip != null)
+            if (audioSource != null)
             {
-                StartCoroutine(ReturnSoundToPool(audioSource.clip.length));
+                // Desvincular el AudioSource del objeto para que no se desactive junto con la moneda
+                audioSource.transform.parent = null;
+
+                // Si el clip es válido, devolverlo a la pool después de que termine el sonido
+                if (audioSource.clip != null)
+                {
+                    StartCoroutine(ReturnSoundToPool(audioSource.clip.length, audioSource));
+                }
             }
-            gameObject.GetComponent<MeshRenderer>().enabled = false;
-            gameObject.GetComponent<BoxCollider>().enabled = false;
+
+            // Desactivar el objeto inmediatamente para prevenir nuevas interacciones
+            gameObject.SetActive(false);
         }
     }
 
-    private IEnumerator ReturnSoundToPool(float delay)
+    private IEnumerator ReturnSoundToPool(float delay, AudioSource audioSource)
     {
         yield return new WaitForSeconds(delay);
         SoundPoolManager.Instance.ReturnToPool(soundName, audioSource);
-        gameObject.SetActive(false);
-
     }
 }

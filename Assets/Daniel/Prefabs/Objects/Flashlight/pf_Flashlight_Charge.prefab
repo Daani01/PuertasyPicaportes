@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7474453833970248096}
   - component: {fileID: -4841224508352542949}
   m_Layer: 3
-  m_Name: pf_Flashlight
+  m_Name: pf_Flashlight_Charge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -69,9 +69,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bb07785e729480438fcb3e73577e9c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activationType: 1
+  activationType: 2
   FlashlightLight: {fileID: 1176814628892212957}
-  flashlightTime: 180
+  maxflashlightTime: 10
+  flashlightTime: 10
 --- !u!114 &-4841224508352542949
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -159,8 +160,8 @@ Light:
   m_Type: 0
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1
-  m_Range: 10
+  m_Intensity: 3
+  m_Range: 15
   m_SpotAngle: 60
   m_InnerSpotAngle: 6
   m_CookieSize: 10
@@ -281,6 +282,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6690962425577091079, guid: d07f4eca02cfd1e4ba892c4941bf3f76, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 8a35614f980d3884081ccc6474748c60, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

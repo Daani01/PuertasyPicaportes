@@ -88,12 +88,12 @@ public class GameLoop : MonoBehaviour
     }
 
 
-    public void FadeEffectFinish(string text)
+    public void PlayerEndGameDead(string text)
     {
-        StartCoroutine(EndGame(text));
+        StartCoroutine(EndGameDead(text));
     }
 
-    private IEnumerator EndGame(string text)
+    private IEnumerator EndGameDead(string text)
     {
         if (endFadeEffect != null)
         {
@@ -108,6 +108,74 @@ public class GameLoop : MonoBehaviour
                     //playerController.blockPlayer = true;
                     player.GetComponent<FirstPersonController>().DisableInputs();
                     text += "\n\n\n" + player.GetComponent<FirstPersonController>().StopTimer();
+                    //playerController.StopAllCoroutines();
+                }
+
+                yield return new WaitForSeconds(2.0f);
+
+                yield return StartCoroutine(TypeTextEffect(text, 5.0f));
+
+                yield return new WaitForSeconds(4.0f);
+
+
+                SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
+            }
+        }
+    }
+
+
+    public void PlayerEndGameRestart()
+    {
+        StartCoroutine(EndGameRestart());
+    }
+
+    private IEnumerator EndGameRestart()
+    {
+        if (endFadeEffect != null)
+        {
+            endFadeEffect.StartEffect();
+
+            GameObject player = GameObject.FindWithTag("Player");
+            if (player != null)
+            {
+                FirstPersonController playerController = player.GetComponent<FirstPersonController>();
+                if (playerController != null)
+                {
+                    //playerController.blockPlayer = true;
+                    player.GetComponent<FirstPersonController>().DisableInputs();
+                    player.GetComponent<FirstPersonController>().StopTimer();
+                    //playerController.StopAllCoroutines();
+                }
+
+                yield return new WaitForSeconds(3.0f);
+
+                SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
+            }
+        }
+    }
+
+    public void PlayerEndGameWin()
+    {
+        StartCoroutine(EndGameWin());
+    }
+
+    private IEnumerator EndGameWin()
+    {
+        string text = "";
+
+        if (endFadeEffect != null)
+        {
+            endFadeEffect.StartEffect();
+
+            GameObject player = GameObject.FindWithTag("Player");
+            if (player != null)
+            {
+                FirstPersonController playerController = player.GetComponent<FirstPersonController>();
+                if (playerController != null)
+                {
+                    //playerController.blockPlayer = true;
+                    player.GetComponent<FirstPersonController>().DisableInputs();
+                    text += "Has ganado\n\n\n" + player.GetComponent<FirstPersonController>().StopTimer();
                     //playerController.StopAllCoroutines();
                 }
 

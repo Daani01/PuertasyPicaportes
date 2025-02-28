@@ -47,14 +47,8 @@ public class GameMenu : MonoBehaviour
         deltaTime += (Time.unscaledDeltaTime - deltaTime) * 0.1f;
         float fps = 1.0f / deltaTime;
 
-        // Obtiene uso aproximado de la CPU
-        float cpuUsage = SystemInfo.processorCount * SystemInfo.processorFrequency / 1000f; // Estimación
-
-        // Obtiene uso aproximado de la GPU
-        float gpuUsage = SystemInfo.graphicsMemorySize; // Muestra VRAM total, no carga en tiempo real
-
         // Actualiza el TextMeshPro con FPS, CPU y GPU
-        infoText.text = $"FPS: {Mathf.Ceil(fps)} CPU: ~{cpuUsage:F1} GHz GPU VRAM: {gpuUsage} MB";
+        infoText.text = $"FPS: {Mathf.Ceil(fps)}";
     }
 
     private void Start()
@@ -137,7 +131,7 @@ public class GameMenu : MonoBehaviour
     {
         QualitySettings.SetQualityLevel(index);
         PlayerPrefs.SetInt("Quality", index);
-        qualityDropdown.RefreshShownValue();  // Asegúrate de que se actualice el valor visible
+        //qualityDropdown.RefreshShownValue();  // Asegúrate de que se actualice el valor visible
     }
 
 
@@ -225,19 +219,19 @@ public void SetSFXVolume(float volume)
         List<string> screenModes = new List<string> { "Ventana", "Pantalla Completa" };
         screenModeDropdown.ClearOptions();
         screenModeDropdown.AddOptions(screenModes);
-        screenModeDropdown.value = PlayerPrefs.GetInt("ScreenMode", 1);
+        screenModeDropdown.value = PlayerPrefs.GetInt("ScreenMode");
         screenModeDropdown.RefreshShownValue();
 
         List<string> qualityOptions = new List<string> { "Muy baja", "Baja", "Media", "Alta", "Muy alta", "Ultra" };
         qualityDropdown.ClearOptions();
         qualityDropdown.AddOptions(qualityOptions);
-        qualityDropdown.value = PlayerPrefs.GetInt("Quality", 2);
+        qualityDropdown.value = PlayerPrefs.GetInt("Quality");
         qualityDropdown.RefreshShownValue();
 
         List<string> fpsOptions = new List<string> { "30", "60", "120", "144", "240" };
         fpsLimitDropdown.ClearOptions();
         fpsLimitDropdown.AddOptions(fpsOptions);
-        fpsLimitDropdown.value = PlayerPrefs.GetInt("FPSLimit", 1);
+        fpsLimitDropdown.value = PlayerPrefs.GetInt("FPSLimit");
         fpsLimitDropdown.RefreshShownValue();
 
         masterVolumeSlider.value = PlayerPrefs.GetFloat("MasterVolume");
