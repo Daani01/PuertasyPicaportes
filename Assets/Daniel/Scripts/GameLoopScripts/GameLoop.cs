@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -13,7 +14,9 @@ public class GameLoop : MonoBehaviour
 
     [SerializeField] private TMP_Text info_Text;
     [SerializeField] private TMP_Text final_Text;
+    [SerializeField] private ProceduralRoomGenerator CurrentDoor;
 
+    private string endText = "";
 
 
     private List<GameObject> instantiatedObjects = new List<GameObject>();
@@ -88,13 +91,22 @@ public class GameLoop : MonoBehaviour
     }
 
 
-    public void PlayerEndGameDead(string text)
+    public void PlayerEndGameDead(Enemie enemie)
     {
-        StartCoroutine(EndGameDead(text));
+        StartCoroutine(EndGameDead(enemie));
     }
 
-    private IEnumerator EndGameDead(string text)
+    private IEnumerator EndGameDead(Enemie enemieData)
     {
+        var data = SaveSystem.LoadPlayerData();
+
+        if (data == null)
+        {
+            data = new SaveSystem.PlayerData();
+            data.recordTime = "23:59:59";
+            data.globalTime = "00:00:00";
+        }
+
         if (endFadeEffect != null)
         {
             endFadeEffect.StartEffect();
@@ -105,18 +117,51 @@ public class GameLoop : MonoBehaviour
                 FirstPersonController playerController = player.GetComponent<FirstPersonController>();
                 if (playerController != null)
                 {
-                    //playerController.blockPlayer = true;
-                    player.GetComponent<FirstPersonController>().DisableInputs();
-                    text += "\n\n\n" + player.GetComponent<FirstPersonController>().StopTimer();
-                    //playerController.StopAllCoroutines();
+                    playerController.DisableInputs();
+
+                    data.coins = playerController.coinsCount;
+                    data.attempts += 1;
+
+                    TimeSpan sessionTime = TimeSpan.Parse(playerController.StopTimer());
+
+                    TimeSpan global = TimeSpan.Parse(data.globalTime);
+                    data.globalTime = (global + sessionTime).ToString(@"hh\:mm\:ss");
+
+                    int currentDoorIndex = CurrentDoor.GetStaticCurrentRoomIndex();
+                    if (data.doorRecord < currentDoorIndex)
+                    {
+                        data.doorRecord = currentDoorIndex;
+                    }
+
+                    switch (enemieData.enemyName)
+                    {
+                        case "Rush":
+                            data.deathsByRush += 1;
+                            break;
+                        case "Eyes":
+                            data.deathsByEyes += 1;
+                            break;
+                        case "Screech":
+                            data.deathsByScreech += 1;
+                            break;
+                        default:
+                            Debug.LogWarning($"[WARNING] Enemigo no reconocido: {enemieData.enemyName}");
+                            break;
+                    }
+
                 }
 
-                yield return new WaitForSeconds(2.0f);
+                SaveSystem.SavePlayerData(data);
 
-                yield return StartCoroutine(TypeTextEffect(text, 5.0f));
+                endText = $"{enemieData.dieInfo}\n" +
+                          $"Has llegado hasta la puerta: {CurrentDoor.GetStaticCurrentRoomIndex()}\n" +
+                          $"Tiempo: {TimeSpan.Parse(playerController.StopTimer())}\n" +
+                          $"Monedas: {data.coins}\n" +
+                          $"Puerta record: {data.doorRecord}\n";
 
-                yield return new WaitForSeconds(4.0f);
+                yield return StartCoroutine(TypeTextEffect(endText, 5.0f));
 
+                yield return new WaitForSeconds(3.5f);
 
                 SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
             }
@@ -131,6 +176,15 @@ public class GameLoop : MonoBehaviour
 
     private IEnumerator EndGameRestart()
     {
+        var data = SaveSystem.LoadPlayerData();
+
+        if (data == null)
+        {
+            data = new SaveSystem.PlayerData();
+            data.recordTime = "23:59:59";
+            data.globalTime = "00:00:00";
+        }
+
         if (endFadeEffect != null)
         {
             endFadeEffect.StartEffect();
@@ -141,18 +195,40 @@ public class GameLoop : MonoBehaviour
                 FirstPersonController playerController = player.GetComponent<FirstPersonController>();
                 if (playerController != null)
                 {
-                    //playerController.blockPlayer = true;
-                    player.GetComponent<FirstPersonController>().DisableInputs();
-                    player.GetComponent<FirstPersonController>().StopTimer();
-                    //playerController.StopAllCoroutines();
+                    playerController.DisableInputs();
+
+                    data.coins = playerController.coinsCount;
+                    data.attempts += 1;
+
+                    TimeSpan sessionTime = TimeSpan.Parse(playerController.StopTimer());
+
+                    TimeSpan global = TimeSpan.Parse(data.globalTime);
+                    data.globalTime = (global + sessionTime).ToString(@"hh\:mm\:ss");
+
+                    int currentDoorIndex = CurrentDoor.GetStaticCurrentRoomIndex();
+                    if (data.doorRecord < currentDoorIndex)
+                    {
+                        data.doorRecord = currentDoorIndex;
+                    }
+
                 }
 
-                yield return new WaitForSeconds(3.0f);
+                SaveSystem.SavePlayerData(data);
+
+                endText = $"Tiempo: {TimeSpan.Parse(playerController.StopTimer())}\n" +
+                          $"Monedas: {data.coins}\n" +
+                          $"Puerta record: {data.doorRecord}\n";
+
+                yield return StartCoroutine(TypeTextEffect(endText, 5.0f));
+
+                yield return new WaitForSeconds(3.5f);
 
                 SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
             }
         }
     }
+
+
 
     public void PlayerEndGameWin()
     {
@@ -161,7 +237,15 @@ public class GameLoop : MonoBehaviour
 
     private IEnumerator EndGameWin()
     {
-        string text = "";
+
+        var data = SaveSystem.LoadPlayerData();
+
+        if (data == null)
+        {
+            data = new SaveSystem.PlayerData();
+            data.recordTime = "23:59:59";
+            data.globalTime = "00:00:00";
+        }
 
         if (endFadeEffect != null)
         {
@@ -173,18 +257,41 @@ public class GameLoop : MonoBehaviour
                 FirstPersonController playerController = player.GetComponent<FirstPersonController>();
                 if (playerController != null)
                 {
-                    //playerController.blockPlayer = true;
-                    player.GetComponent<FirstPersonController>().DisableInputs();
-                    text += "Has ganado\n\n\n" + player.GetComponent<FirstPersonController>().StopTimer();
-                    //playerController.StopAllCoroutines();
+                    playerController.DisableInputs();
+
+                    data.coins = playerController.coinsCount;
+                    data.attempts += 1;
+
+                    TimeSpan sessionTime = TimeSpan.Parse(playerController.StopTimer());
+
+                    TimeSpan bestTime = TimeSpan.Parse(data.recordTime);
+                    if (sessionTime < bestTime)
+                    {
+                        data.recordTime = sessionTime.ToString(@"hh\:mm\:ss");
+                    }
+
+                    TimeSpan global = TimeSpan.Parse(data.globalTime);
+                    data.globalTime = (global + sessionTime).ToString(@"hh\:mm\:ss");
+
+                    int currentDoorIndex = CurrentDoor.GetStaticCurrentRoomIndex();
+                    if (data.doorRecord < currentDoorIndex)
+                    {
+                        data.doorRecord = currentDoorIndex;
+                    }
+
                 }
 
-                yield return new WaitForSeconds(2.0f);
+                SaveSystem.SavePlayerData(data);
 
-                yield return StartCoroutine(TypeTextEffect(text, 5.0f));
+                endText = $"HAS GANADO\n" +
+                          $"Tiempo: {TimeSpan.Parse(playerController.StopTimer())}\n" +
+                          $"Record de tiempo: {data.recordTime}\n\n" +
+                          $"Monedas: {data.coins}\n" +
+                          $"Puerta record: {data.doorRecord}\n";
 
-                yield return new WaitForSeconds(4.0f);
+                yield return StartCoroutine(TypeTextEffect(endText, 5.0f));
 
+                yield return new WaitForSeconds(3.5f);
 
                 SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
             }

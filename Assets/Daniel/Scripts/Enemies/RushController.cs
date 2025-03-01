@@ -49,6 +49,7 @@ public class RushController : Enemie
     {
         soundName = "RushSound";
         audioSource = SoundPoolManager.Instance.PlaySound(soundName, gameObject);
+        audioSource.loop = true;
 
         isMoving = true;
         while (currentWaypointIndex < waypoints.Count)

@@ -14,12 +14,17 @@ public class ProceduralRoomGenerator : MonoBehaviour, IProcess
 
     public int numberOfRooms;
     public int roomCount;
+    static public int staticroomCount;
     public int maxRoomActived;
 
     public List<GameObject> rooms = new List<GameObject>();
     private RoomEventManager roomEventManager;
 
 
+    private void Start()
+    {
+        staticroomCount = 0;
+    }
     public void ExecuteProcess(System.Action onComplete)
     {
         StartCoroutine(ProcessRoutine(onComplete));
@@ -142,7 +147,12 @@ public class ProceduralRoomGenerator : MonoBehaviour, IProcess
         // Aumentar el contador de habitaciones
         roomCount++;
 
-        if(roomCount == 1)
+        if(staticroomCount < numberOfRooms)
+        {
+            staticroomCount++;
+        }
+
+        if (roomCount == 1)
         {
             GameObject player = GameObject.FindWithTag("Player");
             if (player != null)
@@ -197,6 +207,11 @@ public class ProceduralRoomGenerator : MonoBehaviour, IProcess
     public int GetCurrentRoomIndex()
     {
         return roomCount;
+    }
+
+    public int GetStaticCurrentRoomIndex()
+    {
+        return staticroomCount;
     }
 
     public Transform GetCurrentRoomTransform()

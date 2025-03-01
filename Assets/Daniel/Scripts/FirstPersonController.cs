@@ -220,7 +220,18 @@ public class FirstPersonController : MonoBehaviour
         if (coinsCountText == null)
             coinsCountText = GameObject.Find("Coins_Count").GetComponent<TMP_Text>();
 
+
+        var data = SaveSystem.LoadPlayerData();
+
+        if(data != null)
+        {
+            coinsCount = data.coins;
+        }
+
+
         coinsCountText.text = coinsCount.ToString();
+
+
 
         if (interactedImage == null)
             interactedImage = GameObject.Find("Interacted_Image").GetComponent<Image>();
@@ -731,7 +742,7 @@ private bool CheckPickUpItem(IUsable usableItem)
         UpdateHealthSlider(currentHealth);
         healthText.text = currentHealth.ToString();
         DetachCamera();
-        gameloopManager.PlayerEndGameDead(enemie.dieInfo);
+        gameloopManager.PlayerEndGameDead(enemie);
         //Debug.Log("Enemie:" + enemie.enemyName);
     }
 

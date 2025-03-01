@@ -82,7 +82,7 @@ public class EyesController : Enemie
         {
             soundName = "EyesSound";
             audioSource = SoundPoolManager.Instance.PlaySound(soundName, gameObject);
-
+            audioSource.loop = true;
             gameObject.transform.position = spawnPosition.position;
         }
     }

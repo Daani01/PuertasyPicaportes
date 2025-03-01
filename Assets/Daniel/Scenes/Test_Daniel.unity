@@ -11258,6 +11258,7 @@ MonoBehaviour:
   endFadeEffect: {fileID: 1674675152}
   info_Text: {fileID: 277829662}
   final_Text: {fileID: 796051701}
+  CurrentDoor: {fileID: 5432418227036310142, guid: cf94b9ef8c71062488a4cea4f3dca4b6, type: 3}
 --- !u!4 &890056345
 Transform:
   m_ObjectHideFlags: 0
