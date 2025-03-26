@@ -7,7 +7,7 @@ public class CSVManager : MonoBehaviour, IProcess
     public TextAsset csvFile;
 
     private static CSVManager instance;
-    private List<Dictionary<string, string>> data = new List<Dictionary<string, string>>();
+    static private List<Dictionary<string, string>> data = new List<Dictionary<string, string>>();
     public bool IsCompleted { get; private set; } = false;
 
     public static CSVManager Instance
@@ -23,24 +23,7 @@ public class CSVManager : MonoBehaviour, IProcess
             return instance;
         }
     }
-    /*
-    private void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-            if (csvFile != null)
-            {
-                LoadCSV(null); // Carga inicial si es necesario
-            }
-        }
-        else if (instance != this)
-        {
-            Destroy(gameObject);
-        }
-    }
-    */
+
     public void ExecuteProcess(System.Action onComplete)
     {
         StartCoroutine(LoadCSV(onComplete));
@@ -93,7 +76,7 @@ public class CSVManager : MonoBehaviour, IProcess
         Dictionary<string, string> row = GetRowByEnemyName(enemyName);
         if (row != null && row.ContainsKey(columnName))
         {
-            return row[columnName];
+            return row[columnName].Replace("\\n", "\n");
         }
         return "Dato no encontrado";
     }

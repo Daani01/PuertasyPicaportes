@@ -4,8 +4,17 @@ using static FirstPersonController;
 
 public class Coins : MonoBehaviour, IInteractable
 {
-    public int value;
-    private string soundName = "Coins";
+    private int coinsAmount;
+    private string soundName;
+
+    private void Awake()
+    {
+        coinsAmount = int.Parse(CSVManager.Instance.GetSpecificData("Coins", "Amount"));
+        coinsAmount = UnityEngine.Random.Range(1, coinsAmount + 1);
+
+        soundName = "Coins";
+    }
+
 
     public void InteractObj()
     {
@@ -13,7 +22,7 @@ public class Coins : MonoBehaviour, IInteractable
 
         if (player != null)
         {
-            player.AddCoins(value);
+            player.AddCoins(coinsAmount);
 
             // Reproducir el sonido y obtener el AudioSource
             AudioSource audioSource = SoundPoolManager.Instance.PlaySound(soundName, gameObject);

@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using static IUsable;
 
-public class Pill : MonoBehaviour, IInteractable, IUsable
+public class Pill : MonoBehaviour, IUsable
 {
     public ActivationType activationType;
-    public int SpeedTime;
+    private int speedAmount;
 
     private AudioSource audioSource;
     private string soundName;
 
-
-    public void InteractObj()
+    private void Awake()
     {
-
+        speedAmount = int.Parse(CSVManager.Instance.GetSpecificData("Pills", "Amount"));
+        soundName = "Pills";
     }
 
     ItemType IUsable.GetName()
@@ -81,8 +81,6 @@ public class Pill : MonoBehaviour, IInteractable, IUsable
 
     public void Use()
     {
-        soundName = "Pills";
-
         switch (activationType)
         {
             case ActivationType.OneTime:
@@ -103,7 +101,7 @@ public class Pill : MonoBehaviour, IInteractable, IUsable
                         }
                     }
 
-                    player.ActivatePillEffect(SpeedTime);
+                    player.ActivatePillEffect(speedAmount);
                     Destroy();
                 }
                 break;

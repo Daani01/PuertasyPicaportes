@@ -1,4 +1,10 @@
-Name,Damge,Info,Prob
-Eyes,15,Eyes info,5
-Screech,20,Screech info,10
-Rush,100,Rush info,3
+Name,Damage,Speed,timeToAppear,maxTimeNotLookedAt,Probability,Amount,EnergyTime,MaxEnergyTime,,,,,,,,,,,,,,,DieInfo
+Eyes,5,,,,25,,,,,,,,,,,,,,,,,,Has muerto por Eyes\n\nPrueba a no mirarlo por mucho tiempo
+Screech,40,,2,10,50,,,,,,,,,,,,,,,,,,Has muerto por Screech\n\nPrueba a plantarle cara antes de que sea demasiado tarde
+Rush,125,20,,,10,,,,,,,,,,,,,,,,,,Has muerto por Rush\n\nPrueba a esconderte antes de que te alcance
+Bandage,,,,,10,10,,,,,,,,,,,,,,,,,
+Coins,,,,,85,20,,,,,,,,,,,,,,,,,
+Crucifix,,,,,2,,,,,,,,,,,,,,,,,,
+Flashlight,,,,,5,,120,120,,,,,,,,,,,,,,,
+Lighter,,,,,10,,180,180,,,,,,,,,,,,,,,
+Pills,,,,,10,15,,,,,,,,,,,,,,,,,

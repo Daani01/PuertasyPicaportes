@@ -1,4 +1,7 @@
+using System.Collections.Generic;
+using System;
 using UnityEngine;
+using System.Linq;
 
 public class RoomEventManager : MonoBehaviour
 {
@@ -18,18 +21,45 @@ public class RoomEventManager : MonoBehaviour
     }
 
     private RoomEventType _eventType;
+    private Dictionary<RoomEventType, int> eventProbabilities = new Dictionary<RoomEventType, int>();
+
+    private void Awake()
+    {
+        LoadProbabilitiesFromCSV();
+    }
+
+    private void LoadProbabilitiesFromCSV()
+    {
+        foreach (RoomEventType eventType in Enum.GetValues(typeof(RoomEventType)))
+        {
+            string probabilityStr = CSVManager.Instance.GetSpecificData(eventType.ToString(), "Probability");
+
+            if (int.TryParse(probabilityStr, out int probability))
+            {
+                eventProbabilities[eventType] = probability;
+            }
+            else
+            {
+                //Debug.LogWarning($"No se encontró una probabilidad válida para {eventType}, asignando 0.");
+                eventProbabilities[eventType] = 0;
+            }
+        }
+    }
+
 
     public void AssignRoomEvent(GameObject room, int numberRoom, int maxNumberRoom)
     {
-        // Selecciona aleatoriamente uno de los primeros 4 tipos de RoomEventType
-        int randomFirst4 = Random.Range(0, 4); // Rush, Screech, Eyes, Ambush
-        _eventType = (RoomEventType)randomFirst4;
+        int remainingRooms = maxNumberRoom - numberRoom;
+        int eventChance = Mathf.Clamp((numberRoom * 100) / maxNumberRoom, 0, 100);
 
-        // Descomentar para elegir aleatoriamente de todos los tipos de RoomEventType
-        /*
-        int randomAll = Random.Range(0, System.Enum.GetValues(typeof(RoomEventType)).Length);
-        _eventType = (RoomEventType)randomAll;
-        */
+        if (UnityEngine.Random.Range(0, 100) < eventChance)
+        {
+            _eventType = GetRandomEventByProbability();
+        }
+        else
+        {
+            _eventType = RoomEventType.None;
+        }
 
         if (numberRoom > 0)
         {
@@ -37,11 +67,35 @@ public class RoomEventManager : MonoBehaviour
             if (triggerEvent != null)
             {
                 room.GetComponent<RoomEventManager>()._eventType = _eventType;
-                //Debug.Log($"Asignando evento {_eventType} en la habitación {numberRoom}");
+                if(_eventType != RoomEventType.None)
+                {
+                    Debug.Log($"Enemigo: {_eventType} - Habitacion: {numberRoom}");
+                }
+
+            }
+        }
+    }
+
+    private RoomEventType GetRandomEventByProbability()
+    {
+        int randomPoint = UnityEngine.Random.Range(0, 100);
+
+        foreach (var kvp in eventProbabilities.OrderByDescending(x => x.Value))
+        {
+            if (randomPoint < kvp.Value)
+            {
+                return kvp.Key;
             }
         }
 
+        //FINAL
+        //return eventProbabilities.Keys.ElementAt(UnityEngine.Random.Range(0, eventProbabilities.Count));
+        //FINAL
+
+        return RoomEventType.None;
     }
+
+
 
     public void AssignEndRoomEvent(GameObject room)
     {

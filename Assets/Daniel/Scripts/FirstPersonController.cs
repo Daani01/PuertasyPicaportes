@@ -277,7 +277,7 @@ public class FirstPersonController : MonoBehaviour
     {        
         playerInput.DeactivateInput();
         playerInputActions.Disable();
-        Debug.Log("INPUT DESACTIVADO");
+        //Debug.Log("INPUT DESACTIVADO");
         //Destroy(gameObject);
     }
 
@@ -494,6 +494,7 @@ public class FirstPersonController : MonoBehaviour
 
 
     // Interaction methods
+    /*
     private void Interact()
     {
         if (currentState != PlayerState.Block && currentState != PlayerState.Dead)
@@ -519,9 +520,35 @@ public class FirstPersonController : MonoBehaviour
             }
         }
     }
+    */
+
+    private void Interact()
+    {
+        if (currentState == PlayerState.Block || currentState == PlayerState.Dead)
+            return;
+
+        Ray ray = new Ray(playerCamera.transform.position, playerCamera.transform.forward);
+        if (Physics.Raycast(ray, out RaycastHit hit, interactRange, interactableLayer))
+        {
+            // Primero, verificamos si es interactuable
+            IInteractable interactable = hit.collider.GetComponent<IInteractable>();
+            if (interactable != null)
+            {
+                interactable.InteractObj();
+            }
+
+            // Luego, verificamos si es usable
+            IUsable usable = hit.collider.GetComponent<IUsable>();
+            if (usable != null && CheckPickUpItem(usable))
+            {
+                PickUpItem(usable);
+                usable.GetObjPlayer(ObjectsTransform, ObjectsLookAtTransform);
+            }
+        }
+    }
 
 
-private void CheckInteractImage()
+    private void CheckInteractImage()
 {
     if (currentState != PlayerState.Block && currentState != PlayerState.Dead)
     {

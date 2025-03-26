@@ -2,12 +2,12 @@ using UnityEngine;
 using System.Collections;
 using static IUsable;
 
-public class Lighter : MonoBehaviour, IInteractable, IUsable
+public class Lighter : MonoBehaviour, IUsable
 {
     public ActivationType activationType;
     public GameObject Flashlighter;
-    public float maxlighterTime; //(3 minutos)
-    public float lighterTime; //(3 minutos)
+    private float maxenergyTime; //(3 minutos)
+    private float energyTime; //(3 minutos)
     private bool activatedLighter;
     private Coroutine lightCoroutine;
 
@@ -16,14 +16,17 @@ public class Lighter : MonoBehaviour, IInteractable, IUsable
     private string soundNameActivate;
     private string soundNameDesctivate;
 
-    private void Start()
+    private void Awake()
     {
-        lighterTime = maxlighterTime;
+        energyTime = float.Parse(CSVManager.Instance.GetSpecificData("Lighter", "EnergyTime"));
+        maxenergyTime = float.Parse(CSVManager.Instance.GetSpecificData("Lighter", "MaxEnergyTime"));
+        soundNameActivate = "Lighter_On";
+        soundNameDesctivate = "Lighter_Off";
     }
 
-    public void InteractObj()
+    private void Start()
     {
-
+        energyTime = maxenergyTime;
     }
 
     ItemType IUsable.GetName()
@@ -40,7 +43,7 @@ public class Lighter : MonoBehaviour, IInteractable, IUsable
     {
         if (Energy())
         {
-            return lighterTime;
+            return energyTime;
         }
         else
         {
@@ -52,7 +55,7 @@ public class Lighter : MonoBehaviour, IInteractable, IUsable
     {
         if (Energy())
         {
-            return maxlighterTime;
+            return maxenergyTime;
         }
         else
         {
@@ -108,8 +111,6 @@ public class Lighter : MonoBehaviour, IInteractable, IUsable
 
     public void Use()
     {
-        soundNameActivate = "Lighter_On";
-        soundNameDesctivate = "Lighter_Off";
 
         switch (activationType)
         {
@@ -153,9 +154,9 @@ public class Lighter : MonoBehaviour, IInteractable, IUsable
 
     private IEnumerator LighterTimer()
     {
-        while (lighterTime > 0)
+        while (energyTime > 0)
         {
-            lighterTime -= Time.deltaTime;
+            energyTime -= Time.deltaTime;
             //Debug.Log("MECHERO: " + lighterTime.ToString());
             yield return null;
         }

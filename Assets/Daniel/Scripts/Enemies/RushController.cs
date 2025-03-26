@@ -6,8 +6,7 @@ public class RushController : Enemie
 {
     private List<Transform> waypoints;
     private int currentWaypointIndex = 0;
-    public float speed = 5f;
-    public float damageAmount = 20f;
+    private float speed;
     private bool isMoving = false;
 
     private bool isInitialized = false;
@@ -16,10 +15,9 @@ public class RushController : Enemie
 
     private void Awake()
     {
-        enemyName = "Rush";
-        dieInfo = "Has muerto por Rush\n\nPrueba a esconderte antes de que te alcance";
-        //damageAmount = 40.0f;
-        //speed
+        damage = float.Parse(CSVManager.Instance.GetSpecificData(enemyName, ExcelValues.Damage.ToString()));
+        dieInfo = CSVManager.Instance.GetSpecificData(enemyName, ExcelValues.DieInfo.ToString());
+        speed = float.Parse(CSVManager.Instance.GetSpecificData(enemyName, ExcelValues.Speed.ToString()));
     }
 
     private void Start()
@@ -87,7 +85,7 @@ public class RushController : Enemie
 
                 if (player.currentState != FirstPersonController.PlayerState.Dead && player.currentState != FirstPersonController.PlayerState.Hiding)
                 {
-                    player.KillInstantly(gameObject.GetComponent<Enemie>());
+                    player.TakeDamage(damage, gameObject.GetComponent<Enemie>());
                 }
             }
         }

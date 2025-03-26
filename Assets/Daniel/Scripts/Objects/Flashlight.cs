@@ -2,12 +2,12 @@ using UnityEngine;
 using System.Collections;
 using static IUsable;
 
-public class Flashlight : MonoBehaviour, IInteractable, IUsable
+public class Flashlight : MonoBehaviour, IUsable
 {
     public ActivationType activationType;
     public GameObject FlashlightLight;
-    public float maxflashlightTime; //(3 minutos)
-    public float flashlightTime;
+    private float maxenergyTime; //(3 minutos)
+    private float energyTime;
 
     private AudioSource audioSourceActivate;
     private AudioSource audioSourceDesactivate;
@@ -17,15 +17,17 @@ public class Flashlight : MonoBehaviour, IInteractable, IUsable
     private bool activatedFlashlight;
     private Coroutine flashlightCoroutine;
 
+    private void Awake()
+    {
+        energyTime = float.Parse(CSVManager.Instance.GetSpecificData("Flashlight", "EnergyTime"));
+        maxenergyTime = float.Parse(CSVManager.Instance.GetSpecificData("Flashlight", "MaxEnergyTime"));
+        soundNameActivate = "Flashlight_On";
+        soundNameDesctivate = "Flashlight_Off";
+    }
 
     private void Start()
     {
-        flashlightTime = maxflashlightTime;
-    }
-
-    public void InteractObj()
-    {
-
+        energyTime = maxenergyTime;
     }
 
     ItemType IUsable.GetName()
@@ -42,7 +44,7 @@ public class Flashlight : MonoBehaviour, IInteractable, IUsable
     {
         if (Energy())
         {
-            return flashlightTime;
+            return energyTime;
         }
         else
         {
@@ -54,7 +56,7 @@ public class Flashlight : MonoBehaviour, IInteractable, IUsable
     {
         if (Energy())
         {
-            return maxflashlightTime;
+            return maxenergyTime;
         }
         else
         {
@@ -117,8 +119,6 @@ public class Flashlight : MonoBehaviour, IInteractable, IUsable
     }
     public void Use()
     {
-        soundNameActivate = "Flashlight_On";
-        soundNameDesctivate = "Flashlight_Off";
 
         switch (activationType)
         {
@@ -175,13 +175,13 @@ public class Flashlight : MonoBehaviour, IInteractable, IUsable
                 if (activatedFlashlight)
                 {
                     // Comprobar si el tiempo de la linterna no excede el máximo permitido
-                    if (flashlightTime + 2f <= maxflashlightTime)
+                    if (energyTime + 2f <= maxenergyTime)
                     {
-                        flashlightTime += 2f; // Añadir 2 segundos
+                        energyTime += 2f; // Añadir 2 segundos
                     }
                     else
                     {
-                        flashlightTime = maxflashlightTime; // Ajustar al máximo si se excede
+                        energyTime = maxenergyTime; // Ajustar al máximo si se excede
                     }
 
                     // Iniciar la corrutina solo si es necesario
@@ -214,9 +214,9 @@ public class Flashlight : MonoBehaviour, IInteractable, IUsable
 
     private IEnumerator FlashlightTimer()
     {
-        while (flashlightTime > 0)
+        while (energyTime > 0)
         {
-            flashlightTime -= Time.deltaTime;
+            energyTime -= Time.deltaTime;
             //Debug.Log("LINTERNA: " + flashlightTime.ToString());
             yield return null;
         }

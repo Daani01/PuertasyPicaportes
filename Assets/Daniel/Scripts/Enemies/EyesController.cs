@@ -6,7 +6,7 @@ using static FirstPersonController;
 
 public class EyesController : Enemie
 {
-    public float damageAmount;
+    //private float damageAmount;
     public float checkInterval;
     public float detectionRadius;
     public float visionRadius;
@@ -22,17 +22,13 @@ public class EyesController : Enemie
 
     private void OnEnable()
     {
-        string enemyInfo = CSVManager.Instance.GetSpecificData(enemyName, ExcelValues.Prob.ToString());
-        //Debug.Log($"Info de {enemyName}: {enemyInfo}");
-
         timeElapsed = 0.0f;
     }
 
     void Awake()
     {
-        enemyName = "Eyes";
-        dieInfo = "Has muerto por Eyes\n\nPrueba a no mirarlo por mucho tiempo";
-        //damageAmount = 40.0f;
+        damage = float.Parse(CSVManager.Instance.GetSpecificData(enemyName, ExcelValues.Damage.ToString()));
+        dieInfo = CSVManager.Instance.GetSpecificData(enemyName, ExcelValues.DieInfo.ToString());
 
         if (playerTransform == null)
         {
@@ -116,7 +112,7 @@ public class EyesController : Enemie
                     FirstPersonController player = playerTransform.GetComponent<FirstPersonController>();
                     if (player != null && player.currentHealth > 0)
                     {
-                        player.TakeDamage(damageAmount, gameObject.GetComponent<Enemie>());
+                        player.TakeDamage(damage, gameObject.GetComponent<Enemie>());
                         //Debug.Log($"Player damaged by {damageAmount}. Current health: {player.currentHealth}");
 
                         //EnemyPool.Instance.ReturnEnemy(gameObject);

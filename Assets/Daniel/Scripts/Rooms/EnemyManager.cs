@@ -28,7 +28,7 @@ public class EnemyManager : MonoBehaviour
     {
         roomGenerator.IncreaseRoomCount();
 
-        Debug.Log($"Enemigo: {eventType} activado");
+        //Debug.Log($"Enemigo: {eventType} activado");
 
 
         switch (eventType)

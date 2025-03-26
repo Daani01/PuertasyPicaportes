@@ -46,12 +46,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eefb4e288fa055548a3a1f3a5cb62310, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyName: 
+  enemyName: Screech
+  damage: 0
   dieInfo: 
-  maxTimeNotLookedAt: 12
   lookThreshold: 0.8
-  timeToAppear: 2
-  damageAmount: 10
   screechObj: {fileID: 5368945620869896402}
   detectionSphere: {fileID: 6214394735688529836}
   visionSphere: {fileID: 6214394735688529836}

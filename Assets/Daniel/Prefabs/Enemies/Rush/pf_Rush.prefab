@@ -68,10 +68,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4703b7a9f12eac94e969b62143fd9e13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyName: 
+  enemyName: Rush
+  damage: 0
   dieInfo: 
-  speed: 20
-  damageAmount: 20
 --- !u!1 &2753538952125283347
 GameObject:
   m_ObjectHideFlags: 0

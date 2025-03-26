@@ -1,11 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using static Enemie;
 using static FirstPersonController;
 
 public class Bandage : MonoBehaviour, IInteractable
 {
-    public int HealAmount;
+    private int healAmount;
+
+    private void Awake()
+    {
+        healAmount = int.Parse(CSVManager.Instance.GetSpecificData("Bandage", "Amount"));
+    }
 
     public void InteractObj()
     {
@@ -15,7 +19,7 @@ public class Bandage : MonoBehaviour, IInteractable
         {
             if (player.currentHealth > 0 && player.currentHealth < player.maxHealth)
             {
-                player.Heal(HealAmount);
+                player.Heal(healAmount);
                 gameObject.SetActive(false);
             }
             else

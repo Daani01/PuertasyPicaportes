@@ -12,11 +12,10 @@ public class ScreechController : Enemie, IInteractable
     private bool killScreech;
 
     private float timeNotLookedAt;
-    public float maxTimeNotLookedAt;
+    private float maxTimeNotLookedAt;
     public float lookThreshold;
 
-    public float timeToAppear;
-    public float damageAmount;
+    private float timeToAppear;
 
     public GameObject screechObj;
     public Transform detectionSphere;
@@ -30,9 +29,11 @@ public class ScreechController : Enemie, IInteractable
 
     void Awake()
     {
-        enemyName = "Screech";
-        dieInfo = "Has muerto por Screech\n\nPrueba a plantarle cara antes de que sea demasiado tarde";
-        damageAmount = 40.0f;
+        damage = float.Parse(CSVManager.Instance.GetSpecificData(enemyName, ExcelValues.Damage.ToString()));
+        dieInfo = CSVManager.Instance.GetSpecificData(enemyName, ExcelValues.DieInfo.ToString());
+        timeToAppear = float.Parse(CSVManager.Instance.GetSpecificData(enemyName, "timeToAppear"));
+        maxTimeNotLookedAt = float.Parse(CSVManager.Instance.GetSpecificData(enemyName, "maxTimeNotLookedAt"));
+
         //timeToAppear
         //maxTimeNotLookedAt
 
@@ -162,9 +163,9 @@ public class ScreechController : Enemie, IInteractable
         FirstPersonController player = playerTransform.GetComponent<FirstPersonController>();
         if (player != null && player.currentHealth > 0)
         {
-            player.TakeDamage(damageAmount, gameObject.GetComponent<Enemie>());
+            player.TakeDamage(damage, gameObject.GetComponent<Enemie>());
             EnemyPool.Instance.ReturnEnemy(gameObject);
-            Debug.Log($"Player damaged by {damageAmount}. Current health: {player.currentHealth}");
+            //Debug.Log($"Player damaged by {damageAmount}. Current health: {player.currentHealth}");
         }
     }
 
