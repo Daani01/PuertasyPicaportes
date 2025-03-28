@@ -1,10 +1,15 @@
-using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
+using static Enemie;
 
-public class RushController : Enemie
+public class AmbushController : Enemie
 {
     private List<Transform> waypoints;
+    private int repetitions;
+    private int currentRepetition = 0;
+    private bool reverse = false;
+
     private int currentWaypointIndex = 0;
     private float speed;
     private bool isMoving = false;
@@ -15,10 +20,17 @@ public class RushController : Enemie
 
     private void Awake()
     {
-        soundName = "RushSound";
-        damage = float.Parse(CSVManager.Instance.GetSpecificData(enemyName, ExcelValues.Damage.ToString()));
-        dieInfo = CSVManager.Instance.GetSpecificData(enemyName, ExcelValues.DieInfo.ToString());
-        speed = float.Parse(CSVManager.Instance.GetSpecificData(enemyName, ExcelValues.Speed.ToString()));
+        soundName = "AmbushSound";
+        //damage = float.Parse(CSVManager.Instance.GetSpecificData(enemyName, ExcelValues.Damage.ToString()));
+        //dieInfo = CSVManager.Instance.GetSpecificData(enemyName, ExcelValues.DieInfo.ToString());
+        //speed = float.Parse(CSVManager.Instance.GetSpecificData(enemyName, ExcelValues.Speed.ToString()));
+        //repetitions = int.Parse(CSVManager.Instance.GetSpecificData(enemyName, "Repetitions"));
+
+        damage = 100;
+        dieInfo = "XDDD";
+        speed = 30;
+        repetitions = 5;
+        repetitions = Random.Range(2, repetitions + 1);
     }
 
     private void Start()
@@ -34,10 +46,14 @@ public class RushController : Enemie
         }
     }
 
+
     public void SetWaypoints(List<Transform> waypointsToFollow)
     {
         waypoints = waypointsToFollow;
         currentWaypointIndex = 0;
+        currentRepetition = 0;
+        reverse = false;
+
         if (waypoints != null && waypoints.Count > 0 && !isMoving)
         {
             StartCoroutine(MoveThroughWaypoints());
@@ -50,19 +66,35 @@ public class RushController : Enemie
         audioSource.loop = true;
 
         isMoving = true;
-        while (currentWaypointIndex < waypoints.Count)
+
+        while (currentRepetition < repetitions)
         {
-            Transform targetWaypoint = waypoints[currentWaypointIndex];
-            while (Vector3.Distance(transform.position, targetWaypoint.position) > 0.1f)
+            while ((reverse && currentWaypointIndex >= 0) || (!reverse && currentWaypointIndex < waypoints.Count))
             {
-                transform.position = Vector3.MoveTowards(transform.position, targetWaypoint.position, speed * Time.deltaTime);
-                yield return null;
+                Transform targetWaypoint = waypoints[currentWaypointIndex];
+
+                while (Vector3.Distance(transform.position, targetWaypoint.position) > 0.1f)
+                {
+                    transform.position = Vector3.MoveTowards(transform.position, targetWaypoint.position, speed * Time.deltaTime);
+                    yield return null;
+                }
+
+                // Avanzar o retroceder en función de la dirección
+                if (reverse)
+                    currentWaypointIndex--;
+                else
+                    currentWaypointIndex++;
             }
 
-            currentWaypointIndex++;
+            // Cambiar la dirección una vez llegamos al final o al inicio
+            reverse = !reverse;
+
+            // Ajustar el índice al cambiar de dirección
+            currentWaypointIndex = reverse ? waypoints.Count - 1 : 0;
+
+            currentRepetition++;
         }
 
-        
         isMoving = false;
 
         // Detener y devolver el sonido a la pool
@@ -90,4 +122,5 @@ public class RushController : Enemie
             }
         }
     }
+
 }

@@ -59,7 +59,7 @@ public class CSVManager : MonoBehaviour, IProcess
         onComplete?.Invoke();
     }
 
-    public Dictionary<string, string> GetRowByEnemyName(string enemyName)
+    public Dictionary<string, string> GetRowByName(string enemyName)
     {
         foreach (var row in data)
         {
@@ -73,7 +73,7 @@ public class CSVManager : MonoBehaviour, IProcess
 
     public string GetSpecificData(string enemyName, string columnName)
     {
-        Dictionary<string, string> row = GetRowByEnemyName(enemyName);
+        Dictionary<string, string> row = GetRowByName(enemyName);
         if (row != null && row.ContainsKey(columnName))
         {
             return row[columnName].Replace("\\n", "\n");

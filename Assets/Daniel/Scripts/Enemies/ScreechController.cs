@@ -87,7 +87,7 @@ public class ScreechController : Enemie, IInteractable
         soundName = "ScreechSound";
         audioSource = SoundPoolManager.Instance.PlaySound(soundName, gameObject);
 
-        float radius = playerTransform.GetComponent<FirstPersonController>().screechRadius;
+        float radius = playerTransform.GetComponent<FirstPersonController>().playerRadius;
         randomPosition = GetRandomPositionInSphere(playerTransform.position, radius);
         relativePosition = randomPosition - playerTransform.position;
 

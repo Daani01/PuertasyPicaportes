@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3798414931787565196}
   - component: {fileID: 7483156772389947400}
   - component: {fileID: 6996895025697766131}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Mueble6
   m_TagString: Untagged
   m_Icon: {fileID: 0}

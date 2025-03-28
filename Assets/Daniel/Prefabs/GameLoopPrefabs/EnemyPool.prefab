@@ -45,7 +45,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabEnemies:
-  - {fileID: 100282186354382211, guid: b33871a047b0d4c42a6c4f183f2b1fbe, type: 3}
   - {fileID: 2519625118080284939, guid: 9f05cb6b37dc54f4f81c0b896973ec9d, type: 3}
+  - {fileID: 2519625118080284939, guid: f677699d12e00e9428110bb2409e905a, type: 3}
+  - {fileID: 100282186354382211, guid: b33871a047b0d4c42a6c4f183f2b1fbe, type: 3}
   - {fileID: 4598048211679944991, guid: 8a7a9f937b397e446b6c7822e136f380, type: 3}
-  poolSize: 1
+  poolSize: 2

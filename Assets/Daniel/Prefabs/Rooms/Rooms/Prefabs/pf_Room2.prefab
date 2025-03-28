@@ -430,7 +430,7 @@ GameObject:
   - component: {fileID: 8859799063699575122}
   - component: {fileID: 7022499754639875203}
   - component: {fileID: 3935498716007516411}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ROOM1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1252,7 +1252,7 @@ GameObject:
   - component: {fileID: 980624090607588625}
   - component: {fileID: 3246493501563513611}
   - component: {fileID: 4901201829680740116}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Celing
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -11250,8 +11250,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabProcesses:
   - {fileID: 3980330964623407603, guid: bcdf211f299c1ee45b6b3d72fef3fa27, type: 3}
-  - {fileID: 7190760924247338799, guid: c7690712cc4197c45be785811f85e58b, type: 3}
   - {fileID: 7905650157254243868, guid: cf94b9ef8c71062488a4cea4f3dca4b6, type: 3}
+  - {fileID: 7190760924247338799, guid: c7690712cc4197c45be785811f85e58b, type: 3}
   - {fileID: 4010255121046227388, guid: 5c6b0cde1cf1ea44183d8042cae4c2b7, type: 3}
   - {fileID: 4326313661239995859, guid: 5084fe92f29f06d458a79d0f08c3a0ae, type: 3}
   startFadeEffect: {fileID: 1442392795}

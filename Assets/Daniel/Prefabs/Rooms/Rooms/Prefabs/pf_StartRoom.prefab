@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6224227401352962952}
   - component: {fileID: 5165643694018235093}
   - component: {fileID: 8912311877106016688}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ROOM1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -118,7 +118,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6132544021448456731}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: transform3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -149,7 +149,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 821469976224830784}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: pPlane1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -181,7 +181,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4763467958693993400}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: transform4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -215,7 +215,7 @@ GameObject:
   - component: {fileID: 4193375556448243921}
   - component: {fileID: 4578328714799961570}
   - component: {fileID: 3673959816864479658}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Door
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -319,7 +319,7 @@ GameObject:
   - component: {fileID: 7100416979426343142}
   - component: {fileID: 7009003440555441994}
   - component: {fileID: 4617878930032086087}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: pPlane3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -404,7 +404,7 @@ GameObject:
   - component: {fileID: 4213600512557352150}
   - component: {fileID: 4510566120393573393}
   - component: {fileID: 8848528691453240909}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Celing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -509,7 +509,7 @@ GameObject:
   - component: {fileID: 5375380045828903749}
   - component: {fileID: 560251798557996977}
   - component: {fileID: 6824431005086453695}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: pPlane3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -591,7 +591,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1884213041026561361}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Inicio_Cuadro_Horizontal (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -606,8 +606,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1071413896259828777}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 6.178, y: 2.19, z: -3.713}
+  m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 7.1789994, y: 0.57600164, z: 7.615368}
   m_LocalScale: {x: 30, y: 30, z: 30}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -615,7 +615,7 @@ Transform:
   - {fileID: 7653280114650390110}
   - {fileID: 4218364360139456880}
   - {fileID: 3992272544940274879}
-  m_Father: {fileID: 9122429482834050327}
+  m_Father: {fileID: 4745764132563295549}
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!1 &1119629234954055484
 GameObject:
@@ -626,7 +626,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6144420727705056150}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: transform3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -657,7 +657,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6732802439675565998}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: transform3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -688,7 +688,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1970873370691425033}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Inicio_Cuadro_Vertical (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -703,8 +703,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1193657384368547590}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: -0.84, y: 2.7211797, z: 10.445}
+  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
+  m_LocalPosition: {x: 0.16099948, y: 1.1071813, z: 21.773369}
   m_LocalScale: {x: 30, y: 30, z: 30}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -712,7 +712,7 @@ Transform:
   - {fileID: 821469976224830784}
   - {fileID: 7100416979426343142}
   - {fileID: 2330154212809809488}
-  m_Father: {fileID: 9122429482834050327}
+  m_Father: {fileID: 4745764132563295549}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1 &1212672979324952369
 GameObject:
@@ -723,7 +723,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8254601925951436756}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: pPlane1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -757,7 +757,7 @@ GameObject:
   - component: {fileID: 496005730399788844}
   - component: {fileID: 3308100227280831172}
   - component: {fileID: 7594830637205428928}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: pCube3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -841,7 +841,7 @@ GameObject:
   - component: {fileID: 5736558250032955506}
   - component: {fileID: 6087958873229277289}
   - component: {fileID: 6052556482420872336}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Info_Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1024,7 +1024,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7329858842339089315}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: pPlane2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1058,7 +1058,7 @@ GameObject:
   - component: {fileID: 4218364360139456880}
   - component: {fileID: 2546427769492260915}
   - component: {fileID: 8756013686173376015}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: pCube3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1140,7 +1140,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7653280114650390110}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: pCube2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1172,7 +1172,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1297595138746858540}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Axis
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1204,7 +1204,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1440265884865713739}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: transform4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1236,7 +1236,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3868852344436177724}
   - component: {fileID: 4517167040075815179}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: pf_Door_Falsa
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1291,7 +1291,7 @@ GameObject:
   - component: {fileID: 8117458153338266770}
   - component: {fileID: 6857317540185644778}
   - component: {fileID: 6211821164024875983}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Info_Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1490,12 +1490,6 @@ Transform:
   - {fileID: 6459623057695125160}
   - {fileID: 6834833176256129349}
   - {fileID: 4745764132563295549}
-  - {fileID: 1824384902176079717}
-  - {fileID: 8157306919945230444}
-  - {fileID: 1884213041026561361}
-  - {fileID: 5411694786783956622}
-  - {fileID: 996610374999253739}
-  - {fileID: 1970873370691425033}
   - {fileID: 8997895222806412780}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1520,7 +1514,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4188283698341503879}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: pCube1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1552,7 +1546,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3181494204764756585}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: transform1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1583,7 +1577,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8157306919945230444}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Inicio_Cuadro_Horizontal (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1598,8 +1592,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3031785215743203329}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -5.807, y: 2.19, z: 2.734}
+  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: -4.8060007, y: 0.57600164, z: 14.062368}
   m_LocalScale: {x: 30, y: 30, z: 30}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1607,7 +1601,7 @@ Transform:
   - {fileID: 5736326547349241965}
   - {fileID: 2946178637275028485}
   - {fileID: 1154343736438908480}
-  m_Father: {fileID: 9122429482834050327}
+  m_Father: {fileID: 4745764132563295549}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!1 &3711916242310795775
 GameObject:
@@ -1618,7 +1612,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1154343736438908480}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: pPlane2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1650,7 +1644,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6947526433753014325}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: transform2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1681,7 +1675,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4411818843396076697}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: transform2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1712,7 +1706,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 996610374999253739}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Inicio_Cuadro_Vertical (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1727,8 +1721,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4121170296468271703}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 6.182, y: 2.5431798, z: 3.06}
+  m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 7.1829996, y: 0.92918134, z: 14.388369}
   m_LocalScale: {x: 30, y: 30, z: 30}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1736,7 +1730,7 @@ Transform:
   - {fileID: 205850838780958954}
   - {fileID: 2542546624682726371}
   - {fileID: 8113175720764864824}
-  m_Father: {fileID: 9122429482834050327}
+  m_Father: {fileID: 4745764132563295549}
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!1 &4370564126818203962
 GameObject:
@@ -1747,7 +1741,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 280698038234926784}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: transform1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1778,7 +1772,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5615377467216701514}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: transform1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1809,7 +1803,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6707074857323599646}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: pCube1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1841,7 +1835,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5736326547349241965}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: pCube2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1875,7 +1869,7 @@ GameObject:
   - component: {fileID: 8605879568756177530}
   - component: {fileID: 6264768264020808861}
   - component: {fileID: 5134030599200758807}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Info_Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2047,7 +2041,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4398577784857119812}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: transform2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2205,7 +2199,7 @@ GameObject:
   - component: {fileID: 2946178637275028485}
   - component: {fileID: 1239074883217472893}
   - component: {fileID: 2880808035701272619}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: pCube3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2303,7 +2297,7 @@ Transform:
   m_GameObject: {fileID: 6747005598887128628}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.032, y: 1.639, z: -7.037}
+  m_LocalPosition: {x: -0.032, y: 1.7, z: -7.037}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2320,7 +2314,7 @@ GameObject:
   - component: {fileID: 2330154212809809488}
   - component: {fileID: 3043943167277351756}
   - component: {fileID: 8086469257472795323}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Info_Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2494,7 +2488,7 @@ GameObject:
   - component: {fileID: 8113175720764864824}
   - component: {fileID: 7014580925438774056}
   - component: {fileID: 1948359614625744479}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Info_Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2666,7 +2660,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6311087793344361353}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: pCube1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2700,7 +2694,7 @@ GameObject:
   - component: {fileID: 148620710815813073}
   - component: {fileID: 3601802792768409471}
   - component: {fileID: 1146019349483532654}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Info_Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2924,7 +2918,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 205850838780958954}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: pPlane1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2958,7 +2952,7 @@ GameObject:
   - component: {fileID: 2542546624682726371}
   - component: {fileID: 7408824262917760472}
   - component: {fileID: 4479810246758165890}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: pPlane3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3087,7 +3081,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4745764132563295549}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Forniture
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3109,6 +3103,12 @@ Transform:
   m_Children:
   - {fileID: 6260422550500864978}
   - {fileID: 3868852344436177724}
+  - {fileID: 1824384902176079717}
+  - {fileID: 8157306919945230444}
+  - {fileID: 1884213041026561361}
+  - {fileID: 5411694786783956622}
+  - {fileID: 996610374999253739}
+  - {fileID: 1970873370691425033}
   m_Father: {fileID: 9122429482834050327}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8234315422294471444
@@ -3120,7 +3120,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3992272544940274879}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: pPlane2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3152,7 +3152,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5411694786783956622}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Inicio_Cuadro_Vertical (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3167,8 +3167,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8257087181715698985}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 6.18, y: 2.5431798, z: 6.56}
+  m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 7.1809993, y: 0.92918134, z: 17.888369}
   m_LocalScale: {x: 30, y: 30, z: 30}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3176,7 +3176,7 @@ Transform:
   - {fileID: 8254601925951436756}
   - {fileID: 5375380045828903749}
   - {fileID: 8605879568756177530}
-  m_Father: {fileID: 9122429482834050327}
+  m_Father: {fileID: 4745764132563295549}
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!1 &8938013723431221231
 GameObject:
@@ -3187,7 +3187,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8291717200266679822}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: transform4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3218,7 +3218,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1824384902176079717}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Inicio_Cuadro_Horizontal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3233,8 +3233,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9153772185647700019}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -5.807, y: 2.19, z: -0.6171899}
+  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: -4.8060007, y: 0.57600164, z: 10.711178}
   m_LocalScale: {x: 30, y: 30, z: 30}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3242,7 +3242,7 @@ Transform:
   - {fileID: 1404012352220312464}
   - {fileID: 496005730399788844}
   - {fileID: 7329858842339089315}
-  m_Father: {fileID: 9122429482834050327}
+  m_Father: {fileID: 4745764132563295549}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!1 &9156817939958737137
 GameObject:
@@ -3253,7 +3253,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1404012352220312464}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: pCube2
   m_TagString: Untagged
   m_Icon: {fileID: 0}

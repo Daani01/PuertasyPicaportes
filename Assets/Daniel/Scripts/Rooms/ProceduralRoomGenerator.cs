@@ -53,7 +53,15 @@ public class ProceduralRoomGenerator : MonoBehaviour, IProcess
             yield break;
         }
 
-        GameObject startRoom = Instantiate(startRoomPrefab);
+        // Buscar o crear el GameObject "ALLROOMS"
+        GameObject allRooms = GameObject.Find("ALLROOMS");
+        if (allRooms == null)
+        {
+            allRooms = new GameObject("ALLROOMS");
+        }
+
+        // Generar la habitación inicial
+        GameObject startRoom = Instantiate(startRoomPrefab, allRooms.transform);
         rooms.Add(startRoom);
 
         TextMeshPro textMesh = startRoom.GetComponentInChildren<TextMeshPro>();
@@ -75,17 +83,15 @@ public class ProceduralRoomGenerator : MonoBehaviour, IProcess
             }
         }
 
-
-
         Transform previousEndDoor = startRoom.transform.Find("EndDoorSpawnPoint");
 
         contadorLocal++;
 
         for (int i = 0; i < (numberOfRooms - 1); i++)
         {
-            // Crear una nueva sala
+            // Crear una nueva sala dentro de ALLROOMS
             GameObject newRoomPrefab = basicRoomPrefabs[Random.Range(0, basicRoomPrefabs.Length)];
-            GameObject newRoom = Instantiate(newRoomPrefab);
+            GameObject newRoom = Instantiate(newRoomPrefab, allRooms.transform);
             roomEventManager.AssignRoomEvent(newRoom, contadorLocal, numberOfRooms);
 
             Transform newStartDoor = newRoom.transform.Find("StartDoorSpawnPoint");
@@ -93,7 +99,6 @@ public class ProceduralRoomGenerator : MonoBehaviour, IProcess
 
             rooms.Add(newRoom);
             previousEndDoor = newRoom.transform.Find("EndDoorSpawnPoint");
-
 
             TextMeshPro doorText = newRoom.GetComponentInChildren<TextMeshPro>();
 
@@ -103,37 +108,32 @@ public class ProceduralRoomGenerator : MonoBehaviour, IProcess
                 contadorLocal++;
             }
 
-            // Verifica si se ha generado al menos el 20% de las habitaciones
-            if (contadorLocal > numberOfRooms * 0.2f)
+            // Probabilidad del 50% de apagar la luz en algunas habitaciones
+            if (contadorLocal > numberOfRooms * 0.2f && Random.value <= 0.5f)
             {
-                // Probabilidad del 50% de apagar la luz
-                if (Random.value <= 0.5f)
+                Transform ambientLight = newRoom.transform.Find("Ambient_Light");
+                if (ambientLight != null)
                 {
-                    Transform ambientLight = newRoom.transform.Find("Ambient_Light");
-                    if (ambientLight != null)
-                    {
-                        ambientLight.gameObject.SetActive(false);
-                    }
+                    ambientLight.gameObject.SetActive(false);
                 }
             }
-
-
         }
 
-        GameObject finishRoom = Instantiate(finishRoomPrefab);
+        // Generar la habitación final dentro de ALLROOMS
+        GameObject finishRoom = Instantiate(finishRoomPrefab, allRooms.transform);
         roomEventManager.AssignEndRoomEvent(finishRoom);
 
         Transform finishStartDoor = finishRoom.transform.Find("StartDoorSpawnPoint");
-
         AlignRooms(previousEndDoor, finishStartDoor);
         rooms.Add(finishRoom);
 
-
+        // Limitar el número de habitaciones activas
         for (int i = 0; i < rooms.Count; i++)
         {
             rooms[i].SetActive(i < maxRoomActived);
         }
     }
+
 
     void AlignRooms(Transform previousEnd, Transform newStart)
     {
@@ -232,7 +232,7 @@ public class ProceduralRoomGenerator : MonoBehaviour, IProcess
         return this.transform;
     }
 
-    public List<Transform> GetTransformsRush(int count)
+    public List<Transform> GetTransforms(int count)
     {
         List<Transform> lastRoomTransforms = new List<Transform>();
 

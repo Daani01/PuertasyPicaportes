@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5073268937741846412}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: pSphere1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41,7 +41,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5082547719531328834}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: transform11
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -74,7 +74,7 @@ GameObject:
   - component: {fileID: 5593340065520122708}
   - component: {fileID: 5593800495450911848}
   - component: {fileID: 7072350736102677837}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: pCylinder5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -157,7 +157,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3691853256222569712}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: pCylinder3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -189,7 +189,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2963663438044649873}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: transform12
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -221,7 +221,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7105531291016274593}
   - component: {fileID: 6755324851544861284}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Planta_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}

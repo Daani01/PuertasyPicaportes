@@ -56,7 +56,7 @@ MonoBehaviour:
   - {fileID: 4790591924577290706, guid: 2fdcade2399b3f14d8dc999ed4f75456, type: 3}
   - {fileID: 310142163004902800, guid: 784ecf732fff53243b337c6ea222c98c, type: 3}
   - {fileID: 7366301997251150556, guid: c5d906d48c105ed40bca42a2cc3d67e9, type: 3}
-  numberOfRooms: 100
+  numberOfRooms: 20
   roomCount: 0
   maxRoomActived: 3
   rooms: []
@@ -85,6 +85,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pf_Rush: {fileID: 2519625118080284939, guid: 9f05cb6b37dc54f4f81c0b896973ec9d, type: 3}
+  pf_Ambush: {fileID: 2519625118080284939, guid: f677699d12e00e9428110bb2409e905a, type: 3}
   pf_Screech: {fileID: 100282186354382211, guid: b33871a047b0d4c42a6c4f183f2b1fbe, type: 3}
   pf_Eyes: {fileID: 4598048211679944991, guid: 8a7a9f937b397e446b6c7822e136f380, type: 3}
   roomGenerator: {fileID: 5432418227036310142}

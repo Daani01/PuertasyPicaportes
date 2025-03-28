@@ -189,7 +189,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 127
+    m_Bits: 383
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -378,6 +378,9 @@ MonoBehaviour:
   MaxDurationAlert: 0.2
   healthImage: {fileID: 0}
   healthText: {fileID: 0}
+  coinsCountText: {fileID: 0}
+  interactedImage: {fileID: 0}
+  interactedObjImage: {fileID: 0}
   damageIndicator: {fileID: 0}
   helpText: {fileID: 0}
   walkSpeed: 7
@@ -405,7 +408,7 @@ MonoBehaviour:
   blockPlayer: 1
   ObjectsTransform: {fileID: 1128572268354788109}
   ObjectsLookAtTransform: {fileID: 8814858625440316355}
-  screechRadius: 1
+  playerRadius: 0
   currentState: 5
 --- !u!1 &7303695523485932157
 GameObject:

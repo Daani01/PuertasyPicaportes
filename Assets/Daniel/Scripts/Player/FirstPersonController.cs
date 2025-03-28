@@ -90,7 +90,7 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] private Transform ObjectsLookAtTransform;
 
     [Header("Screech")]
-    [SerializeField] public float screechRadius;
+    [SerializeField] public float playerRadius;
 
     private CharacterController controller;
     private Vector2 moveInput;
@@ -103,6 +103,7 @@ public class FirstPersonController : MonoBehaviour
     private bool isPillEffectActive = false; // Nuevo booleano para controlar el efecto de la píldora
     private Coroutine pillEffectCoroutine; // Guarda la referencia de la corrutina de la píldora
 
+    private Transform allRooms;
 
     public enum PlayerState
     {
@@ -118,41 +119,6 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] public PlayerState currentState;
     private PlayerState StateBeforePause;
 
-    private void Awake()
-    {
-        
-
-
-        /*
-        if (playerCamera == null)
-            playerCamera = Camera.main;
-
-        //controller = GetComponent<CharacterController>();
-        controller = FindObjectOfType<CharacterController>();
-
-        ObjectsTransform = GameObject.Find("OBJECT_PLACEMENT").transform;
-        ObjectsLookAtTransform = GameObject.Find("OBJECT_LOOKAT").transform;
-
-        controller.enabled = false;
-        controller.enabled = true;
-
-        //blockPlayer = true;
-        currentHealth = maxHealth;
-
-        // Asignamos cada sprite al diccionario según el estado
-        stateSprites = new Dictionary<PlayerState, Sprite>
-        {
-            { PlayerState.Waiting, WaitingSprite },
-            { PlayerState.Walking, WalkingSprite },
-            { PlayerState.Running, RunningSprite },
-            { PlayerState.Crouching, CrouchingSprite },
-            { PlayerState.Hiding, HidingSprite },
-            { PlayerState.Block, BlockSprite },
-            { PlayerState.Dead, DeadSprite }
-        };
-        */
-
-    }
 
     private void Start()
     {
@@ -220,6 +186,16 @@ public class FirstPersonController : MonoBehaviour
         if (coinsCountText == null)
             coinsCountText = GameObject.Find("Coins_Count").GetComponent<TMP_Text>();
 
+        if(allRooms == null)
+            allRooms = GameObject.Find("ALLROOMS").GetComponent<Transform>();
+
+        Transform playerSpawnPoint = GameObject.Find("PlayerSpawnPoint").transform;
+        if (playerSpawnPoint != null)
+        {
+            //player.SetActive(false);
+            this.transform.position = playerSpawnPoint.position;
+            //player.SetActive(true);
+        }
 
         var data = SaveSystem.LoadPlayerData();
 
@@ -344,6 +320,7 @@ public class FirstPersonController : MonoBehaviour
     }
 
     // Movement-related methods
+    /*
     private void Move()
     {
 
@@ -376,6 +353,82 @@ public class FirstPersonController : MonoBehaviour
         Vector3 moveDirection = transform.TransformDirection(new Vector3(moveInput.x, 0f, moveInput.y));
         controller.Move(moveDirection * currentSpeed * Time.deltaTime);
     }
+    */
+
+    private void Move()
+    {
+        if (currentState == PlayerState.Dead || currentState == PlayerState.Block || currentState == PlayerState.Hiding)
+        {
+            currentSpeed = 0f;
+            return;
+        }
+
+        if (moveInput == Vector2.zero && currentState != PlayerState.Crouching)
+        {
+            ChangePlayerState(PlayerState.Waiting);
+            currentSpeed = 0f;
+            return;
+        }
+
+        if (isPillEffectActive && currentState != PlayerState.Crouching)
+        {
+            ChangePlayerState(PlayerState.Running);
+        }
+        else if (!isPillEffectActive && moveInput != Vector2.zero && currentState != PlayerState.Running && currentState != PlayerState.Crouching)
+        {
+            ChangePlayerState(PlayerState.Walking);
+        }
+
+        float targetSpeed = currentState == PlayerState.Running ? runSpeed :
+                            (currentState == PlayerState.Crouching ? crouchSpeed : walkSpeed);
+        currentSpeed = Mathf.Lerp(currentSpeed, targetSpeed, Time.deltaTime * 10f);
+
+        Vector3 moveDirection = transform.TransformDirection(new Vector3(moveInput.x, 0f, moveInput.y));
+
+        if (!IsNearWall(moveDirection))
+        {
+            if (allRooms != null)
+            {
+                allRooms.transform.position -= moveDirection * currentSpeed * Time.deltaTime;
+            }
+        }
+        else
+        {
+            currentSpeed = 0f;
+        }
+    }
+
+    private bool IsNearWall(Vector3 direction)
+    {
+        float rayDistance = 0.6f; // Ajustar si es necesario
+        Vector3 rayStart = transform.position + Vector3.up * 1.0f; // Evitar el suelo
+        int wallLayer = LayerMask.GetMask("Forniture", "Interact"); // Asegúrate de que la capa "Wall" existe en Unity
+
+        // Direcciones en las que disparamos los Raycasts (diagonal incluida)
+        Vector3[] directions = new Vector3[]
+        {
+        direction,                                        // Dirección principal
+        new Vector3(direction.x, 0f, 0f),                // Lateral (X)
+        new Vector3(0f, 0f, direction.z),                // Frontal/trasera (Z)
+        new Vector3(direction.x, 0f, direction.z).normalized // Diagonal
+        };
+
+        foreach (Vector3 dir in directions)
+        {
+            Debug.DrawRay(rayStart, dir * rayDistance, Color.red, 0.1f);
+
+            if (Physics.Raycast(rayStart, dir, out RaycastHit hit, rayDistance, wallLayer))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+
+
 
     private void ApplyGravity()
     {
@@ -946,7 +999,7 @@ private bool CheckPickUpItem(IUsable usableItem)
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(gameObject.transform.position, screechRadius);
+        Gizmos.DrawWireSphere(gameObject.transform.position, playerRadius);
         
     }
 }
