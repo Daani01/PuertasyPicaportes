@@ -10,12 +10,10 @@ public class RushController : Enemie
     private bool isMoving = false;
 
     private bool isInitialized = false;
-    private AudioSource audioSource;
-    private string soundName;
+
 
     private void Awake()
     {
-        soundName = "RushSound";
         damage = float.Parse(CSVManager.Instance.GetSpecificData(enemyName, ExcelValues.Damage.ToString()));
         dieInfo = CSVManager.Instance.GetSpecificData(enemyName, ExcelValues.DieInfo.ToString());
         speed = float.Parse(CSVManager.Instance.GetSpecificData(enemyName, ExcelValues.Speed.ToString()));
@@ -46,9 +44,6 @@ public class RushController : Enemie
 
     private IEnumerator MoveThroughWaypoints()
     {
-        audioSource = SoundPoolManager.Instance.PlaySound(soundName, gameObject);
-        audioSource.loop = true;
-
         isMoving = true;
         while (currentWaypointIndex < waypoints.Count)
         {
@@ -60,14 +55,8 @@ public class RushController : Enemie
             }
 
             currentWaypointIndex++;
-        }
-
-        
+        }        
         isMoving = false;
-
-        // Detener y devolver el sonido a la pool
-        SoundPoolManager.Instance.ReturnToPool(soundName, audioSource);
-
         EnemyPool.Instance.ReturnEnemy(gameObject);
     }
 

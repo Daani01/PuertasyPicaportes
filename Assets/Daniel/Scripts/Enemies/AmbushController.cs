@@ -15,12 +15,9 @@ public class AmbushController : Enemie
     private bool isMoving = false;
 
     private bool isInitialized = false;
-    private AudioSource audioSource;
-    private string soundName;
 
     private void Awake()
     {
-        soundName = "AmbushSound";
         //damage = float.Parse(CSVManager.Instance.GetSpecificData(enemyName, ExcelValues.Damage.ToString()));
         //dieInfo = CSVManager.Instance.GetSpecificData(enemyName, ExcelValues.DieInfo.ToString());
         //speed = float.Parse(CSVManager.Instance.GetSpecificData(enemyName, ExcelValues.Speed.ToString()));
@@ -28,7 +25,7 @@ public class AmbushController : Enemie
 
         damage = 100;
         dieInfo = "XDDD";
-        speed = 30;
+        speed = 20;
         repetitions = 5;
         repetitions = Random.Range(2, repetitions + 1);
     }
@@ -62,9 +59,6 @@ public class AmbushController : Enemie
 
     private IEnumerator MoveThroughWaypoints()
     {
-        audioSource = SoundPoolManager.Instance.PlaySound(soundName, gameObject);
-        audioSource.loop = true;
-
         isMoving = true;
 
         while (currentRepetition < repetitions)
@@ -79,27 +73,19 @@ public class AmbushController : Enemie
                     yield return null;
                 }
 
-                // Avanzar o retroceder en función de la dirección
                 if (reverse)
                     currentWaypointIndex--;
                 else
                     currentWaypointIndex++;
             }
 
-            // Cambiar la dirección una vez llegamos al final o al inicio
             reverse = !reverse;
 
-            // Ajustar el índice al cambiar de dirección
             currentWaypointIndex = reverse ? waypoints.Count - 1 : 0;
 
             currentRepetition++;
         }
-
         isMoving = false;
-
-        // Detener y devolver el sonido a la pool
-        SoundPoolManager.Instance.ReturnToPool(soundName, audioSource);
-
         EnemyPool.Instance.ReturnEnemy(gameObject);
     }
 

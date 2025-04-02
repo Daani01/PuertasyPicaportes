@@ -93,8 +93,8 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] public float playerRadius;
 
     private CharacterController controller;
-    private Vector2 moveInput;
-    private Vector2 lookInput;
+    public Vector2 moveInput;
+    public Vector2 lookInput;
     private Vector2 currentRotation;
     private Vector2 targetRotation;
     private Vector2 rotationVelocity;
@@ -320,7 +320,7 @@ public class FirstPersonController : MonoBehaviour
     }
 
     // Movement-related methods
-    /*
+    
     private void Move()
     {
 
@@ -353,8 +353,9 @@ public class FirstPersonController : MonoBehaviour
         Vector3 moveDirection = transform.TransformDirection(new Vector3(moveInput.x, 0f, moveInput.y));
         controller.Move(moveDirection * currentSpeed * Time.deltaTime);
     }
-    */
 
+
+    /*
     private void Move()
     {
         if (currentState == PlayerState.Dead || currentState == PlayerState.Block || currentState == PlayerState.Hiding)
@@ -397,7 +398,7 @@ public class FirstPersonController : MonoBehaviour
             currentSpeed = 0f;
         }
     }
-
+    
     private bool IsNearWall(Vector3 direction)
     {
         float rayDistance = 0.6f; // Ajustar si es necesario
@@ -425,8 +426,7 @@ public class FirstPersonController : MonoBehaviour
 
         return false;
     }
-
-
+    */
 
 
 

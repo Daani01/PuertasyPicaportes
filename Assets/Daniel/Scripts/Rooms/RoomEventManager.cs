@@ -68,7 +68,7 @@ public class RoomEventManager : MonoBehaviour
             Transform triggerEvent = room.transform.Find("TriggerEvent");
             if (triggerEvent != null)
             {
-                _eventType = RoomEventType.Ambush;
+                _eventType = RoomEventType.A_120;
                 room.GetComponent<RoomEventManager>()._eventType = _eventType;
 
                 Debug.Log($"Enemigo: {room.GetComponent<RoomEventManager>()._eventType} - Habitacion: {numberRoom}");
