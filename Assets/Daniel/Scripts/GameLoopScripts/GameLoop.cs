@@ -14,6 +14,7 @@ public class GameLoop : MonoBehaviour
 
     [SerializeField] private TMP_Text info_Text;
     [SerializeField] private TMP_Text final_Text;
+    [SerializeField] private GameObject endGameButton;
     [SerializeField] private ProceduralRoomGenerator CurrentDoor;
 
     private string endText = "";
@@ -163,7 +164,9 @@ public class GameLoop : MonoBehaviour
 
                 yield return new WaitForSeconds(3.5f);
 
-                SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
+                endGameButton.SetActive(true);
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
             }
         }
     }
@@ -223,12 +226,12 @@ public class GameLoop : MonoBehaviour
 
                 yield return new WaitForSeconds(3.5f);
 
-                SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
+                endGameButton.SetActive(true);
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
             }
         }
     }
-
-
 
     public void PlayerEndGameWin()
     {
@@ -293,7 +296,11 @@ public class GameLoop : MonoBehaviour
 
                 yield return new WaitForSeconds(3.5f);
 
-                SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
+
+                endGameButton.SetActive(true);
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+
             }
         }
     }

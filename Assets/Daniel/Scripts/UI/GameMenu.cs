@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Audio;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class GameMenu : MonoBehaviour
 {
@@ -86,6 +87,11 @@ public class GameMenu : MonoBehaviour
         {
             player.GetComponent<FirstPersonController>().InstaDie();
         }
+    }
+
+    public void EndGame()
+    {
+        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
     }
 
     public void ExitGame()

@@ -22,9 +22,8 @@ public class A120Controller : Enemie
         //speed = float.Parse(CSVManager.Instance.GetSpecificData(enemyName, ExcelValues.Speed.ToString()));
         //repetitions = int.Parse(CSVManager.Instance.GetSpecificData(enemyName, "Repetitions"));
 
-        damage = 100;
         dieInfo = "Has muerto por A120";
-        speed = 15;
+        speed = 5;
         repetitions = 5;
         repetitions = Random.Range(2, repetitions + 1);
     }
@@ -102,7 +101,7 @@ public class A120Controller : Enemie
 
                 if (player.currentState != FirstPersonController.PlayerState.Dead && player.currentState != FirstPersonController.PlayerState.Hiding)
                 {
-                    player.TakeDamage(damage, gameObject.GetComponent<Enemie>());
+                    player.Die(gameObject.GetComponent<Enemie>());
                 }
             }
         }

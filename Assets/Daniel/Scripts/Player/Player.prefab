@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 3400590701280676834}
   m_Layer: 0
   m_Name: Camera
-  m_TagString: Untagged
+  m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -409,6 +409,8 @@ MonoBehaviour:
   ObjectsTransform: {fileID: 1128572268354788109}
   ObjectsLookAtTransform: {fileID: 8814858625440316355}
   playerRadius: 0
+  moveInput: {x: 0, y: 0}
+  lookInput: {x: 0, y: 0}
   currentState: 5
 --- !u!1 &7303695523485932157
 GameObject:

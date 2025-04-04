@@ -3,26 +3,20 @@ using UnityEngine;
 
 public class ScreechController : Enemie, IInteractable
 {
+    public GameObject screechObj;
+    public Transform detectionSphere;
+    public float minRadius;
+    public float maxRadius;
+
     private Transform playerTransform;
     private Camera playerCamera;
     private Vector3 randomPosition;
     private Vector3 relativePosition;
     private GameObject player;
-
-    private bool killScreech;
-
+    private bool screechKilled;
     private float timeNotLookedAt;
     private float maxTimeNotLookedAt;
-    public float lookThreshold;
-
-    private float timeToAppear;
-
-    public GameObject screechObj;
-    public Transform detectionSphere;
-    public Transform visionSphere;
-    public float detectionRadius;
-    public float visionRadius;
-
+    private float timeToAppear;   
     private bool isInitialized = false;
     private AudioSource audioSource;
     private string soundName;
@@ -34,14 +28,11 @@ public class ScreechController : Enemie, IInteractable
         timeToAppear = float.Parse(CSVManager.Instance.GetSpecificData(enemyName, "timeToAppear"));
         maxTimeNotLookedAt = float.Parse(CSVManager.Instance.GetSpecificData(enemyName, "maxTimeNotLookedAt"));
 
-        //timeToAppear
-        //maxTimeNotLookedAt
-
         player = GameObject.FindWithTag("Player");
         if (player != null)
         {
             playerTransform = player.transform;
-            playerCamera = player.GetComponentInChildren<Camera>();
+            playerCamera = playerTransform.GetComponentInChildren<Camera>();
 
             if (playerCamera == null)
             {
@@ -63,12 +54,12 @@ public class ScreechController : Enemie, IInteractable
     {
         if (!isInitialized)
         {
-            Start(); // Asegurar que Start() se ejecute si OnEnable() se llama antes de Start()
+            Start();
         }
 
         if (playerTransform != null && playerTransform.GetComponent<FirstPersonController>() != null)
         {
-            StartCoroutine(WaitAndActivate()); // Ahora se ejecutará correctamente
+            StartCoroutine(WaitAndActivate());
         }
         else
         {
@@ -76,19 +67,24 @@ public class ScreechController : Enemie, IInteractable
         }
     }
 
-    private Vector3 GetRandomPositionInSphere(Vector3 center, float radius)
+    private Vector3 GetRandomPositionInSphere(Vector3 center)
     {
-        Vector3 randomPoint = Random.insideUnitSphere * radius;
-        return center + randomPoint;
+        Vector3 direction = Random.insideUnitSphere.normalized;
+        float distance = Random.Range(minRadius, maxRadius);
+        Vector3 randomPoint = center + direction * distance;
+
+        randomPoint.y = Mathf.Min(randomPoint.y, 1f);
+
+        return randomPoint;
     }
+
 
     private IEnumerator WaitAndActivate()
     {
         soundName = "ScreechSound";
         audioSource = SoundPoolManager.Instance.PlaySound(soundName, gameObject);
 
-        float radius = playerTransform.GetComponent<FirstPersonController>().playerRadius;
-        randomPosition = GetRandomPositionInSphere(playerTransform.position, radius);
+        randomPosition = GetRandomPositionInSphere(playerTransform.position);
         relativePosition = randomPosition - playerTransform.position;
 
         yield return new WaitForSeconds(timeToAppear);
@@ -101,27 +97,27 @@ public class ScreechController : Enemie, IInteractable
     {
         while (true)
         {
+            transform.position = playerTransform.position + relativePosition;
+
             if (playerCamera != null)
             {
-                transform.position = playerTransform.position + relativePosition;
+                transform.LookAt(playerCamera.transform);
+            }
 
-                if (killScreech)
+            if (screechKilled)
+            {
+                DeactivateObject();
+                yield break;
+            }
+            else
+            {
+                timeNotLookedAt += Time.deltaTime;
+
+                if (timeNotLookedAt >= maxTimeNotLookedAt)
                 {
-                    //Debug.Log("Screech visto");
+                    ApplyDamageToPlayer();
                     DeactivateObject();
                     yield break;
-                }
-                else
-                {
-                    timeNotLookedAt += Time.deltaTime;
-                    //Debug.Log($"Time not looked at: {timeNotLookedAt}");
-
-                    if (timeNotLookedAt >= maxTimeNotLookedAt)
-                    {
-                        ApplyDamageToPlayer();
-                        DeactivateObject();
-                        yield break;
-                    }
                 }
             }
 
@@ -132,31 +128,8 @@ public class ScreechController : Enemie, IInteractable
 
     public void InteractObj()
     {
-        killScreech = true;
-    }
-
-    private bool CheckPlayerView()
-    {
-        if (playerTransform == null || detectionSphere == null || visionSphere == null || playerCamera == null)
-            return false;
-
-        // Verificar si está mirando la visión frontal
-        Vector3 directionToVisionSphere = (visionSphere.position - playerCamera.transform.position).normalized;
-        float dotProduct = Vector3.Dot(playerCamera.transform.forward, directionToVisionSphere);
-
-        // Validar el producto punto y el radio de visión frontal
-        if (dotProduct > 0.9)
-        {
-            float distanceToVisionSphere = Vector3.Distance(playerCamera.transform.position, visionSphere.position);
-            if (distanceToVisionSphere <= visionRadius)
-            {
-                Debug.Log("Player is within vision range and looking at the object.");
-                return true;
-            }
-        }
-
-        return false;
-    }
+        screechKilled = true;
+    }    
 
     private void ApplyDamageToPlayer()
     {
@@ -165,7 +138,6 @@ public class ScreechController : Enemie, IInteractable
         {
             player.TakeDamage(damage, gameObject.GetComponent<Enemie>());
             EnemyPool.Instance.ReturnEnemy(gameObject);
-            //Debug.Log($"Player damaged by {damageAmount}. Current health: {player.currentHealth}");
         }
     }
 
@@ -173,30 +145,18 @@ public class ScreechController : Enemie, IInteractable
     {
         timeNotLookedAt = 0.0f;
         screechObj.SetActive(false);
-        killScreech = false;
+        screechKilled = false;
         SoundPoolManager.Instance.ReturnToPool(soundName, audioSource);
         EnemyPool.Instance.ReturnEnemy(gameObject);
-        //gameObject.SetActive(false);
-        //Debug.Log("Screech object deactivated.");
     }
 
     private void OnDrawGizmos()
     {
-        if (detectionSphere == null || visionSphere == null) return;
+        if (detectionSphere == null) return;
 
-        // Dibuja la esfera de detección
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(detectionSphere.position, detectionRadius);
-
-        // Dibuja la esfera de visión
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(visionSphere.position, visionRadius);
-
-        // Dibuja la dirección de la cámara
-        if (playerCamera != null)
-        {
-            Gizmos.color = Color.green;
-            Gizmos.DrawLine(playerCamera.transform.position, playerCamera.transform.position + playerCamera.transform.forward * 10f);
-        }
+        Gizmos.DrawWireSphere(detectionSphere.position, minRadius);
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(detectionSphere.position, maxRadius);
     }
 }

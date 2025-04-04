@@ -17,8 +17,7 @@ public class EyesController : Enemie
     private Camera playerCamera;
     private float nextCheckTime = 0f;
     private float timeElapsed = 0f;
-    private AudioSource audioSource;
-    private string soundName;
+
 
     private void OnEnable()
     {
@@ -62,7 +61,6 @@ public class EyesController : Enemie
 
         if (timeElapsed >= 60f)
         {
-            SoundPoolManager.Instance.ReturnToPool(soundName, audioSource);
             EnemyPool.Instance.ReturnEnemy(gameObject);
         }
 
@@ -76,9 +74,6 @@ public class EyesController : Enemie
     {
         if(spawnPosition != null)
         {
-            soundName = "EyesSound";
-            audioSource = SoundPoolManager.Instance.PlaySound(soundName, gameObject);
-            audioSource.loop = true;
             gameObject.transform.position = spawnPosition.position;
         }
     }
