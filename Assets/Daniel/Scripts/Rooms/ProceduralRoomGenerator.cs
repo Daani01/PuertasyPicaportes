@@ -108,8 +108,19 @@ public class ProceduralRoomGenerator : MonoBehaviour, IProcess
                 contadorLocal++;
             }
 
-            // Probabilidad del 50% de apagar la luz en algunas habitaciones
-            if (contadorLocal > numberOfRooms * 0.2f && Random.value <= 0.5f)
+
+            float probabilidadApagarLuz = 0.25f;
+
+            if (contadorLocal > 15 && contadorLocal <= 40)
+            {
+                probabilidadApagarLuz = 0.6f;
+            }
+            else if (contadorLocal > 40)
+            {
+                probabilidadApagarLuz = 0.95f;
+            }
+
+            if (contadorLocal > 3 && Random.value <= probabilidadApagarLuz)
             {
                 Transform ambientLight = newRoom.transform.Find("Ambient_Light");
                 if (ambientLight != null)
@@ -117,6 +128,8 @@ public class ProceduralRoomGenerator : MonoBehaviour, IProcess
                     ambientLight.gameObject.SetActive(false);
                 }
             }
+
+
         }
 
         // Generar la habitación final dentro de ALLROOMS

@@ -27,8 +27,12 @@ public class EyesController : Enemie
     void Awake()
     {
         damage = float.Parse(CSVManager.Instance.GetSpecificData(enemyName, ExcelValues.Damage.ToString()));
-        dieInfo = CSVManager.Instance.GetSpecificData(enemyName, ExcelValues.DieInfo.ToString());
+        string[] dieInfoArray = CSVManager.Instance.GetSpecificData(enemyName, ExcelValues.DieInfo.ToString()).Split(';');
+        dieInfo = dieInfoArray[Random.Range(0, dieInfoArray.Length)];
+    }
 
+    void Update()
+    {
         if (playerTransform == null)
         {
             GameObject playerObject = GameObject.FindWithTag("Player");
@@ -47,10 +51,7 @@ public class EyesController : Enemie
                 Debug.LogError("Player object not found in the scene.");
             }
         }
-    }
 
-    void Update()
-    {
         if (Time.time >= nextCheckTime)
         {
             nextCheckTime = Time.time + checkInterval;

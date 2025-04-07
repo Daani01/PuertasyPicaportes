@@ -179,5 +179,22 @@ public class GDTFadeEffect : MonoBehaviour
         finished = false;
     }
 
+    public void EndEffect()
+    {
+        performEffect = true;
+        finished = false;
+        goingToLast = !firstToLast;  // Hace el efecto al revés
+
+        if (goingToLast)
+        {
+            currentValue = 0f;
+            blackImage.color = firstColor;
+        }
+        else
+        {
+            currentValue = 1f;
+            blackImage.color = lastColor;
+        }
+    }
 
 }

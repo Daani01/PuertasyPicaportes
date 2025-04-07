@@ -18,14 +18,11 @@ public class AmbushController : Enemie
 
     private void Awake()
     {
-        //damage = float.Parse(CSVManager.Instance.GetSpecificData(enemyName, ExcelValues.Damage.ToString()));
-        //dieInfo = CSVManager.Instance.GetSpecificData(enemyName, ExcelValues.DieInfo.ToString());
-        //speed = float.Parse(CSVManager.Instance.GetSpecificData(enemyName, ExcelValues.Speed.ToString()));
-        //repetitions = int.Parse(CSVManager.Instance.GetSpecificData(enemyName, "Repetitions"));
+        damage = float.Parse(CSVManager.Instance.GetSpecificData(enemyName, ExcelValues.Damage.ToString()));
+        string[] dieInfoArray = CSVManager.Instance.GetSpecificData(enemyName, ExcelValues.DieInfo.ToString()).Split(';');
+        dieInfo = dieInfoArray[Random.Range(0, dieInfoArray.Length)];
+        speed = float.Parse(CSVManager.Instance.GetSpecificData(enemyName, ExcelValues.Speed.ToString()));
 
-        damage = 100;
-        dieInfo = "XDDD";
-        speed = 20;
         repetitions = 5;
         repetitions = Random.Range(2, repetitions + 1);
     }

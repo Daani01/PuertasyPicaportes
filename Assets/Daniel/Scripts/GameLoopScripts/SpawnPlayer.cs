@@ -6,33 +6,51 @@ public class SpawnPlayer : MonoBehaviour, IProcess
 {
     public bool IsCompleted { get; private set; } = false;
     public GameObject playerPrefab;
-    private FirstPersonController currentPlayer;
+    public static FirstPersonController currentPlayer;
 
     public void ExecuteProcess(System.Action onComplete)
     {
-        StartCoroutine(ProcessRoutine(onComplete));
-    }
-
-    private IEnumerator ProcessRoutine(System.Action onComplete)
-    {
-
-        yield return StartCoroutine(Spawn());
-
+        Spawn();
         IsCompleted = true;
-
         onComplete?.Invoke();
     }
 
-    private IEnumerator Spawn()
+    public void Spawn()
     {
+        Vector3 spawnPosition = Vector3.zero;
+
         if (currentPlayer != null)
         {
-            Destroy(currentPlayer.gameObject);
+            spawnPosition = currentPlayer.transform.position;
+            currentPlayer.RemoveAllItemsRevive();
+            DestroyImmediate(currentPlayer.gameObject); // Destruir YA
         }
 
-        GameObject playerInstance = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
+        // Buscar y destruir TODAS las cámaras
+        Camera[] cameras = FindObjectsOfType<Camera>();
+        foreach (Camera cam in cameras)
+        {
+            DestroyImmediate(cam.gameObject); // Destruir YA
+        }
 
-        yield return null;
+        // Buscar y destruir TODAS las cámaras
+        Enemie[] enemies = FindObjectsOfType<Enemie>();
+        foreach (Enemie enemie in enemies)
+        {
+            if (enemie.gameObject.activeSelf)
+            {
+                DestroyImmediate(enemie.gameObject); // Destruir YA
+            }
+        }
+
+        // Instanciar el nuevo jugador
+        GameObject playerInstance = Instantiate(playerPrefab, spawnPosition, Quaternion.identity);
+        currentPlayer = playerInstance.GetComponent<FirstPersonController>();
     }
+
+
+
+
+
 
 }

@@ -52,7 +52,7 @@ public class EnemyManager : MonoBehaviour
 
                 break;
             case RoomEventType.Ambush:
-                List<Transform> ambushTransforms = roomGenerator.GetTransforms(10);
+                List<Transform> ambushTransforms = roomGenerator.GetTransforms(9);
                 if (ambushTransforms.Count > 0)
                 {
                     Transform initialSpawnPoint = ambushTransforms[0];

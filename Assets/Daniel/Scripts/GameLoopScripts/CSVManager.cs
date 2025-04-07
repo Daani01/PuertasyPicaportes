@@ -31,6 +31,41 @@ public class CSVManager : MonoBehaviour, IProcess
 
     private IEnumerator LoadCSV(System.Action onComplete)
     {
+        if (csvFile == null)
+        {
+            IsCompleted = true;
+            onComplete?.Invoke();
+            yield break;
+        }
+
+        data.Clear();
+        string[] lines = csvFile.text.Split('\n');
+        string[] headers = lines[0].Split(',');
+
+        for (int i = 1; i < lines.Length; i++)
+        {
+            if (string.IsNullOrWhiteSpace(lines[i])) // Ignora líneas vacías
+                continue;
+
+            string[] values = lines[i].Split(',');
+            Dictionary<string, string> row = new Dictionary<string, string>();
+
+            for (int j = 0; j < headers.Length; j++)
+            {
+                string value = (j < values.Length) ? values[j].Trim() : ""; // Si no hay valor, pone ""
+                row[headers[j].Trim()] = value;
+            }
+            data.Add(row);
+        }
+
+        IsCompleted = true;
+        onComplete?.Invoke();
+    }
+
+
+    /*
+    private IEnumerator LoadCSV(System.Action onComplete)
+    {
 
         if (csvFile == null)
         {
@@ -58,7 +93,9 @@ public class CSVManager : MonoBehaviour, IProcess
         IsCompleted = true;
         onComplete?.Invoke();
     }
-
+    */
+    
+    
     public Dictionary<string, string> GetRowByName(string enemyName)
     {
         foreach (var row in data)

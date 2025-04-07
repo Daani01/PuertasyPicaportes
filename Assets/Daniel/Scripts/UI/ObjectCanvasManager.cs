@@ -117,6 +117,21 @@ public class ObjectCanvasManager : MonoBehaviour
         }
     }
 
+    public void RemoveAllItems()
+    {
+        for (int i = createdItems.Count - 1; i >= 0; i--)
+        {
+            if (createdItems[i] != null)
+            {
+                Destroy(createdItems[i]);
+                createdItems.RemoveAt(i);
+            }
+        }
+
+        UpdateItemNumbers(); // Si querés actualizar la UI después
+    }
+
+
     // Función para actualizar los textos de los elementos restantes
     private void UpdateItemNumbers()
     {

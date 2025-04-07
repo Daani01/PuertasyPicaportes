@@ -7,6 +7,8 @@ using UnityEngine.SceneManagement;
 
 public class GameLoop : MonoBehaviour
 {
+    [Header("Revive Player")]
+    public SpawnPlayer spawnPlayer;
 
     [SerializeField] private List<GameObject> prefabProcesses;
     [SerializeField] private GDTFadeEffect startFadeEffect;
@@ -15,6 +17,7 @@ public class GameLoop : MonoBehaviour
     [SerializeField] private TMP_Text info_Text;
     [SerializeField] private TMP_Text final_Text;
     [SerializeField] private GameObject endGameButton;
+    [SerializeField] private GameObject restartGameButton;
     [SerializeField] private ProceduralRoomGenerator CurrentDoor;
 
     private string endText = "";
@@ -160,10 +163,10 @@ public class GameLoop : MonoBehaviour
                           $"Monedas: {data.coins}\n" +
                           $"Puerta record: {data.doorRecord}\n";
 
-                yield return StartCoroutine(TypeTextEffect(endText, 5.0f));
+                yield return StartCoroutine(TypeTextEffect(endText, 3.0f));
 
-                yield return new WaitForSeconds(3.5f);
 
+                restartGameButton.SetActive(true);
                 endGameButton.SetActive(true);
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
@@ -222,10 +225,13 @@ public class GameLoop : MonoBehaviour
                           $"Monedas: {data.coins}\n" +
                           $"Puerta record: {data.doorRecord}\n";
 
-                yield return StartCoroutine(TypeTextEffect(endText, 5.0f));
+                yield return StartCoroutine(TypeTextEffect(endText, 3.0f));
 
-                yield return new WaitForSeconds(3.5f);
 
+
+                //esperar a que el jugador active el revivir
+
+                restartGameButton.SetActive(true);
                 endGameButton.SetActive(true);
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
@@ -292,9 +298,7 @@ public class GameLoop : MonoBehaviour
                           $"Monedas: {data.coins}\n" +
                           $"Puerta record: {data.doorRecord}\n";
 
-                yield return StartCoroutine(TypeTextEffect(endText, 5.0f));
-
-                yield return new WaitForSeconds(3.5f);
+                yield return StartCoroutine(TypeTextEffect(endText, 3.0f));
 
 
                 endGameButton.SetActive(true);
@@ -304,6 +308,37 @@ public class GameLoop : MonoBehaviour
             }
         }
     }
+
+
+
+
+    public void RevivePlayer()
+    {
+        StartCoroutine(RevivePlayerLogic());
+    }
+
+    private IEnumerator RevivePlayerLogic()
+    {
+        endFadeEffect.EndEffect();
+
+        restartGameButton.SetActive(false);
+        endGameButton.SetActive(false);
+
+        yield return StartCoroutine(DeleteTextEffect(2.0f));
+
+        spawnPlayer.Spawn();
+
+        // Como es static accedo directamente sin buscar en la escena
+        FirstPersonController playerController = SpawnPlayer.currentPlayer;
+
+        if (playerController != null)
+        {
+            playerController.blockPlayer = false;
+            playerController.Heal(100.0f);
+        }
+    }
+
+
 
     private IEnumerator TypeTextEffect(string text, float duration)
     {
@@ -316,6 +351,19 @@ public class GameLoop : MonoBehaviour
             yield return new WaitForSeconds(delay);
         }
     }
+
+    private IEnumerator DeleteTextEffect(float duration)
+    {
+        string text = final_Text.text;
+        float delay = duration / text.Length;
+
+        for (int i = text.Length - 1; i >= 0; i--)
+        {
+            final_Text.text = text.Substring(0, i);
+            yield return new WaitForSeconds(delay);
+        }
+    }
+
 
     private IEnumerator FadeOutText()
     {

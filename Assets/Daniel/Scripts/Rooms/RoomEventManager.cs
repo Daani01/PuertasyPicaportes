@@ -12,8 +12,6 @@ public class RoomEventManager : MonoBehaviour
         Screech,
         Eyes,
         Ambush,
-        Halt,
-        Dupe,
         A_60,
         A_90,
         A_120,
@@ -32,6 +30,9 @@ public class RoomEventManager : MonoBehaviour
     {
         foreach (RoomEventType eventType in Enum.GetValues(typeof(RoomEventType)))
         {
+            if (eventType == RoomEventType.End)
+                continue;
+
             string probabilityStr = CSVManager.Instance.GetSpecificData(eventType.ToString(), "Probability");
 
             if (int.TryParse(probabilityStr, out int probability))
@@ -40,19 +41,19 @@ public class RoomEventManager : MonoBehaviour
             }
             else
             {
-                //Debug.LogWarning($"No se encontró una probabilidad válida para {eventType}, asignando 0.");
                 eventProbabilities[eventType] = 0;
             }
         }
     }
 
 
+
     public void AssignRoomEvent(GameObject room, int numberRoom, int maxNumberRoom)
     {
-        int remainingRooms = maxNumberRoom - numberRoom;
+        //int remainingRooms = maxNumberRoom - numberRoom;
         int eventChance = Mathf.Clamp((numberRoom * 100) / maxNumberRoom, 0, 100);
 
-        /*
+        
         if (UnityEngine.Random.Range(0, 100) < eventChance)
         {
             _eventType = GetRandomEventByProbability();
@@ -61,22 +62,20 @@ public class RoomEventManager : MonoBehaviour
         {
             _eventType = RoomEventType.None;
         }
-        */
+        
 
         if (numberRoom > 0)
         {
             Transform triggerEvent = room.transform.Find("TriggerEvent");
             if (triggerEvent != null)
             {
-                _eventType = RoomEventType.Screech;
                 room.GetComponent<RoomEventManager>()._eventType = _eventType;
 
-                Debug.Log($"Enemigo: {room.GetComponent<RoomEventManager>()._eventType} - Habitacion: {numberRoom}");
-                /*
-                if (_eventType != RoomEventType.None)
+                if(_eventType != RoomEventType.None)
                 {
+                    Debug.Log($"Enemigo: {room.GetComponent<RoomEventManager>()._eventType} - Habitacion: {numberRoom}");
                 }
-                */
+
             }
         }
     }
@@ -92,12 +91,7 @@ public class RoomEventManager : MonoBehaviour
                 return kvp.Key;
             }
         }
-
-        //FINAL
-        //return eventProbabilities.Keys.ElementAt(UnityEngine.Random.Range(0, eventProbabilities.Count));
-        //FINAL
-
-        return RoomEventType.None;
+        return eventProbabilities.Keys.ElementAt(UnityEngine.Random.Range(0, eventProbabilities.Count));
     }
 
 

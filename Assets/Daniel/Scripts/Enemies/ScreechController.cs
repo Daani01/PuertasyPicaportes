@@ -24,9 +24,23 @@ public class ScreechController : Enemie, IInteractable
     void Awake()
     {
         damage = float.Parse(CSVManager.Instance.GetSpecificData(enemyName, ExcelValues.Damage.ToString()));
-        dieInfo = CSVManager.Instance.GetSpecificData(enemyName, ExcelValues.DieInfo.ToString());
+        string[] dieInfoArray = CSVManager.Instance.GetSpecificData(enemyName, ExcelValues.DieInfo.ToString()).Split(';');
+        dieInfo = dieInfoArray[Random.Range(0, dieInfoArray.Length)];
         timeToAppear = float.Parse(CSVManager.Instance.GetSpecificData(enemyName, "timeToAppear"));
-        maxTimeNotLookedAt = float.Parse(CSVManager.Instance.GetSpecificData(enemyName, "maxTimeNotLookedAt"));
+        maxTimeNotLookedAt = float.Parse(CSVManager.Instance.GetSpecificData(enemyName, "maxTimeNotLookedAt"));        
+    }
+
+    void Start()
+    {
+        isInitialized = true;
+    }
+
+    void OnEnable()
+    {
+        if (!isInitialized)
+        {
+            Start();
+        }
 
         player = GameObject.FindWithTag("Player");
         if (player != null)
@@ -42,19 +56,6 @@ public class ScreechController : Enemie, IInteractable
         else
         {
             Debug.LogError("Player object not found in the scene.");
-        }
-    }
-
-    void Start()
-    {
-        isInitialized = true;
-    }
-
-    void OnEnable()
-    {
-        if (!isInitialized)
-        {
-            Start();
         }
 
         if (playerTransform != null && playerTransform.GetComponent<FirstPersonController>() != null)
@@ -97,7 +98,10 @@ public class ScreechController : Enemie, IInteractable
     {
         while (true)
         {
-            transform.position = playerTransform.position + relativePosition;
+            if(playerTransform != null)
+            {
+                transform.position = playerTransform.position + relativePosition;
+            }
 
             if (playerCamera != null)
             {
@@ -133,7 +137,13 @@ public class ScreechController : Enemie, IInteractable
 
     private void ApplyDamageToPlayer()
     {
-        FirstPersonController player = playerTransform.GetComponent<FirstPersonController>();
+        FirstPersonController player = null;
+
+        if (playerTransform != null) 
+        {
+            player = playerTransform.GetComponent<FirstPersonController>();
+        }
+
         if (player != null && player.currentHealth > 0)
         {
             player.TakeDamage(damage, gameObject.GetComponent<Enemie>());

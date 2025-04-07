@@ -14,8 +14,7 @@ public class DrawerObjectManager : MonoBehaviour
         Coins,
         Bandage,
         Pills,
-        Crucifix,
-        Spider
+        Crucifix
     }
 
     public GameObject[] objectsPrefabs;

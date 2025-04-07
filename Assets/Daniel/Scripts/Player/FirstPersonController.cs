@@ -120,7 +120,7 @@ public class FirstPersonController : MonoBehaviour
     private PlayerState StateBeforePause;
 
 
-    private void Start()
+    private void Awake()
     {
 
         currentState = PlayerState.Block;
@@ -189,13 +189,14 @@ public class FirstPersonController : MonoBehaviour
         if(allRooms == null)
             allRooms = GameObject.Find("ALLROOMS").GetComponent<Transform>();
 
-        Transform playerSpawnPoint = GameObject.Find("PlayerSpawnPoint").transform;
-        if (playerSpawnPoint != null)
+
+        GameObject playerSpawnPointObject = GameObject.Find("PlayerSpawnPoint");
+        if (playerSpawnPointObject != null)
         {
-            //player.SetActive(false);
+            Transform playerSpawnPoint = playerSpawnPointObject.transform;
             this.transform.position = playerSpawnPoint.position;
-            //player.SetActive(true);
         }
+
 
         var data = SaveSystem.LoadPlayerData();
 
@@ -735,6 +736,11 @@ private bool CheckPickUpItem(IUsable usableItem)
         {
             //Debug.Log($"{usableItem.GetType().ToString()} no está en el inventario.");
         }
+    }
+
+    public void RemoveAllItemsRevive()
+    {
+        canvasManager.RemoveAllItems();
     }
 
     public void SelectObj(int index)

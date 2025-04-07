@@ -13,8 +13,9 @@ public class A90Controller : Enemie
 
     private void Awake()
     {
-        damage = 90;
-        dieInfo = "NO TE MUEVAS PAI!!!";
+        damage = float.Parse(CSVManager.Instance.GetSpecificData(enemyName, ExcelValues.Damage.ToString()));
+        string[] dieInfoArray = CSVManager.Instance.GetSpecificData(enemyName, ExcelValues.DieInfo.ToString()).Split(';');
+        dieInfo = dieInfoArray[Random.Range(0, dieInfoArray.Length)];
 
         if (A90IDLE == null)
             A90IDLE = GameObject.Find("A90IDLECanvas").GetComponent<Image>();
@@ -33,31 +34,35 @@ public class A90Controller : Enemie
     private IEnumerator HandleA90Sequence()
     {
         SetImageAlpha(A90IDLE, 1f);
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.5f);
 
         SetImageAlpha(A90IDLE, 0f);
         SetImageAlpha(A90BLOCK, 1f);
         SetImageAlpha(A90BACK, 1f);
 
-        // Detectar movimiento o rotación del jugador una sola vez
-        while (!hasDetectedMovement)
+        float timer = 0f;
+        float audioDuration = A90AUDIO.length - 0.5f;
+
+        // Mientras el audio esté sonando
+        while (timer < audioDuration)
         {
-            if (player != null && (player.moveInput.magnitude > 0f || player.lookInput.magnitude > 0f))
+            if (!hasDetectedMovement && player != null && (player.moveInput.magnitude > 0f || player.lookInput.magnitude > 0f))
             {
                 player.TakeDamage(damage, gameObject.GetComponent<Enemie>());
                 hasDetectedMovement = true;
             }
-            yield return null; // Espera un frame antes de volver a comprobar
+
+            timer += Time.deltaTime;
+            yield return null;
         }
 
-        float audioDuration = A90AUDIO.length - 0.3f;
-        yield return new WaitForSeconds(audioDuration);
-
+        // Si no se movió, se ejecuta esto después del audio
         SetImageAlpha(A90BLOCK, 0f);
         SetImageAlpha(A90BACK, 0f);
 
         gameObject.SetActive(false);
     }
+
 
     private void SetImageAlpha(Image image, float alpha)
     {
