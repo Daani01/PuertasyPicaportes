@@ -13,11 +13,7 @@ public class TriggerEventHandler : MonoBehaviour
             {
                 roomEventManager.OnPlayerEnterRoom();
                 gameObject.SetActive(false);
-            }
-            else
-            {
-
-            }
+            }            
         }
     }
 }

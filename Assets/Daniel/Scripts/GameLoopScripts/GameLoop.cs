@@ -22,6 +22,9 @@ public class GameLoop : MonoBehaviour
 
     private string endText = "";
 
+    [Header("Timer Manager")]
+    private float elapsedTime = 0f;
+    private float maxTime = 23 * 3600f; // 23 horas en segundos
 
     private List<GameObject> instantiatedObjects = new List<GameObject>();
     private int currentIndex = 0;
@@ -126,7 +129,7 @@ public class GameLoop : MonoBehaviour
                     data.coins = playerController.coinsCount;
                     data.attempts += 1;
 
-                    TimeSpan sessionTime = TimeSpan.Parse(playerController.StopTimer());
+                    TimeSpan sessionTime = TimeSpan.Parse(StopTimer());
 
                     TimeSpan global = TimeSpan.Parse(data.globalTime);
                     data.globalTime = (global + sessionTime).ToString(@"hh\:mm\:ss");
@@ -148,6 +151,21 @@ public class GameLoop : MonoBehaviour
                         case "Screech":
                             data.deathsByScreech += 1;
                             break;
+                        case "A60":
+                            data.deathsByA60 += 1;
+                            break;
+                        case "A90":
+                            data.deathsByA90 += 1;
+                            break;
+                        case "A120":
+                            data.deathsByA120 += 1;
+                            break;
+                        case "Ambush":
+                            data.deathsByAmbush += 1;
+                            break;
+                        case "Jack":
+                            data.deathsByJack += 1;
+                            break;
                         default:
                             Debug.LogWarning($"[WARNING] Enemigo no reconocido: {enemieData.enemyName}");
                             break;
@@ -159,7 +177,7 @@ public class GameLoop : MonoBehaviour
 
                 endText = $"{enemieData.dieInfo}\n" +
                           $"Has llegado hasta la puerta: {CurrentDoor.GetStaticCurrentRoomIndex()}\n" +
-                          $"Tiempo: {TimeSpan.Parse(playerController.StopTimer())}\n" +
+                          $"Tiempo: {TimeSpan.Parse(StopTimer())}\n" +
                           $"Monedas: {data.coins}\n" +
                           $"Puerta record: {data.doorRecord}\n";
 
@@ -206,7 +224,7 @@ public class GameLoop : MonoBehaviour
                     data.coins = playerController.coinsCount;
                     data.attempts += 1;
 
-                    TimeSpan sessionTime = TimeSpan.Parse(playerController.StopTimer());
+                    TimeSpan sessionTime = TimeSpan.Parse(StopTimer());
 
                     TimeSpan global = TimeSpan.Parse(data.globalTime);
                     data.globalTime = (global + sessionTime).ToString(@"hh\:mm\:ss");
@@ -221,7 +239,7 @@ public class GameLoop : MonoBehaviour
 
                 SaveSystem.SavePlayerData(data);
 
-                endText = $"Tiempo: {TimeSpan.Parse(playerController.StopTimer())}\n" +
+                endText = $"Tiempo: {TimeSpan.Parse(StopTimer())}\n" +
                           $"Monedas: {data.coins}\n" +
                           $"Puerta record: {data.doorRecord}\n";
 
@@ -270,8 +288,9 @@ public class GameLoop : MonoBehaviour
 
                     data.coins = playerController.coinsCount;
                     data.attempts += 1;
+                    data.wins += 1;
 
-                    TimeSpan sessionTime = TimeSpan.Parse(playerController.StopTimer());
+                    TimeSpan sessionTime = TimeSpan.Parse(StopTimer());
 
                     TimeSpan bestTime = TimeSpan.Parse(data.recordTime);
                     if (sessionTime < bestTime)
@@ -293,7 +312,7 @@ public class GameLoop : MonoBehaviour
                 SaveSystem.SavePlayerData(data);
 
                 endText = $"HAS GANADO\n" +
-                          $"Tiempo: {TimeSpan.Parse(playerController.StopTimer())}\n" +
+                          $"Tiempo: {TimeSpan.Parse(StopTimer())}\n" +
                           $"Record de tiempo: {data.recordTime}\n\n" +
                           $"Monedas: {data.coins}\n" +
                           $"Puerta record: {data.doorRecord}\n";
@@ -328,6 +347,8 @@ public class GameLoop : MonoBehaviour
 
         spawnPlayer.Spawn();
 
+        StartCoroutine("StartTimer");
+
         // Como es static accedo directamente sin buscar en la escena
         FirstPersonController playerController = SpawnPlayer.currentPlayer;
 
@@ -338,6 +359,26 @@ public class GameLoop : MonoBehaviour
         }
     }
 
+
+    public IEnumerator StartTimer()
+    {
+        while (elapsedTime < maxTime)
+        {
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+    }
+
+    public string StopTimer()
+    {
+        StopCoroutine("StartTimer");
+        int hours = Mathf.FloorToInt(elapsedTime / 3600);
+        int minutes = Mathf.FloorToInt((elapsedTime % 3600) / 60);
+        int seconds = Mathf.FloorToInt(elapsedTime % 60);
+        string formattedTime = string.Format("{0:D2}:{1:D2}:{2:D2}", hours, minutes, seconds);
+
+        return formattedTime;
+    }
 
 
     private IEnumerator TypeTextEffect(string text, float duration)

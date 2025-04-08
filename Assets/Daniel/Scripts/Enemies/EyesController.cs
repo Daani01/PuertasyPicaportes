@@ -24,13 +24,6 @@ public class EyesController : Enemie
         timeElapsed = 0.0f;
     }
 
-    void Awake()
-    {
-        damage = float.Parse(CSVManager.Instance.GetSpecificData(enemyName, ExcelValues.Damage.ToString()));
-        string[] dieInfoArray = CSVManager.Instance.GetSpecificData(enemyName, ExcelValues.DieInfo.ToString()).Split(';');
-        dieInfo = dieInfoArray[Random.Range(0, dieInfoArray.Length)];
-    }
-
     void Update()
     {
         if (playerTransform == null)

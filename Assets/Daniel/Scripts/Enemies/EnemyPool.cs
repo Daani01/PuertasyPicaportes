@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Enemie;
 
 public class EnemyPool : MonoBehaviour, IProcess
 {
@@ -14,6 +15,8 @@ public class EnemyPool : MonoBehaviour, IProcess
     public List<GameObject> prefabEnemies; // Lista de prefabs de enemigos
     [SerializeField] private int poolSize = 10;
     private Dictionary<GameObject, Pool> poolDictionary = new Dictionary<GameObject, Pool>();
+
+    private Transform allRooms;
 
     public bool IsCompleted { get; private set; } = false;
     public static EnemyPool Instance { get; private set; }
@@ -39,12 +42,22 @@ public class EnemyPool : MonoBehaviour, IProcess
 
     private IEnumerator InitializePool(System.Action onComplete)
     {
+        if (allRooms == null)
+            allRooms = GameObject.Find("ALLROOMS").GetComponent<Transform>();
+
         foreach (var prefab in prefabEnemies)
         {
             Pool pool = new Pool { prefab = prefab };
             for (int i = 0; i < poolSize; i++)
             {
                 GameObject enemy = Instantiate(prefab);
+                enemy.transform.SetParent(allRooms);
+
+                enemy.GetComponent<Enemie>().damage = float.Parse(CSVManager.Instance.GetSpecificData(enemy.GetComponent<Enemie>().enemyName, ExcelValues.Damage.ToString()));
+                enemy.GetComponent<Enemie>().speed = float.Parse(CSVManager.Instance.GetSpecificData(enemy.GetComponent<Enemie>().enemyName, ExcelValues.Speed.ToString()));
+                string[] dieInfoArray = CSVManager.Instance.GetSpecificData(enemy.GetComponent<Enemie>().enemyName, ExcelValues.DieInfo.ToString()).Split(';');
+                enemy.GetComponent<Enemie>().dieInfo = dieInfoArray[Random.Range(0, dieInfoArray.Length)];
+
                 enemy.SetActive(false);
 
                 enemyToPrefab[enemy] = prefab; // Guardamos la referencia al prefab original
@@ -69,6 +82,11 @@ public class EnemyPool : MonoBehaviour, IProcess
             if (pool.enemies.Count == 1)
             {
                 GameObject newEnemy = Instantiate(prefab);
+                newEnemy.GetComponent<Enemie>().damage = float.Parse(CSVManager.Instance.GetSpecificData(newEnemy.GetComponent<Enemie>().enemyName, ExcelValues.Damage.ToString()));
+                newEnemy.GetComponent<Enemie>().speed = float.Parse(CSVManager.Instance.GetSpecificData(newEnemy.GetComponent<Enemie>().enemyName, ExcelValues.Speed.ToString()));
+                string[] dieInfoArray = CSVManager.Instance.GetSpecificData(newEnemy.GetComponent<Enemie>().enemyName, ExcelValues.DieInfo.ToString()).Split(';');
+                newEnemy.GetComponent<Enemie>().dieInfo = dieInfoArray[Random.Range(0, dieInfoArray.Length)];
+
                 newEnemy.SetActive(false);
                 enemyToPrefab[newEnemy] = prefab;
                 pool.enemies.Enqueue(newEnemy);

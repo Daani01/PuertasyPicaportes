@@ -69,6 +69,8 @@ public class RoomEventManager : MonoBehaviour
             Transform triggerEvent = room.transform.Find("TriggerEvent");
             if (triggerEvent != null)
             {
+                _eventType = RoomEventType.A_90;//BORRAR FINAL
+
                 room.GetComponent<RoomEventManager>()._eventType = _eventType;
 
                 if(_eventType != RoomEventType.None)

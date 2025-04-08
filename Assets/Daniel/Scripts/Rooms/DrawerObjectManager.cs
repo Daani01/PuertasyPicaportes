@@ -54,7 +54,7 @@ public class DrawerObjectManager : MonoBehaviour
         {
             Transform spawnPoint = spawnPoints[UnityEngine.Random.Range(0, spawnPoints.Length)];
             GameObject newObj = Instantiate(objectsPrefabs[prefabIndex], spawnPoint);
-            Debug.Log($"Objeto generado: {objectsPrefabs[prefabIndex].name}");
+            //Debug.Log($"Objeto generado: {objectsPrefabs[prefabIndex].name}");
         }
     }
 

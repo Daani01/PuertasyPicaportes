@@ -17,9 +17,11 @@ public class ProceduralRoomGenerator : MonoBehaviour, IProcess
     static public int staticroomCount;
     public int maxRoomActived;
 
+    private GameObject gameLoop;
+
+
     public List<GameObject> rooms = new List<GameObject>();
     private RoomEventManager roomEventManager;
-
 
     private void Start()
     {
@@ -43,6 +45,16 @@ public class ProceduralRoomGenerator : MonoBehaviour, IProcess
 
     private IEnumerator GenerateRooms()
     {
+        var data = SaveSystem.LoadPlayerData();
+
+        if (data != null)
+        {
+            if(data.wins >= 1)
+            {
+                numberOfRooms = 1000;
+            }
+        }
+
         int contadorLocal = 1;
         int maxDigits = numberOfRooms.ToString().Length;
 
@@ -55,9 +67,15 @@ public class ProceduralRoomGenerator : MonoBehaviour, IProcess
 
         // Buscar o crear el GameObject "ALLROOMS"
         GameObject allRooms = GameObject.Find("ALLROOMS");
+
         if (allRooms == null)
         {
             allRooms = new GameObject("ALLROOMS");
+        }
+
+        if (gameLoop == null)
+        {
+            gameLoop = GameObject.Find("GAMELOOP");
         }
 
         // Generar la habitación inicial
@@ -123,6 +141,7 @@ public class ProceduralRoomGenerator : MonoBehaviour, IProcess
             if (contadorLocal > 3 && Random.value <= probabilidadApagarLuz)
             {
                 Transform ambientLight = newRoom.transform.Find("Ambient_Light");
+
                 if (ambientLight != null)
                 {
                     ambientLight.gameObject.SetActive(false);
@@ -167,11 +186,8 @@ public class ProceduralRoomGenerator : MonoBehaviour, IProcess
 
         if (roomCount == 1)
         {
-            GameObject player = GameObject.FindWithTag("Player");
-            if (player != null)
-            {
-                player.GetComponent<FirstPersonController>().StartCoroutine("StartTimer");
-            }
+            GameLoop gameLoopScript = gameLoop.GetComponent<GameLoop>();
+            gameLoopScript.StartCoroutine(gameLoopScript.StartTimer());
         }
 
         // Asegurarse de que roomCount no exceda el número total de habitaciones
@@ -210,7 +226,7 @@ public class ProceduralRoomGenerator : MonoBehaviour, IProcess
         }
 
 
-    }
+    }        
 
     public void DecreaseRoomCount()
     {

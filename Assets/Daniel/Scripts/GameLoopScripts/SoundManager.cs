@@ -19,6 +19,8 @@ public class SoundPoolManager : MonoBehaviour, IProcess
     private Dictionary<string, SoundPool> poolDictionary = new Dictionary<string, SoundPool>();
     private Dictionary<string, AudioClip> clipDictionary = new Dictionary<string, AudioClip>();
 
+    private Transform allRooms;
+
     public static SoundPoolManager Instance { get; private set; }
     public bool IsCompleted { get; private set; } = false;
 
@@ -41,6 +43,9 @@ public class SoundPoolManager : MonoBehaviour, IProcess
 
     private IEnumerator InitializePool(System.Action onComplete)
     {
+        if (allRooms == null)
+            allRooms = GameObject.Find("ALLROOMS").GetComponent<Transform>();
+
         foreach (var clip in audioClips)
         {
             string clipName = clip.name;
@@ -64,10 +69,10 @@ public class SoundPoolManager : MonoBehaviour, IProcess
     private AudioSource CreateAudioSource(AudioClip clip)
     {
         GameObject soundObject = new GameObject($"Sound_{clip.name}");
-        //soundObject.transform.SetParent(transform);
+        soundObject.transform.SetParent(allRooms);
+
         AudioSource audioSource = soundObject.AddComponent<AudioSource>();
 
-        // Configuración del AudioSource
         audioSource.clip = clip;
         audioSource.outputAudioMixerGroup = sfxAudioMixerGroup;
         audioSource.playOnAwake = true;

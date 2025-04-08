@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class ScreechController : Enemie, IInteractable
 {
+    public float timeToAppear;
+    public float maxTimeNotLookedAt;
     public GameObject screechObj;
     public Transform detectionSphere;
     public float minRadius;
@@ -15,20 +17,10 @@ public class ScreechController : Enemie, IInteractable
     private GameObject player;
     private bool screechKilled;
     private float timeNotLookedAt;
-    private float maxTimeNotLookedAt;
-    private float timeToAppear;   
+      
     private bool isInitialized = false;
     private AudioSource audioSource;
     private string soundName;
-
-    void Awake()
-    {
-        damage = float.Parse(CSVManager.Instance.GetSpecificData(enemyName, ExcelValues.Damage.ToString()));
-        string[] dieInfoArray = CSVManager.Instance.GetSpecificData(enemyName, ExcelValues.DieInfo.ToString()).Split(';');
-        dieInfo = dieInfoArray[Random.Range(0, dieInfoArray.Length)];
-        timeToAppear = float.Parse(CSVManager.Instance.GetSpecificData(enemyName, "timeToAppear"));
-        maxTimeNotLookedAt = float.Parse(CSVManager.Instance.GetSpecificData(enemyName, "maxTimeNotLookedAt"));        
-    }
 
     void Start()
     {

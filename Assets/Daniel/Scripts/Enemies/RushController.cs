@@ -6,19 +6,9 @@ public class RushController : Enemie
 {
     private List<Transform> waypoints;
     private int currentWaypointIndex = 0;
-    private float speed;
     private bool isMoving = false;
 
     private bool isInitialized = false;
-
-
-    private void Awake()
-    {
-        damage = float.Parse(CSVManager.Instance.GetSpecificData(enemyName, ExcelValues.Damage.ToString()));
-        speed = float.Parse(CSVManager.Instance.GetSpecificData(enemyName, ExcelValues.Speed.ToString()));
-        string[] dieInfoArray = CSVManager.Instance.GetSpecificData(enemyName, ExcelValues.DieInfo.ToString()).Split(';');
-        dieInfo = dieInfoArray[Random.Range(0, dieInfoArray.Length)];
-    }
 
     private void Start()
     {

@@ -16,9 +16,17 @@ public class SaveSystem : MonoBehaviour
         public string recordTime;  // Formato HH:mm:ss
         public string globalTime;   // Formato HH:mm:ss (acumulado)
         public int attempts;
+        public int wins;
+
+        public int deathsByA60;
+        public int deathsByA90;
+        public int deathsByA120;
+        public int deathsByAmbush;
         public int deathsByRush;
         public int deathsByEyes;
         public int deathsByScreech;
+        public int deathsByJack;
+
         public int doorRecord;
     }
 

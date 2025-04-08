@@ -13,10 +13,6 @@ public class A90Controller : Enemie
 
     private void Awake()
     {
-        damage = float.Parse(CSVManager.Instance.GetSpecificData(enemyName, ExcelValues.Damage.ToString()));
-        string[] dieInfoArray = CSVManager.Instance.GetSpecificData(enemyName, ExcelValues.DieInfo.ToString()).Split(';');
-        dieInfo = dieInfoArray[Random.Range(0, dieInfoArray.Length)];
-
         if (A90IDLE == null)
             A90IDLE = GameObject.Find("A90IDLECanvas").GetComponent<Image>();
         if (A90BLOCK == null)
