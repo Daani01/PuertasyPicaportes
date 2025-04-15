@@ -82,6 +82,8 @@ public class EnemyPool : MonoBehaviour, IProcess
             if (pool.enemies.Count == 1)
             {
                 GameObject newEnemy = Instantiate(prefab);
+                newEnemy.transform.SetParent(allRooms);
+
                 newEnemy.GetComponent<Enemie>().damage = float.Parse(CSVManager.Instance.GetSpecificData(newEnemy.GetComponent<Enemie>().enemyName, ExcelValues.Damage.ToString()));
                 newEnemy.GetComponent<Enemie>().speed = float.Parse(CSVManager.Instance.GetSpecificData(newEnemy.GetComponent<Enemie>().enemyName, ExcelValues.Speed.ToString()));
                 string[] dieInfoArray = CSVManager.Instance.GetSpecificData(newEnemy.GetComponent<Enemie>().enemyName, ExcelValues.DieInfo.ToString()).Split(';');

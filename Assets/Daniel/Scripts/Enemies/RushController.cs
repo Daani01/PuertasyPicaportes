@@ -27,6 +27,7 @@ public class RushController : Enemie
     {
         waypoints = waypointsToFollow;
         currentWaypointIndex = 0;
+        isMoving = false;
         if (waypoints != null && waypoints.Count > 0 && !isMoving)
         {
             StartCoroutine(MoveThroughWaypoints());

@@ -74,6 +74,8 @@ public class ScreechController : Enemie, IInteractable
 
     private IEnumerator WaitAndActivate()
     {
+        screechObj.SetActive(false);
+
         soundName = "ScreechSound";
         audioSource = SoundPoolManager.Instance.PlaySound(soundName, gameObject);
 

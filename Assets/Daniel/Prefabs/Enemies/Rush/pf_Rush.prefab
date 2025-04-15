@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8288866063980466469}
   m_Layer: 0
   m_Name: pf_Rush
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -72,6 +72,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyName: Rush
   damage: 0
+  speed: 0
   dieInfo: 
 --- !u!82 &6303185336510373251
 AudioSource:

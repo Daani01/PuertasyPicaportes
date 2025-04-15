@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 665620373405545601}
   m_Layer: 0
   m_Name: pf_Ambush
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -72,6 +72,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyName: Ambush
   damage: 0
+  speed: 0
   dieInfo: 
 --- !u!82 &1592603207400909647
 AudioSource:

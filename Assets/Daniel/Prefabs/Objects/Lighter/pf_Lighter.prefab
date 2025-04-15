@@ -217,7 +217,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   activationType: 1
   Flashlighter: {fileID: 370814485040690300}
-  lighterTime: 180
 --- !u!114 &-2492249502684887264
 MonoBehaviour:
   m_ObjectHideFlags: 0

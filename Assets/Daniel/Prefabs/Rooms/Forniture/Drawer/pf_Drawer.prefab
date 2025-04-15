@@ -500,7 +500,9 @@ MonoBehaviour:
   - {fileID: 7787526353204673884, guid: 27ef2ae48c698b54b81370d2eac5cac6, type: 3}
   - {fileID: 1503180478031307889, guid: 39b5312fadf3f584ba7d71a1ecbeece8, type: 3}
   - {fileID: 8445284622482785171, guid: 57e50f94fb6194b4a81046bfa9f1a61d, type: 3}
+  - {fileID: 8445284622482785171, guid: 2a5ffa32c1a4e8144b942f03ebb8c5c1, type: 3}
   - {fileID: 3243100331883343296, guid: c2ec984c3063e7547bd5ce8e3d502015, type: 3}
+  - {fileID: 1979786152201262026, guid: 765cfeb9d6909654bbcaed331c346f21, type: 3}
   spawnPoints:
   - {fileID: 6143860737395979327}
   - {fileID: 7194815364616804848}

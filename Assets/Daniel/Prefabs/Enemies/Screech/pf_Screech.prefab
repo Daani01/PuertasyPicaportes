@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5330899688637351884}
   m_Layer: 3
   m_Name: pf_Screech
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -50,12 +50,12 @@ MonoBehaviour:
   damage: 0
   speed: 0
   dieInfo: 
+  timeToAppear: 2
+  maxTimeNotLookedAt: 7
   screechObj: {fileID: 7412091798993581583}
   detectionSphere: {fileID: 8069393409234573397}
   minRadius: 1
   maxRadius: 2
-  timeToAppear: 2
-  maxTimeNotLookedAt: 7
 --- !u!65 &5330899688637351884
 BoxCollider:
   m_ObjectHideFlags: 0

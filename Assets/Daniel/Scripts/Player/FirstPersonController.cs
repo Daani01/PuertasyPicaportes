@@ -857,6 +857,19 @@ private bool CheckPickUpItem(IUsable usableItem)
 
     }
 
+    public void ExtraHeal(float amount)
+    {
+        if (currentState == PlayerState.Dead) return;
+        maxHealth += amount;
+        currentHealth = maxHealth;
+        //UpdateHealthSlider(currentHealth);
+        //healthSlider.value = Mathf.RoundToInt(currentHealth);
+        healthImage.fillAmount = Mathf.Clamp01(currentHealth / 100f); // Asegúrate de que el valor esté entre 0 y 1
+        healthText.text = currentHealth.ToString();
+        ShowMessage("Has aumentado tu vida maxima", 4f);
+
+    }
+
     public void Die(Enemie enemie)
     {
         ChangePlayerState(PlayerState.Dead);

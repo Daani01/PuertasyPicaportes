@@ -40,6 +40,7 @@ public class A120Controller : Enemie
         currentWaypointIndex = 0;
         currentRepetition = 0;
         reverse = false;
+        isMoving = false;
 
         if (waypoints != null && waypoints.Count > 0 && !isMoving)
         {
