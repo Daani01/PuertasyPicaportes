@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameLoop : MonoBehaviour
 {
@@ -175,7 +176,7 @@ public class GameLoop : MonoBehaviour
 
                 SaveSystem.SavePlayerData(data);
 
-                endText = $"{enemieData.dieInfo}\n" +
+                endText = $"{enemieData.dieInfo}\n\n" +
                           $"Has llegado hasta la puerta: {CurrentDoor.GetStaticCurrentRoomIndex()}\n" +
                           $"Tiempo: {TimeSpan.Parse(StopTimer())}\n" +
                           $"Monedas: {data.coins}\n" +
@@ -183,6 +184,14 @@ public class GameLoop : MonoBehaviour
 
                 yield return StartCoroutine(TypeTextEffect(endText, 3.0f));
 
+                if(playerController.coinsCount > 300)
+                {
+                    restartGameButton.GetComponent<Button>().enabled = true;
+                }
+                else
+                {
+                    restartGameButton.GetComponent<Button>().enabled = false;
+                }
 
                 restartGameButton.SetActive(true);
                 endGameButton.SetActive(true);
@@ -249,6 +258,15 @@ public class GameLoop : MonoBehaviour
 
                 //esperar a que el jugador active el revivir
 
+                if (playerController.coinsCount > 300)
+                {
+                    restartGameButton.GetComponent<Button>().enabled = true;
+                }
+                else
+                {
+                    restartGameButton.GetComponent<Button>().enabled = false;
+                }
+
                 restartGameButton.SetActive(true);
                 endGameButton.SetActive(true);
                 Cursor.lockState = CursorLockMode.None;
@@ -311,7 +329,7 @@ public class GameLoop : MonoBehaviour
 
                 SaveSystem.SavePlayerData(data);
 
-                endText = $"HAS GANADO\n" +
+                endText = $"HAS GANADO\n\n" +
                           $"Tiempo: {TimeSpan.Parse(StopTimer())}\n" +
                           $"Record de tiempo: {data.recordTime}\n\n" +
                           $"Monedas: {data.coins}\n" +
@@ -329,8 +347,6 @@ public class GameLoop : MonoBehaviour
     }
 
 
-
-
     public void RevivePlayer()
     {
         StartCoroutine(RevivePlayerLogic());
@@ -342,6 +358,10 @@ public class GameLoop : MonoBehaviour
 
         restartGameButton.SetActive(false);
         endGameButton.SetActive(false);
+
+        var data = SaveSystem.LoadPlayerData();
+        data.coins -= 300;
+        SaveSystem.SavePlayerData(data);
 
         yield return StartCoroutine(DeleteTextEffect(2.0f));
 

@@ -47,9 +47,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyName: A90
   damage: 0
+  speed: 0
   dieInfo: 
   A90IDLE: {fileID: 0}
   A90BLOCK: {fileID: 0}
+  A90BACK: {fileID: 0}
   A90AUDIO: {fileID: 8300000, guid: d93655b646a8fec4facc90d9edd930a7, type: 3}
 --- !u!82 &1448657488524700564
 AudioSource:

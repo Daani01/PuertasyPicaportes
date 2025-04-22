@@ -15,12 +15,7 @@ public class GameMenu : MonoBehaviour
     public TMP_Dropdown screenModeDropdown;
     public TMP_Dropdown qualityDropdown;
     public Toggle vSyncToggle;
-    public TMP_Dropdown fpsLimitDropdown;
-    public TMP_Dropdown shadowsDropdown;
-    public TMP_Dropdown antialiasingDropdown;
-    public TMP_Dropdown texturesDropdown;
-    public Toggle ambientOcclusionToggle;
-    public Toggle postProcessingToggle;
+    public TMP_Dropdown fpsLimitDropdown;    
     private Resolution[] resolutions;
 
     [Header("Audio")]
@@ -29,10 +24,7 @@ public class GameMenu : MonoBehaviour
     public Slider musicVolumeSlider;
     public Slider sfxVolumeSlider;
 
-    [Header("Controles")]
-    public Slider mouseSensitivitySlider;
-    public Toggle invertYAxisToggle;
-
+    [Header("FPS")]
     public TMP_Text infoText; // Asigna este TextMeshPro en el Inspector
 
     private float deltaTime = 0.0f;
@@ -106,19 +98,47 @@ public class GameMenu : MonoBehaviour
     // ------------------------- GRÁFICOS -------------------------
     private void LoadResolutions()
     {
-        // Asignar las resoluciones al dropdown de resoluciones
+        // Resoluciones más comunes y básicas (puedes ajustar esta lista según tus necesidades)
+        List<Vector2Int> commonResolutions = new List<Vector2Int>
+    {
+        new Vector2Int(1280, 720),    // HD
+        new Vector2Int(1920, 1080),   // Full HD
+        new Vector2Int(2560, 1440),   // 2K
+        new Vector2Int(3840, 2160)    // 4K
+    };
+
         resolutions = Screen.resolutions;
         resolutionDropdown.ClearOptions();
         List<string> resolutionOptions = new List<string>();
+        List<Resolution> filteredResolutions = new List<Resolution>();
 
-        for (int i = 0; i < resolutions.Length; i++)
+        foreach (Resolution res in resolutions)
         {
-            resolutionOptions.Add(resolutions[i].width + " x " + resolutions[i].height);
+            Vector2Int current = new Vector2Int(res.width, res.height);
+            if (commonResolutions.Contains(current) && !filteredResolutions.Exists(r => r.width == res.width && r.height == res.height))
+            {
+                filteredResolutions.Add(res);
+                resolutionOptions.Add(res.width + " x " + res.height);
+            }
         }
+
+        // Si no hay ninguna resolución encontrada, se usa al menos la actual
+        if (resolutionOptions.Count == 0)
+        {
+            Resolution current = Screen.currentResolution;
+            resolutionOptions.Add(current.width + " x " + current.height);
+            filteredResolutions.Add(current);
+        }
+
         resolutionDropdown.AddOptions(resolutionOptions);
-        resolutionDropdown.value = PlayerPrefs.GetInt("Resolution", resolutions.Length - 1);
+        int savedIndex = PlayerPrefs.GetInt("Resolution", filteredResolutions.Count - 1);
+        resolutionDropdown.value = Mathf.Clamp(savedIndex, 0, filteredResolutions.Count - 1);
         resolutionDropdown.RefreshShownValue();
+
+        // Actualizar el array con solo las resoluciones filtradas
+        resolutions = filteredResolutions.ToArray();
     }
+
 
     public void SetResolution(int index)
     {
@@ -127,17 +147,35 @@ public class GameMenu : MonoBehaviour
         PlayerPrefs.SetInt("Resolution", index);
     }
 
+    /*
     public void SetScreenMode(int index)
     {
         Screen.fullScreenMode = (FullScreenMode)index;
         PlayerPrefs.SetInt("ScreenMode", index);
     }
+    */
+    public void SetScreenMode(int index)
+    {
+        FullScreenMode newMode = (FullScreenMode)index;
+
+        // Usamos la resolución actualmente seleccionada
+        Resolution currentResolution = Screen.currentResolution;
+
+        // Reaplica la resolución con el nuevo modo de pantalla
+        Screen.SetResolution(currentResolution.width, currentResolution.height, newMode);
+
+        PlayerPrefs.SetInt("ScreenMode", index);
+    }
+
 
     public void SetQuality(int index)
     {
         QualitySettings.SetQualityLevel(index);
         PlayerPrefs.SetInt("Quality", index);
         //qualityDropdown.RefreshShownValue();  // Asegúrate de que se actualice el valor visible
+
+
+        fpsLimitDropdown.RefreshShownValue();
     }
 
 
@@ -162,56 +200,19 @@ public class GameMenu : MonoBehaviour
         PlayerPrefs.SetFloat("MasterVolume", volume);
 }
 
-public void SetMusicVolume(float volume)
-{
-        audioMixer.SetFloat("MusicVolume", volume);
-
-        PlayerPrefs.SetFloat("MusicVolume", volume);
-}
-
-public void SetSFXVolume(float volume)
-{
-        audioMixer.SetFloat("SFXVolume", volume);
-
-        PlayerPrefs.SetFloat("SFXVolume", volume);
-}
-
-
-    /*
-    public void SetShadows(int index)
+    public void SetMusicVolume(float volume)
     {
-        QualitySettings.shadows = (ShadowQuality)index;
-        PlayerPrefs.SetInt("Shadows", index);
+            audioMixer.SetFloat("MusicVolume", volume);
+
+            PlayerPrefs.SetFloat("MusicVolume", volume);
     }
 
-    public void SetAntialiasing(int index)
+    public void SetSFXVolume(float volume)
     {
-        int[] aaValues = { 0, 2, 4, 8 };
-        QualitySettings.antiAliasing = aaValues[index];
-        PlayerPrefs.SetInt("AA", index);
-    }
+            audioMixer.SetFloat("SFXVolume", volume);
 
-    public void SetTextures(int index)
-    {
-        int[] textureQualities = { 2, 1, 0 };
-        QualitySettings.globalTextureMipmapLimit = textureQualities[index];
-        PlayerPrefs.SetInt("Textures", index);
+            PlayerPrefs.SetFloat("SFXVolume", volume);
     }
-    */
-
-    // ------------------------- CONTROLES -------------------------
-
-    /*
-    public void SetMouseSensitivity(float sensitivity)
-    {
-        PlayerPrefs.SetFloat("MouseSensitivity", sensitivity);
-    }
-
-    public void SetInvertYAxis(bool isInverted)
-    {
-        PlayerPrefs.SetInt("InvertYAxis", isInverted ? 1 : 0);
-    }
-    */
 
     public void ApplySettings()
     {
@@ -239,30 +240,12 @@ public void SetSFXVolume(float volume)
         fpsLimitDropdown.AddOptions(fpsOptions);
         fpsLimitDropdown.value = PlayerPrefs.GetInt("FPSLimit");
         fpsLimitDropdown.RefreshShownValue();
+        SetFPSLimit(PlayerPrefs.GetInt("FPSLimit"));
 
         masterVolumeSlider.value = PlayerPrefs.GetFloat("MasterVolume");
         musicVolumeSlider.value = PlayerPrefs.GetFloat("MusicVolume");
         sfxVolumeSlider.value = PlayerPrefs.GetFloat("SFXVolume");
 
-        /*
-        List<string> shadowsOptions = new List<string> { "Bajo", "Medio", "Alto" };//BAJO NO //cambiar shadow resolution 4 opciones //pixel light count 3 / 4
-        shadowsDropdown.ClearOptions();
-        shadowsDropdown.AddOptions(shadowsOptions);
-        shadowsDropdown.value = PlayerPrefs.GetInt("Shadows", 2);
-        shadowsDropdown.RefreshShownValue();
-
-        List<string> antialiasingOptions = new List<string> { "Ninguno", "2x", "4x", "8x" };
-        antialiasingDropdown.ClearOptions();
-        antialiasingDropdown.AddOptions(antialiasingOptions);
-        antialiasingDropdown.value = PlayerPrefs.GetInt("AA", 1);
-        antialiasingDropdown.RefreshShownValue();
-
-        List<string> texturesOptions = new List<string> { "Baja", "Media", "Alta" }; //4 tipos
-        texturesDropdown.ClearOptions();
-        texturesDropdown.AddOptions(texturesOptions);
-        texturesDropdown.value = PlayerPrefs.GetInt("Textures", 1);
-        texturesDropdown.RefreshShownValue();
-        */
     }
 
 }

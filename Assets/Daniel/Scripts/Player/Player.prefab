@@ -393,7 +393,7 @@ MonoBehaviour:
   maxHealth: 100
   currentHealth: 0
   coinsCount: 0
-  mouseSensitivity: 0.1
+  mouseSensitivity: 2
   maxVerticalAngle: 90
   minVerticalAngle: -90
   rotationSmoothness: 0.15

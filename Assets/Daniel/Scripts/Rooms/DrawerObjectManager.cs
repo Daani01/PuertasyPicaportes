@@ -54,8 +54,8 @@ public class DrawerObjectManager : MonoBehaviour
         if (prefabIndex >= 0 && prefabIndex < objectsPrefabs.Length)
         {
             Transform spawnPoint = spawnPoints[UnityEngine.Random.Range(0, spawnPoints.Length)];
-            //GameObject newObj = Instantiate(objectsPrefabs[prefabIndex], spawnPoint);
-            GameObject newObj = Instantiate(objectsPrefabs[5], spawnPoint);
+            GameObject newObj = Instantiate(objectsPrefabs[prefabIndex], spawnPoint);
+            //GameObject newObj = Instantiate(objectsPrefabs[5], spawnPoint);
 
             Debug.Log($"Objeto generado: {objectsPrefabs[prefabIndex].name}");
         }
