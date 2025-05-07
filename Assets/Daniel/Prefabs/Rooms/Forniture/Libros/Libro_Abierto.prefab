@@ -260,7 +260,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2408950901393290362, guid: 39ff2bc0a3fab7d449803a5e99c88ced, type: 2}
+  - {fileID: -6163094232197545557, guid: a37866c901d89f14ba67b19ca87de4b5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -302,12 +302,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'hola bebe
-
-    que tal estas'
+  m_text: EXAMPLE
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 39ff2bc0a3fab7d449803a5e99c88ced, type: 2}
-  m_sharedMaterial: {fileID: 2408950901393290362, guid: 39ff2bc0a3fab7d449803a5e99c88ced, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: a37866c901d89f14ba67b19ca87de4b5, type: 2}
+  m_sharedMaterial: {fileID: -6163094232197545557, guid: a37866c901d89f14ba67b19ca87de4b5, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -433,7 +431,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2408950901393290362, guid: 39ff2bc0a3fab7d449803a5e99c88ced, type: 2}
+  - {fileID: -6163094232197545557, guid: a37866c901d89f14ba67b19ca87de4b5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -475,18 +473,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Te doy la bienvenida a Puertas
-
-
-    En esta habitacion podras resolver
-    todas tus dudas sobre el funcionamiento del juego, tabla de clasificacion, compra
-    de objetos, etc.
-
-
-    Cuando estes listo, puedes pasar por la primera puerta'
+  m_text: EXAMPLE
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 39ff2bc0a3fab7d449803a5e99c88ced, type: 2}
-  m_sharedMaterial: {fileID: 2408950901393290362, guid: 39ff2bc0a3fab7d449803a5e99c88ced, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: a37866c901d89f14ba67b19ca87de4b5, type: 2}
+  m_sharedMaterial: {fileID: -6163094232197545557, guid: a37866c901d89f14ba67b19ca87de4b5, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -510,7 +500,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 0.3
+  m_fontSize: 0.5
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1

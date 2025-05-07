@@ -148,7 +148,6 @@ public class ProceduralRoomGenerator : MonoBehaviour, IProcess
                 }
             }
 
-
         }
 
         // Generar la habitación final dentro de ALLROOMS

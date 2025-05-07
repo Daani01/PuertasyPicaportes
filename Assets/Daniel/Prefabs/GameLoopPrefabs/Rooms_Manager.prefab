@@ -55,7 +55,7 @@ MonoBehaviour:
   - {fileID: 807415901228318794, guid: 5abad50035c7cb74bbe3c21f5dcd324d, type: 3}
   - {fileID: 4790591924577290706, guid: 2fdcade2399b3f14d8dc999ed4f75456, type: 3}
   - {fileID: 310142163004902800, guid: 784ecf732fff53243b337c6ea222c98c, type: 3}
-  numberOfRooms: 30
+  numberOfRooms: 5
   roomCount: 0
   maxRoomActived: 3
   rooms: []

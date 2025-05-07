@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
+using UnityEngine.InputSystem.OnScreen;
+using UnityEngine.InputSystem.Controls;
 
 public class ObjectCanvasManager : MonoBehaviour
 {
@@ -13,6 +15,8 @@ public class ObjectCanvasManager : MonoBehaviour
     private List<GameObject> createdItems = new List<GameObject>(); // Lista de elementos creados
     private List<Image> energyImages = new List<Image>(); // Lista para almacenar las imágenes de energía
     private List<IUsable> itemScripts = new List<IUsable>(); // Lista para almacenar las referencias de los scripts que contienen getEnergy
+
+    private int numberControllerMobile; 
 
     public void AddItem(IUsable type, string value, bool energy)
     {
@@ -35,6 +39,27 @@ public class ObjectCanvasManager : MonoBehaviour
     {
         // Instanciar el prefab ya existente
         GameObject item = Instantiate(itemPrefab, contentPanel); // Asegúrate de que itemPrefab está asignado en el Inspector
+
+        numberControllerMobile++;
+
+        switch (numberControllerMobile)
+        {
+            case 1:
+                item.GetComponent<OnScreenButton>().controlPath = "<Gamepad>/dpad/left";
+                break;
+            case 2:
+                item.GetComponent<OnScreenButton>().controlPath = "<Gamepad>/dpad/up";
+                break;
+            case 3:
+                item.GetComponent<OnScreenButton>().controlPath = "<Gamepad>/dpad/right";
+                break;
+            case 4:
+                item.GetComponent<OnScreenButton>().controlPath = "<Gamepad>/dpad/down";
+                break;
+            default:
+                Debug.LogWarning("Solo se soportan 4 botones (izq, arriba, der, abajo)");
+                break;
+        }
 
         // Buscar y modificar la imagen
         RawImage image = item.transform.Find("Image").GetComponent<RawImage>();
@@ -135,6 +160,8 @@ public class ObjectCanvasManager : MonoBehaviour
     // Función para actualizar los textos de los elementos restantes
     private void UpdateItemNumbers()
     {
+        numberControllerMobile = 0; // Reiniciar el contador antes de reasignar
+
         for (int i = 0; i < createdItems.Count; i++)
         {
             TMP_Text textComponent = createdItems[i].transform.Find("Number_Box").GetComponent<TMP_Text>();
@@ -142,6 +169,28 @@ public class ObjectCanvasManager : MonoBehaviour
             {
                 textComponent.text = (i + 1).ToString(); // Se numera desde 1 hasta el total
             }
+
+            numberControllerMobile++;
+
+            switch (numberControllerMobile)
+            {
+                case 1:
+                    createdItems[i].GetComponent<OnScreenButton>().controlPath = "<Gamepad>/dpad/left";
+                    break;
+                case 2:
+                    createdItems[i].GetComponent<OnScreenButton>().controlPath = "<Gamepad>/dpad/up";
+                    break;
+                case 3:
+                    createdItems[i].GetComponent<OnScreenButton>().controlPath = "<Gamepad>/dpad/right";
+                    break;
+                case 4:
+                    createdItems[i].GetComponent<OnScreenButton>().controlPath = "<Gamepad>/dpad/down";
+                    break;
+                default:
+                    Debug.LogWarning("Solo se soportan 4 On-Screen Buttons");
+                    break;
+            }
+
         }
     }
 }

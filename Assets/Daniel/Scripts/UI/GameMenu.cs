@@ -7,8 +7,37 @@ using UnityEngine.SceneManagement;
 
 public class GameMenu : MonoBehaviour
 {
+    [Header("Canvas UI")]
     public GameObject pauseMenuUI;
     public GameObject optionsMenuUI;
+    public GameObject controlsMenuUI;
+    public GameObject statsMenuUI;
+    public GameObject creditsMenuUI;
+
+    [Header("Estadisticas")]
+    public TMP_Text tiempoRecord;
+    public TMP_Text puertaRecord;
+    public TMP_Text tiempoTotal;
+    public TMP_Text intentos;
+    public TMP_Text victorias;
+    public TMP_Text screechName;
+    public TMP_Text screechValue;
+
+    public TMP_Text eyesName;
+    public TMP_Text eyesValue;
+    public TMP_Text rushName;
+    public TMP_Text rushValue;
+    public TMP_Text ambushName;
+    public TMP_Text ambushValue;
+    public TMP_Text jackName;
+    public TMP_Text jackValue;
+    public TMP_Text a60Name;
+    public TMP_Text a60Value;
+    public TMP_Text a90Name;
+    public TMP_Text a90Value;
+    public TMP_Text a120Name;
+    public TMP_Text a120Value;
+
 
     [Header("Graficos")]
     public TMP_Dropdown resolutionDropdown;
@@ -25,7 +54,7 @@ public class GameMenu : MonoBehaviour
     public Slider sfxVolumeSlider;
 
     [Header("FPS")]
-    public TMP_Text infoText; // Asigna este TextMeshPro en el Inspector
+    public TMP_Text infoFPSText; // Asigna este TextMeshPro en el Inspector
 
     private float deltaTime = 0.0f;
 
@@ -41,7 +70,7 @@ public class GameMenu : MonoBehaviour
         float fps = 1.0f / deltaTime;
 
         // Actualiza el TextMeshPro con FPS, CPU y GPU
-        infoText.text = $"FPS: {Mathf.Ceil(fps)}";
+        infoFPSText.text = $"FPS: {Mathf.Ceil(fps)}";
     }
 
     private void Start()
@@ -68,6 +97,136 @@ public class GameMenu : MonoBehaviour
     public void CloseOptionsMenu()
     {
         optionsMenuUI.SetActive(false);
+        pauseMenuUI.SetActive(true);
+        //ApplySettings();
+    }
+
+    public void OpenControlsMenu()
+    {
+        pauseMenuUI.SetActive(false);
+        controlsMenuUI.SetActive(true);
+    }
+    public void CloseControlsMenu()
+    {
+        controlsMenuUI.SetActive(false);
+        pauseMenuUI.SetActive(true);
+        //ApplySettings();
+    }
+    public void OpenStatsMenu()
+    {
+        var data = SaveSystem.LoadPlayerData();
+
+        if (data != null)
+        {
+            if(data.recordTime != "23:59:59")
+            {
+                tiempoRecord.text = data.recordTime;
+            }
+
+            puertaRecord.text = data.doorRecord.ToString();
+            tiempoTotal.text = data.globalTime;
+            intentos.text = data.attempts.ToString();
+            victorias.text = data.wins.ToString();
+
+            if (data.deathsByScreech > 0)
+            {
+                screechValue.text = data.deathsByScreech.ToString();
+                screechName.text = "SCREECH";
+            }
+            else
+            {
+                screechName.text = "???";
+            }
+
+            if (data.deathsByEyes > 0)
+            {
+                eyesValue.text = data.deathsByEyes.ToString();
+                eyesName.text = "EYES";
+            }
+            else
+            {
+                eyesName.text = "???";
+            }
+
+            if (data.deathsByRush > 0)
+            {
+                rushValue.text = data.deathsByRush.ToString();
+                rushName.text = "RUSH";
+            }
+            else
+            {
+                rushName.text = "???";
+            }
+
+            if (data.deathsByAmbush > 0)
+            {
+                ambushValue.text = data.deathsByAmbush.ToString();
+                ambushName.text = "AMBUSH";
+            }
+            else
+            {
+                ambushName.text = "???";
+            }
+
+            if (data.deathsByJack > 0)
+            {
+                jackValue.text = data.deathsByJack.ToString();
+                jackName.text = "JACK";
+            }
+            else
+            {
+                jackName.text = "???";
+            }
+
+            if (data.deathsByA60 > 0)
+            {
+                a60Value.text = data.deathsByA60.ToString();
+                a60Name.text = "A60";
+            }
+            else
+            {
+                a60Name.text = "???";
+            }
+
+            if (data.deathsByA90 > 0)
+            {
+                a90Value.text = data.deathsByA90.ToString();
+                a90Name.text = "A90";
+            }
+            else
+            {
+                a90Name.text = "???";
+            }
+
+            if (data.deathsByA120 > 0)
+            {
+                a120Value.text = data.deathsByA120.ToString();
+                a120Name.text = "A120";
+            }
+            else
+            {
+                a120Name.text = "???";
+            }            
+
+        }
+
+        pauseMenuUI.SetActive(false);
+        statsMenuUI.SetActive(true);
+    }
+    public void CloseStatsMenu()
+    {
+        statsMenuUI.SetActive(false);
+        pauseMenuUI.SetActive(true);
+        //ApplySettings();
+    }
+    public void OpenCreditsMenu()
+    {
+        pauseMenuUI.SetActive(false);
+        creditsMenuUI.SetActive(true);
+    }
+    public void CloseCreditsMenu()
+    {
+        creditsMenuUI.SetActive(false);
         pauseMenuUI.SetActive(true);
         //ApplySettings();
     }
