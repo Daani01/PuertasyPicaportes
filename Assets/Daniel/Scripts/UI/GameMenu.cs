@@ -274,7 +274,8 @@ public class GameMenu : MonoBehaviour
         foreach (Resolution res in resolutions)
         {
             Vector2Int current = new Vector2Int(res.width, res.height);
-            if (commonResolutions.Contains(current) && !filteredResolutions.Exists(r => r.width == res.width && r.height == res.height))
+            if (commonResolutions.Contains(current) &&
+                !filteredResolutions.Exists(r => r.width == res.width && r.height == res.height))
             {
                 filteredResolutions.Add(res);
                 resolutionOptions.Add(res.width + " x " + res.height);
@@ -290,13 +291,37 @@ public class GameMenu : MonoBehaviour
         }
 
         resolutionDropdown.AddOptions(resolutionOptions);
-        int savedIndex = PlayerPrefs.GetInt("Resolution", filteredResolutions.Count - 1);
-        resolutionDropdown.value = Mathf.Clamp(savedIndex, 0, filteredResolutions.Count - 1);
+
+        // Buscar la resolución compatible más alta con la pantalla actual
+        int defaultIndex = 0;
+        for (int i = filteredResolutions.Count - 1; i >= 0; i--)
+        {
+            if (filteredResolutions[i].width <= Screen.currentResolution.width &&
+                filteredResolutions[i].height <= Screen.currentResolution.height)
+            {
+                defaultIndex = i;
+                break;
+            }
+        }
+
+        int savedIndex = PlayerPrefs.GetInt("Resolution", defaultIndex);
+        savedIndex = Mathf.Clamp(savedIndex, 0, filteredResolutions.Count - 1);
+
+        resolutionDropdown.value = savedIndex;
         resolutionDropdown.RefreshShownValue();
+
+        // Aplicar la resolución al cargar
+        Resolution selectedRes = filteredResolutions[savedIndex];
+        Screen.SetResolution(selectedRes.width, selectedRes.height, Screen.fullScreenMode);
+
+        // Guardar la selección
+        PlayerPrefs.SetInt("Resolution", savedIndex);
+        PlayerPrefs.Save();
 
         // Actualizar el array con solo las resoluciones filtradas
         resolutions = filteredResolutions.ToArray();
     }
+
 
 
     public void SetResolution(int index)
@@ -315,16 +340,18 @@ public class GameMenu : MonoBehaviour
     */
     public void SetScreenMode(int index)
     {
-        FullScreenMode newMode = (FullScreenMode)index;
+        FullScreenMode newMode = (index == 0) ? FullScreenMode.Windowed : FullScreenMode.FullScreenWindow;
 
-        // Usamos la resolución actualmente seleccionada
-        Resolution currentResolution = Screen.currentResolution;
+        // Usamos la resolución seleccionada por el usuario en el dropdown
+        Resolution selectedResolution = resolutions[resolutionDropdown.value];
 
-        // Reaplica la resolución con el nuevo modo de pantalla
-        Screen.SetResolution(currentResolution.width, currentResolution.height, newMode);
+        // Aplicamos la resolución y el modo de pantalla
+        Screen.SetResolution(selectedResolution.width, selectedResolution.height, newMode);
 
+        // Guardamos en PlayerPrefs
         PlayerPrefs.SetInt("ScreenMode", index);
     }
+
 
 
     public void SetQuality(int index)
@@ -381,30 +408,48 @@ public class GameMenu : MonoBehaviour
 
     private void LoadSettings()
     {
-        // Configurar opciones para cada dropdown
+        // ------------------- SCREEN MODE -------------------
         List<string> screenModes = new List<string> { "Ventana", "Pantalla Completa" };
         screenModeDropdown.ClearOptions();
         screenModeDropdown.AddOptions(screenModes);
-        screenModeDropdown.value = PlayerPrefs.GetInt("ScreenMode");
+
+        int screenModeIndex = PlayerPrefs.GetInt("ScreenMode", 1); // Por defecto Pantalla Completa
+        screenModeIndex = Mathf.Clamp(screenModeIndex, 0, screenModes.Count - 1);
+        screenModeDropdown.value = screenModeIndex;
         screenModeDropdown.RefreshShownValue();
 
+        // Aplicar modo de pantalla
+        Screen.fullScreenMode = screenModeIndex == 0 ? FullScreenMode.Windowed : FullScreenMode.FullScreenWindow;
+
+        // ------------------- QUALITY SETTINGS -------------------
         List<string> qualityOptions = new List<string> { "Muy baja", "Baja", "Media", "Alta", "Muy alta", "Ultra" };
         qualityDropdown.ClearOptions();
         qualityDropdown.AddOptions(qualityOptions);
-        qualityDropdown.value = PlayerPrefs.GetInt("Quality");
+
+        int qualityIndex = PlayerPrefs.GetInt("Quality", QualitySettings.names.Length - 1); // Por defecto: calidad máxima
+        qualityIndex = Mathf.Clamp(qualityIndex, 0, qualityOptions.Count - 1);
+        qualityDropdown.value = qualityIndex;
         qualityDropdown.RefreshShownValue();
 
+        QualitySettings.SetQualityLevel(qualityIndex);
+
+        // ------------------- FPS LIMIT -------------------
         List<string> fpsOptions = new List<string> { "30", "60", "120", "144", "240" };
         fpsLimitDropdown.ClearOptions();
         fpsLimitDropdown.AddOptions(fpsOptions);
-        fpsLimitDropdown.value = PlayerPrefs.GetInt("FPSLimit");
+
+        int fpsIndex = PlayerPrefs.GetInt("FPSLimit", 1); // Por defecto: 60 fps
+        fpsIndex = Mathf.Clamp(fpsIndex, 0, fpsOptions.Count - 1);
+        fpsLimitDropdown.value = fpsIndex;
         fpsLimitDropdown.RefreshShownValue();
-        SetFPSLimit(PlayerPrefs.GetInt("FPSLimit"));
 
-        masterVolumeSlider.value = PlayerPrefs.GetFloat("MasterVolume");
-        musicVolumeSlider.value = PlayerPrefs.GetFloat("MusicVolume");
-        sfxVolumeSlider.value = PlayerPrefs.GetFloat("SFXVolume");
+        SetFPSLimit(fpsIndex);
 
+        // ------------------- VOLUMEN -------------------
+        masterVolumeSlider.value = PlayerPrefs.GetFloat("MasterVolume", 1f);
+        musicVolumeSlider.value = PlayerPrefs.GetFloat("MusicVolume", 1f);
+        sfxVolumeSlider.value = PlayerPrefs.GetFloat("SFXVolume", 1f);
     }
+
 
 }
