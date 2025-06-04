@@ -57,7 +57,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: b91d620e399892b4e803328fd6c77304, type: 3}
   - {fileID: 8300000, guid: 4ad240557a855d64991acc27f7686809, type: 3}
   sfxAudioMixerGroup: {fileID: -7209248621603476664, guid: 4323ba8966c41c741a91b27963a8fa49, type: 2}
-  poolSize: 20
+  poolSize: 25
 --- !u!82 &-5437577631239402925
 AudioSource:
   m_ObjectHideFlags: 0

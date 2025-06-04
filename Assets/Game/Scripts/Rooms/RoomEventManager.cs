@@ -50,9 +50,7 @@ public class RoomEventManager : MonoBehaviour
 
     public void AssignRoomEvent(GameObject room, int numberRoom, int maxNumberRoom)
     {
-        //int remainingRooms = maxNumberRoom - numberRoom;
         int eventChance = Mathf.Clamp((numberRoom * 100) / maxNumberRoom, 0, 100);
-
         
         if (UnityEngine.Random.Range(0, 100) < eventChance)
         {
@@ -69,8 +67,6 @@ public class RoomEventManager : MonoBehaviour
             Transform triggerEvent = room.transform.Find("TriggerEvent");
             if (triggerEvent != null)
             {
-                //_eventType = RoomEventType.Eyes;//BORRAR FINAL
-
                 room.GetComponent<RoomEventManager>()._eventType = _eventType;
 
                 if(_eventType != RoomEventType.None)
@@ -95,8 +91,6 @@ public class RoomEventManager : MonoBehaviour
         }
         return eventProbabilities.Keys.ElementAt(UnityEngine.Random.Range(0, eventProbabilities.Count));
     }
-
-
 
     public void AssignEndRoomEvent(GameObject room)
     {
